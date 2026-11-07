@@ -1,0 +1,13 @@
+model,variant,n_failed,n_nan_loss,n_constant_prediction,n_total
+ftt,A_long,0,0,0,30
+ftt,B_bigval,0,0,0,30
+ftt,C_long_bigval,0,0,0,30
+ftt,baseline,0,0,0,30
+mlp,A_long,0,0,0,30
+mlp,B_bigval,0,0,0,30
+mlp,C_long_bigval,0,0,0,30
+mlp,baseline,0,0,0,30
+tabnet,A_long,0,0,0,30
+tabnet,B_bigval,0,0,0,30
+tabnet,C_long_bigval,0,0,0,30
+tabnet,baseline,0,0,0,30

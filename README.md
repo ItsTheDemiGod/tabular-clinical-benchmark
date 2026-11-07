@@ -59,30 +59,49 @@ pytest tests/ -v
 ```
 tabular-clinical-benchmark/
   README.md
-  requirements.txt
+  CLAUDE.md               # project context and working protocol for Claude Code
+  requirements.txt        # pins .venv (classical models only, no torch)
+  requirements-deep.txt   # pins .venv-deep (classical models + torch + pytorch-tabnet)
+  .gitignore
   src/
     __init__.py
-    data.py            # load_dataset(name) -> (X, y, meta)
-    preprocessing.py    # build_preprocessor(...) -> unfitted ColumnTransformer
-    utils.py            # set_seed, make_splits, subsample_train
+    data.py              # load_dataset(name) -> (X, y, meta)
+    preprocessing.py     # build_preprocessor(...) -> unfitted ColumnTransformer
+    utils.py             # set_seed, make_splits, subsample_train
     make_dataset_summary.py  # regenerates results/dataset_summary.csv
-    metrics.py          # compute_metrics, prediction_diversity
-    models.py           # MODEL_REGISTRY, build_pipeline, effective_params
-    tuning.py           # tune_model
-    runner.py           # run_task
+    metrics.py           # compute_metrics, prediction_diversity
+    models.py            # MODEL_REGISTRY, build_pipeline, effective_params
+    tuning.py            # tune_model
+    runner.py            # run_task
+    deep_models.py       # MLP / FT-Transformer / TabNet wrappers (Phase 2b)
   scripts/
-    run_phase2a.py      # command-line runner (smoke test and full run)
-    report_phase2a.py   # verification checks, tables and flags
-  data/                 # cached raw dataset downloads (*_raw.pkl)
-  results/              # raw, tuning, predictions, models, phase2a_all_runs.csv
-  results_smoke/        # smoke-test output, kept apart from real results
+    run_phase2a.py        # classical-model command-line runner (smoke test and full run)
+    run_phase2b.py        # deep-model command-line runner
+    report_phase2a.py     # verification checks, tables and flags
+    phase2c_diagnostics.py  # Phase 2c: endpoints / tabnet / sensitivity / sensitivity-report / xgb-wide-range / all
+  data/                   # cached raw dataset downloads (*_raw.pkl), gitignored
+  results/
+    raw/                  # one CSV per (dataset, model, split) task
+    tuning/                # one JSON per task: tuned hyperparameters
+    predictions/           # one .npz per task: test_idx, y_true, prob_{fraction}
+    models/                 # one .joblib per task (fraction 1.0 only), gitignored (regenerable)
+    diagnostics/            # one JSON per deep-model task: training_info_ per fraction
+    phase2a_all_runs.csv    # frozen Phase 2a/2a.1 classical snapshot (800 rows)
+    all_runs.csv            # Phase 2a+2b aggregate (1400 rows)
+    dataset_summary.csv     # per-dataset summary table
+    MANIFEST_sha256.txt      # SHA-256 of every file above, for integrity checks
+    phase2c/                # Phase 2c diagnostic outputs (see "Phase 2c" below)
+  results_smoke/            # smoke-test output (classical), gitignored, disposable
+  results_smoke_2b/          # smoke-test output (deep models), gitignored, disposable
   tests/
     test_data.py
     test_preprocessing.py
     test_metrics.py
     test_models.py
     test_runner.py
-  notebooks/            # reserved for future exploratory analysis
+    test_deep_models.py      # needs torch; run from .venv-deep
+    test_phase2c.py           # fast, no GPU fit required
+  notebooks/                 # reserved for future exploratory analysis
 ```
 
 ## Phase 1 complete
@@ -327,3 +346,69 @@ is untouched.
 **TabPFN.** Not part of this phase. It is excluded from every environment-verification step,
 is not imported or invoked anywhere in `src/` or `scripts/`, and no model weights or API
 tokens were obtained for it.
+
+## Phase 2c
+
+Read-only diagnostics on the Phase 2a/2b results, plus a schedule-sensitivity check for the
+deep models. Phase 2c never modifies `results/raw`, `results/tuning`, `results/predictions`,
+`results/models`, `results/diagnostics`, `results/phase2a_all_runs.csv` or `results/all_runs.csv`,
+and never changes anything in `src/`. All new outputs are under `results/phase2c/`.
+
+**What was run**, via `scripts/phase2c_diagnostics.py` (`.venv-deep\Scripts\python.exe`):
+
+```bash
+.venv-deep\Scripts\python.exe scripts/phase2c_diagnostics.py endpoints
+.venv-deep\Scripts\python.exe scripts/phase2c_diagnostics.py tabnet
+.venv-deep\Scripts\python.exe scripts/phase2c_diagnostics.py xgb-wide-range
+.venv-deep\Scripts\python.exe scripts/phase2c_diagnostics.py sensitivity
+.venv-deep\Scripts\python.exe scripts/phase2c_diagnostics.py sensitivity-report
+```
+
+- **`endpoints`** (read-only): replays every model's `suggest_params` against a recording
+  stand-in for the Optuna trial to recover each hyperparameter's search range, then classifies
+  every tuned value in `results/tuning/*.json` as at the lower endpoint, the upper endpoint, or
+  neither (integers/numeric-categorical choices: exact equality; continuous: within 2% of the
+  range, on a log scale for log-uniform parameters). Writes `results/phase2c/endpoints_overall.csv`
+  and `endpoints_by_dataset.csv`.
+- **`tabnet`** (read-only): per-split AUROC tables for tabnet/logreg/mlp on `ckd` and
+  `heart_cleveland` (`results/phase2c/tabnet_per_split.csv`), plus full tuning/diagnostics/prediction
+  detail for every "collapsed" TabNet split (AUROC < 0.90 on ckd or < 0.75 on heart_cleveland at
+  fraction 1.0) in `tabnet_collapsed_splits.csv`.
+- **`xgb-wide-range`** (descriptive only, does not touch `src/models.py`): re-tunes xgb with
+  `min_child_weight` searched log-uniformly over 0.1-10 instead of 1-10, on 3 datasets x 3 splits,
+  and compares test AUROC at fractions 0.1 and 1.0 to the original `results/raw` values. Writes
+  `results/phase2c/xgb_wide_range.csv`. 3 splits are too few for a conclusion; the results are
+  descriptive only.
+- **`sensitivity`**: re-fits mlp/ftt/tabnet with their already-tuned hyperparameters (no tuning)
+  on all 5 datasets, splits 0-2, fractions 0.1 and 1.0, under 4 schedule variants (patching
+  `src/deep_models.MAX_STEPS`/`PATIENCE_STEPS`/`VALIDATION_FRACTION` in-process only, always
+  restored afterwards): baseline (600/60/0.15, the current production schedule), `A_long`
+  (2000/150/0.15), `B_bigval` (600/60/0.30), `C_long_bigval` (2000/150/0.30). Before running the
+  full 360 fits it (1) reproduces the 90 baseline fits and checks them against `results/raw`
+  (max abs AUROC difference was 0.0 across all 90), and (2) times 6 probe fits and STOPs if the
+  extrapolated total exceeds 2 hours (estimated 1.64h; actual run completed all 360/360 with
+  `status=ok`, 0 failures, 0 NaN losses, 0 constant predictions). Resumable: re-running skips
+  rows already in `results/phase2c/sensitivity_runs.csv`.
+- **`sensitivity-report`** (read-only): rebuilds the five summary tables (S1-S5: baseline check,
+  per-model/fraction mean metrics per variant, per-dataset AUROC with split-to-split std, early
+  stopping/cap/timing behaviour, failure counts) from `sensitivity_runs.csv` without re-fitting
+  anything, as `results/phase2c/sensitivity_report_S1.csv` .. `S5.csv`.
+- **`all`** runs `endpoints` + `tabnet` only (`sensitivity` and `xgb-wide-range` are run on their
+  own because of the STOP gates above).
+
+**Headline findings** (see `results/phase2c/` for the full tables): `xgb`'s `min_child_weight`
+sits at the lower end of its tuned range (1) in 23/50 classical tasks and `rf`'s
+`min_samples_leaf` in 18/50 -- a mild constraint, not a hard floor (see CLAUDE.md section 7).
+TabNet's known "collapse" on `ckd` at fraction 1.0 (mean AUROC 0.919, split std 0.138 under the
+current schedule) disappears under all three longer/bigger-validation variants (mean AUROC
+0.999-1.000, std <= 0.0015) -- but this was only tested on splits 0-2, not the full 10, and MLP
+and FT-Transformer barely move either way (all changes under 0.01 AUROC). Deciding whether to
+rerun the full deep-model benchmark with a different schedule is a decision for Demian; see
+CLAUDE.md section 8.
+
+**Git.** The project is under git locally (no remote; never push or add a remote without
+Demian's consent). `results/models/` and `data/*.pkl` are gitignored (regenerable from the code
+and from the public sources respectively). `results/MANIFEST_sha256.txt` (created 2026-11-07,
+1552 file hashes) records the SHA-256 of every file in `results/raw`, `tuning`, `predictions`,
+`models`, `diagnostics`, plus `phase2a_all_runs.csv` and `all_runs.csv`, so a future session can
+verify nothing in those folders has changed.
