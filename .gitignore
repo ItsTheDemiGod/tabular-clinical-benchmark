@@ -5,8 +5,6 @@ __pycache__/
 .pytest_cache/
 results_smoke/
 results_smoke_2b/
-results/models/
-data/*.pkl
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
 *.log
