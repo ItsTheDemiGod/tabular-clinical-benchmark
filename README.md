@@ -79,6 +79,8 @@ tabular-clinical-benchmark/
     run_phase2b.py        # deep-model command-line runner
     report_phase2a.py     # verification checks, tables and flags
     phase2c_diagnostics.py  # Phase 2c: endpoints / tabnet / sensitivity / sensitivity-report / xgb-wide-range / all
+    phase3a_stats.py        # Phase 3a: tests / ci / figures / tables / all
+  analysis/                # Phase 3a helper package (ranks, Friedman/Wilcoxon/Nadeau-Bengio, bootstrap, tables, plotting)
   data/                   # cached raw dataset downloads (*_raw.pkl), tracked in git
   results/
     raw/                  # one CSV per (dataset, model, split) task
@@ -91,6 +93,7 @@ tabular-clinical-benchmark/
     dataset_summary.csv     # per-dataset summary table
     MANIFEST_sha256.txt      # SHA-256 of every file above, for integrity checks
     phase2c/                # Phase 2c diagnostic outputs (see "Phase 2c" below)
+    phase3a/                 # Phase 3a stats/CI/figures/tables outputs (see "Phase 3a" below)
   results_smoke/            # smoke-test output (classical), gitignored, disposable
   results_smoke_2b/          # smoke-test output (deep models), gitignored, disposable
   tests/
@@ -101,6 +104,7 @@ tabular-clinical-benchmark/
     test_runner.py
     test_deep_models.py      # needs torch; run from .venv-deep
     test_phase2c.py           # fast, no GPU fit required
+    test_phase3a.py           # fast, no GPU fit required
   notebooks/                 # reserved for future exploratory analysis
 ```
 
@@ -423,3 +427,53 @@ This repository is at <https://github.com/ItsTheDemiGod/tabular-clinical-benchma
 included in the repository. Not included: the `.venv`/`.venv-deep` Python environments,
 `results_smoke`/`results_smoke_2b` (disposable smoke-test output), and local editor/session
 settings (`.claude/settings.local.json`).
+
+## Phase 3a
+
+Statistical analysis of the existing `results/all_runs.csv` (1400 rows), plus learning-curve
+figures and the main LaTeX tables. Phase 3a only reads `results/all_runs.csv` (and, once, for a
+precondition check, `results/raw/*.csv`); it never modifies any existing result file and never
+fits a model. New code lives in `analysis/` (helper package) and `scripts/phase3a_stats.py`
+(CLI); all new outputs are under `results/phase3a/`.
+
+**What was computed**, via `.venv-deep\Scripts\python.exe scripts/phase3a_stats.py <subcommand>`:
+
+```bash
+.venv-deep\Scripts\python.exe scripts/phase3a_stats.py tests     # Friedman/Iman-Davenport, Holm-Wilcoxon, Nadeau-Bengio
+.venv-deep\Scripts\python.exe scripts/phase3a_stats.py ci        # bootstrap confidence intervals (seed 42, B=5000)
+.venv-deep\Scripts\python.exe scripts/phase3a_stats.py figures   # learning curves, CD diagrams, diff-vs-logreg plots
+.venv-deep\Scripts\python.exe scripts/phase3a_stats.py tables    # Tables 1-5, CSV + LaTeX
+.venv-deep\Scripts\python.exe scripts/phase3a_stats.py all       # all four, in order
+```
+
+- **`tests`**: for AUROC, log loss and Brier, at fractions 1.0 and 0.1, over ALL5 (all 5
+  datasets) and NO_CKD (CKD excluded): per-block and per-dataset mean ranks, a Friedman test with
+  the Iman-Davenport F correction, and all 21 pairwise Wilcoxon signed-rank tests with a
+  hand-implemented Holm step-down correction. Also a Nadeau-Bengio corrected resampled paired
+  t-test (logreg vs. each of the other 6 models) per dataset. Writes `friedman_summary.csv`,
+  `pairwise_wilcoxon.csv`, `corrected_ttest.csv`, `stats_notes.md`.
+- **`ci`**: 95% percentile bootstrap CIs (seed 42, 5000 resamples) per model/fraction/metric, per
+  dataset and dataset-averaged (nested resampling), plus the paired difference to logreg using the
+  *same* resampled split indices for both. Writes `ci_per_dataset.csv`, `ci_dataset_averaged.csv`,
+  `ci_diff_vs_logreg.csv`.
+- **`figures`**: learning curves (AUROC/log loss/Brier vs. training fraction, 95% CI bands),
+  Wilcoxon-Holm critical-difference-style diagrams (AUROC, BLOCK unit), and dot-and-whisker plots
+  of the AUROC difference to logreg. PNG (300 dpi) and PDF, captions in `figure_captions.md`.
+- **`tables`**: Tables 1-5 (mean +/- std AUROC/log loss at fraction 1.0, mean AUROC by fraction,
+  mean rank by fraction, and mean Brier/log loss/ECE/fit time/predict time at fraction 1.0), each
+  as `.csv` and a hand-written booktabs `.tex`. Notes in `table_captions.md`.
+
+**Unit-of-analysis caveat** (see `results/phase3a/stats_notes.md` for the full statement): the
+BLOCK unit (one row per dataset x split, 50 or 40 rows) treats the 10 splits of a dataset as
+independent, although they come from repeated cross-validation with overlapping training sets, so
+BLOCK-unit p-values are anti-conservative. The DATASET unit (5 or 4 dataset-level means) is valid
+but has almost no power (the smallest possible two-sided Wilcoxon p-value is 0.0625 with 5 cells,
+0.125 with 4), so no DATASET-unit pair is ever significant at 0.05 after Holm. Neither file states
+that a model is "significantly better" -- only "Holm-adjusted p < 0.05 on the BLOCK unit".
+
+**Decisions recorded after Phase 2c/3a** (2026-11-07) are in CLAUDE.md sections 6-8: no
+deep-model rerun with a longer schedule (the baseline schedule stays primary); the xgb
+`min_child_weight` wide-range check showed no consistent AUROC change; the endpoint findings by
+the same-endpoint rule; TabNet's heart_cleveland collapses are not fixed by a longer schedule; the
+"MLP hits a hard 500-epoch cap" claim is unsupported by the actual mean epochs run and is recorded
+as unexplained.
