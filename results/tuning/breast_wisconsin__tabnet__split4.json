@@ -1,0 +1,21 @@
+{
+  "dataset": "breast_wisconsin",
+  "model": "tabnet",
+  "split_idx": 4,
+  "seed": 46,
+  "best_params": {
+    "n_d": 8,
+    "n_steps": 2,
+    "gamma": 1.3170519456162877,
+    "lambda_sparse": 0.0015893346698592791,
+    "lr": 0.005381636340582418,
+    "batch_size": 32
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.991865938145803,
+    "tuning_time_s": 872.7714481000148,
+    "failed_trial_errors": []
+  }
+}

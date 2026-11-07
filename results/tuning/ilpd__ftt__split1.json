@@ -1,0 +1,21 @@
+{
+  "dataset": "ilpd",
+  "model": "ftt",
+  "split_idx": 1,
+  "seed": 43,
+  "best_params": {
+    "d_token": 16,
+    "n_blocks": 3,
+    "dropout": 0.15492601940471995,
+    "lr": 0.002964249423004022,
+    "weight_decay": 9.65109917240474e-06,
+    "batch_size": 16
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.7574310956805089,
+    "tuning_time_s": 62.97023780000745,
+    "failed_trial_errors": []
+  }
+}

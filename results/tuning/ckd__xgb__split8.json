@@ -1,0 +1,22 @@
+{
+  "dataset": "ckd",
+  "model": "xgb",
+  "split_idx": 8,
+  "seed": 50,
+  "best_params": {
+    "n_estimators": 233,
+    "max_depth": 8,
+    "learning_rate": 0.06982119935624141,
+    "subsample": 0.8341687843883401,
+    "colsample_bytree": 0.5261293455532546,
+    "reg_lambda": 0.09575730443370724,
+    "min_child_weight": 1
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.9982587064676617,
+    "tuning_time_s": 2.183750800002599,
+    "failed_trial_errors": []
+  }
+}

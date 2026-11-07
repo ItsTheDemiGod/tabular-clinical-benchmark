@@ -1,0 +1,21 @@
+{
+  "dataset": "pima_diabetes",
+  "model": "tabnet",
+  "split_idx": 3,
+  "seed": 45,
+  "best_params": {
+    "n_d": 16,
+    "n_steps": 3,
+    "gamma": 1.8188734275653764,
+    "lambda_sparse": 1.6734870480469132e-05,
+    "lr": 0.023099565204244648,
+    "batch_size": 32
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.816269247822333,
+    "tuning_time_s": 231.29030150000472,
+    "failed_trial_errors": []
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "ilpd",
+  "model": "lgbm",
+  "split_idx": 8,
+  "seed": 50,
+  "best_params": {
+    "n_estimators": 50,
+    "num_leaves": 14,
+    "learning_rate": 0.019522384336165113,
+    "min_child_samples": 7,
+    "subsample": 0.5142270807279783,
+    "colsample_bytree": 0.6690948829094698,
+    "reg_lambda": 3.519991705881977
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.7444280476337228,
+    "tuning_time_s": 4.183954199994332,
+    "failed_trial_errors": []
+  }
+}

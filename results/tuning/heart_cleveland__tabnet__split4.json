@@ -1,0 +1,21 @@
+{
+  "dataset": "heart_cleveland",
+  "model": "tabnet",
+  "split_idx": 4,
+  "seed": 46,
+  "best_params": {
+    "n_d": 16,
+    "n_steps": 5,
+    "gamma": 1.5746406908362132,
+    "lambda_sparse": 0.006789110493054099,
+    "lr": 0.01961126491048805,
+    "batch_size": 16
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.8288288288288289,
+    "tuning_time_s": 241.19630840001628,
+    "failed_trial_errors": []
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "dataset": "breast_wisconsin",
+  "model": "rf",
+  "split_idx": 7,
+  "seed": 49,
+  "best_params": {
+    "n_estimators": 163,
+    "max_depth": 12,
+    "min_samples_leaf": 5,
+    "max_features": "sqrt"
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.9907839774875785,
+    "tuning_time_s": 20.618909600001643,
+    "failed_trial_errors": []
+  }
+}

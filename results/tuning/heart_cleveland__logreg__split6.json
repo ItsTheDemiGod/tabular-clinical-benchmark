@@ -1,0 +1,16 @@
+{
+  "dataset": "heart_cleveland",
+  "model": "logreg",
+  "split_idx": 6,
+  "seed": 48,
+  "best_params": {
+    "C": 0.12108649546890374
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.9256042511856465,
+    "tuning_time_s": 2.188557299989043,
+    "failed_trial_errors": []
+  }
+}

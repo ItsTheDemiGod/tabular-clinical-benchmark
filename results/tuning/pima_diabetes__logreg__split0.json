@@ -1,0 +1,16 @@
+{
+  "dataset": "pima_diabetes",
+  "model": "logreg",
+  "split_idx": 0,
+  "seed": 42,
+  "best_params": {
+    "C": 0.2052299956316879
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.8361771762342113,
+    "tuning_time_s": 0.5697127000021283,
+    "failed_trial_errors": []
+  }
+}

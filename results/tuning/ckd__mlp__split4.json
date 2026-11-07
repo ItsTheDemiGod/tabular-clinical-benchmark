@@ -1,0 +1,21 @@
+{
+  "dataset": "ckd",
+  "model": "mlp",
+  "split_idx": 4,
+  "seed": 46,
+  "best_params": {
+    "n_layers": 2,
+    "hidden": 90,
+    "dropout": 0.01799427179985036,
+    "lr": 0.000397938263115054,
+    "weight_decay": 1.5510038591708529e-06,
+    "batch_size": 64
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 1.0,
+    "tuning_time_s": 125.69889179998427,
+    "failed_trial_errors": []
+  }
+}

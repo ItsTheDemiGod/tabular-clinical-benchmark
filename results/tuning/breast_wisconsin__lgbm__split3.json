@@ -1,0 +1,22 @@
+{
+  "dataset": "breast_wisconsin",
+  "model": "lgbm",
+  "split_idx": 3,
+  "seed": 45,
+  "best_params": {
+    "n_estimators": 68,
+    "num_leaves": 15,
+    "learning_rate": 0.12428290977723461,
+    "min_child_samples": 6,
+    "subsample": 0.522044250716643,
+    "colsample_bytree": 0.9287334314828876,
+    "reg_lambda": 0.015149230976727176
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.9917381172228817,
+    "tuning_time_s": 2.50738629999978,
+    "failed_trial_errors": []
+  }
+}

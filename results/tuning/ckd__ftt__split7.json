@@ -1,0 +1,21 @@
+{
+  "dataset": "ckd",
+  "model": "ftt",
+  "split_idx": 7,
+  "seed": 49,
+  "best_params": {
+    "d_token": 64,
+    "n_blocks": 3,
+    "dropout": 0.2733107039899948,
+    "lr": 0.0006876340590976703,
+    "weight_decay": 0.00015412160426468707,
+    "batch_size": 64
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 1.0,
+    "tuning_time_s": 236.67948640001123,
+    "failed_trial_errors": []
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "heart_cleveland",
+  "model": "xgb",
+  "split_idx": 2,
+  "seed": 44,
+  "best_params": {
+    "n_estimators": 379,
+    "max_depth": 4,
+    "learning_rate": 0.010325520638183974,
+    "subsample": 0.6374181032944259,
+    "colsample_bytree": 0.679223349437974,
+    "reg_lambda": 1.170360842690624,
+    "min_child_weight": 4
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.91367636135078,
+    "tuning_time_s": 2.0264163999963785,
+    "failed_trial_errors": []
+  }
+}

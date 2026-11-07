@@ -1,0 +1,12 @@
+.venv/
+.venv-deep/
+__pycache__/
+*.pyc
+.pytest_cache/
+results_smoke/
+results_smoke_2b/
+results/models/
+data/*.pkl
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+*.log

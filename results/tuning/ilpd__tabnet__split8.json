@@ -1,0 +1,21 @@
+{
+  "dataset": "ilpd",
+  "model": "tabnet",
+  "split_idx": 8,
+  "seed": 50,
+  "best_params": {
+    "n_d": 16,
+    "n_steps": 3,
+    "gamma": 1.682632610716154,
+    "lambda_sparse": 0.007813189464928684,
+    "lr": 0.002163963209313568,
+    "batch_size": 64
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.7118921267052624,
+    "tuning_time_s": 450.5498147000035,
+    "failed_trial_errors": []
+  }
+}

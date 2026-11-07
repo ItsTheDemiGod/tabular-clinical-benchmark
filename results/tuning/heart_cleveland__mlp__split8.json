@@ -1,0 +1,21 @@
+{
+  "dataset": "heart_cleveland",
+  "model": "mlp",
+  "split_idx": 8,
+  "seed": 50,
+  "best_params": {
+    "n_layers": 1,
+    "hidden": 29,
+    "dropout": 0.36122204992461115,
+    "lr": 0.0005410123409934666,
+    "weight_decay": 7.337948819638042e-05,
+    "batch_size": 128
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.9220330266841895,
+    "tuning_time_s": 75.92011790000834,
+    "failed_trial_errors": []
+  }
+}

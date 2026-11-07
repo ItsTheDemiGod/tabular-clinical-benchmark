@@ -1,0 +1,21 @@
+{
+  "dataset": "ckd",
+  "model": "tabnet",
+  "split_idx": 3,
+  "seed": 45,
+  "best_params": {
+    "n_d": 8,
+    "n_steps": 2,
+    "gamma": 1.4445504669494351,
+    "lambda_sparse": 0.003306111283285006,
+    "lr": 0.0066611214324573415,
+    "batch_size": 16
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.9998756218905472,
+    "tuning_time_s": 373.3331034000148,
+    "failed_trial_errors": []
+  }
+}

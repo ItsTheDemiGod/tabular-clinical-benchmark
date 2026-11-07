@@ -1,0 +1,21 @@
+{
+  "dataset": "pima_diabetes",
+  "model": "ftt",
+  "split_idx": 2,
+  "seed": 44,
+  "best_params": {
+    "d_token": 16,
+    "n_blocks": 2,
+    "dropout": 0.256735094167316,
+    "lr": 0.0009820055528995258,
+    "weight_decay": 1.0374903629562428e-05,
+    "batch_size": 32
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.8377280645848849,
+    "tuning_time_s": 125.93843429998378,
+    "failed_trial_errors": []
+  }
+}

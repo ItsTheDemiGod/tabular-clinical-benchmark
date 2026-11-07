@@ -1,0 +1,22 @@
+{
+  "dataset": "ilpd",
+  "model": "xgb",
+  "split_idx": 6,
+  "seed": 48,
+  "best_params": {
+    "n_estimators": 331,
+    "max_depth": 2,
+    "learning_rate": 0.010245343503273536,
+    "subsample": 0.5085711946366921,
+    "colsample_bytree": 0.6859862033967061,
+    "reg_lambda": 7.190963777063116,
+    "min_child_weight": 5
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.7394743729641675,
+    "tuning_time_s": 6.110633200005395,
+    "failed_trial_errors": []
+  }
+}

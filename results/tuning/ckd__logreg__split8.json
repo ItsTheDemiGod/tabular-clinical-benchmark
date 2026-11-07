@@ -1,0 +1,16 @@
+{
+  "dataset": "ckd",
+  "model": "logreg",
+  "split_idx": 8,
+  "seed": 50,
+  "best_params": {
+    "C": 0.03548515801084289
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 1.0,
+    "tuning_time_s": 2.6330205999984173,
+    "failed_trial_errors": []
+  }
+}

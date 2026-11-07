@@ -1,0 +1,21 @@
+{
+  "dataset": "pima_diabetes",
+  "model": "mlp",
+  "split_idx": 9,
+  "seed": 51,
+  "best_params": {
+    "n_layers": 1,
+    "hidden": 39,
+    "dropout": 0.16168399583784826,
+    "lr": 0.00040911710781373035,
+    "weight_decay": 4.151171629805672e-05,
+    "batch_size": 64
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.8316233629995621,
+    "tuning_time_s": 101.93673539999872,
+    "failed_trial_errors": []
+  }
+}

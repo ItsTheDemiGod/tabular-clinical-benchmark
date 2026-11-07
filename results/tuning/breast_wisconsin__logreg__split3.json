@@ -1,0 +1,16 @@
+{
+  "dataset": "breast_wisconsin",
+  "model": "logreg",
+  "split_idx": 3,
+  "seed": 45,
+  "best_params": {
+    "C": 0.23122769438778124
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.9931385481246977,
+    "tuning_time_s": 1.5826956999953836,
+    "failed_trial_errors": []
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "dataset": "pima_diabetes",
+  "model": "rf",
+  "split_idx": 7,
+  "seed": 49,
+  "best_params": {
+    "n_estimators": 174,
+    "max_depth": 5,
+    "min_samples_leaf": 5,
+    "max_features": "log2"
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.8232747127201837,
+    "tuning_time_s": 21.391205699997954,
+    "failed_trial_errors": []
+  }
+}

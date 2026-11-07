@@ -1,0 +1,329 @@
+# tabular-clinical-benchmark
+
+Supporting code for the research paper **"When Does Deep Learning Help on
+Small Clinical Tabular Data?"**
+
+## Project goal
+
+This project benchmarks the performance of deep learning versus classical
+machine learning models on small, real-world clinical tabular datasets,
+across varying training-set sizes. It is built in phases:
+
+- **Phase 1 (this phase):** project setup, dataset loading, and a
+  leakage-safe preprocessing layer. No models, hyperparameter tuning, or
+  experiments yet.
+- **Later phases:** model implementations, tuning, and the experiments
+  themselves.
+
+## Datasets
+
+Five small clinical binary-classification datasets, loaded via
+`src.data.load_dataset(name)`:
+
+| name               | source                                             | rows | features |
+|--------------------|-----------------------------------------------------|------|----------|
+| `pima_diabetes`    | OpenML "diabetes" v1 (OpenML id 37)                 | 768  | 8        |
+| `heart_cleveland`  | UCI "Heart Disease" (ucimlrepo id 45)               | 303  | 13       |
+| `ckd`              | UCI "Chronic Kidney Disease" (ucimlrepo id 336)     | 400  | 24       |
+| `ilpd`             | UCI "ILPD (Indian Liver Patient Dataset)" (id 225)  | 570  | 10       |
+| `breast_wisconsin` | UCI "Breast Cancer Wisconsin (Diagnostic)" (id 17)  | 569  | 30       |
+
+Raw downloads are cached under `data/` so repeated loads (and the test
+suite) don't hit the network every time. See `results/dataset_summary.csv`
+for the full summary table (rows, duplicates, features, numeric/categorical
+counts, positive-class fraction, missing-value fraction, conflicting-label
+rows). Regenerate it with `python -m src.make_dataset_summary`.
+
+## Environment setup
+
+```bash
+# From the project root:
+python -m venv .venv
+
+# Windows:
+.venv\Scripts\activate
+# macOS/Linux:
+source .venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+## Running the tests
+
+```bash
+pytest tests/ -v
+```
+
+## Repository layout
+
+```
+tabular-clinical-benchmark/
+  README.md
+  requirements.txt
+  src/
+    __init__.py
+    data.py            # load_dataset(name) -> (X, y, meta)
+    preprocessing.py    # build_preprocessor(...) -> unfitted ColumnTransformer
+    utils.py            # set_seed, make_splits, subsample_train
+    make_dataset_summary.py  # regenerates results/dataset_summary.csv
+    metrics.py          # compute_metrics, prediction_diversity
+    models.py           # MODEL_REGISTRY, build_pipeline, effective_params
+    tuning.py           # tune_model
+    runner.py           # run_task
+  scripts/
+    run_phase2a.py      # command-line runner (smoke test and full run)
+    report_phase2a.py   # verification checks, tables and flags
+  data/                 # cached raw dataset downloads (*_raw.pkl)
+  results/              # raw, tuning, predictions, models, phase2a_all_runs.csv
+  results_smoke/        # smoke-test output, kept apart from real results
+  tests/
+    test_data.py
+    test_preprocessing.py
+    test_metrics.py
+    test_models.py
+    test_runner.py
+  notebooks/            # reserved for future exploratory analysis
+```
+
+## Phase 1 complete
+
+- Project structure, virtual environment, and pinned `requirements.txt`.
+- `src/data.py`: `load_dataset(name)` for all five datasets, with identity
+  checks against the live OpenML/UCI sources (fails loudly on a mismatch
+  rather than silently substituting data), raw-download caching, target
+  binarization, and full `meta` dicts (row/feature counts, class balance,
+  numeric/categorical column lists, per-column missing fraction, source).
+- `src/preprocessing.py`: `build_preprocessor(numeric_cols, categorical_cols,
+  scale)` returning an unfitted `ColumnTransformer` (median/most-frequent
+  imputation, optional scaling, one-hot encoding with
+  `handle_unknown="ignore"`) designed to be fit only inside a `Pipeline` on a
+  single training fold.
+- `src/utils.py`: `set_seed`, `make_splits` (RepeatedStratifiedKFold), and
+  `subsample_train` (stratified subsampling with a minimum-2-per-class
+  guarantee).
+- 17 passing tests covering dataset loading, split structure, subsampling
+  behavior, and a leakage test verifying imputation/scaling statistics are
+  computed from the training fold only.
+- `results/dataset_summary.csv` generated from live data.
+
+Not yet implemented (future phases): models, hyperparameter tuning,
+experiment loops, and result analysis.
+
+## Phase 1.1 patch
+
+Three data-quality fixes, all applied in `load_dataset` after the cache is read,
+so the raw downloads in `data/` stay untouched.
+
+1. **Pima hidden missing values.** In `plas`, `pres`, `skin`, `insu` and `mass`,
+   a 0 means "not recorded" and is physiologically impossible, so it now becomes
+   NaN (652 values in total, listed in `meta["zeros_replaced_with_nan"]`). Left as
+   zeros, these looked like real measurements and hid the missingness: 48.7% of
+   `insu` and 29.6% of `skin` are actually missing. `preg`, `pedi` and `age` are
+   unchanged, because 0 pregnancies is a real value.
+2. **Cleveland categorical columns.** `sex`, `cp`, `fbs`, `restecg`, `exang`,
+   `slope` and `thal` are category codes, not quantities, but were being scaled as
+   numbers. They are now strings and go to the one-hot branch, with missing values
+   kept as NaN. `age`, `trestbps`, `chol`, `thalach`, `oldpeak` and `ca` stay numeric.
+3. **Duplicate rows.** Exact duplicates (all features plus the target) are dropped
+   in every dataset, keeping the first, because a copy could land in both the train
+   and test folds and inflate scores. Only ILPD had any: 13 rows, taking it from 583
+   to 570. Rows with identical features but conflicting labels would be kept and
+   counted, with a warning; there are currently none.
+
+## Phase 1.2 patch
+
+**Fix: CKD preprocessor crash.** `build_preprocessor` raised
+`TypeError: boolean value of NA is ambiguous` when fit on `ckd`, because the loader
+stored categorical columns in pandas `string` dtype, whose `pd.NA` missing marker
+`SimpleImputer` cannot handle. A shared helper in `load_dataset`,
+`_normalize_categoricals`, now stores categorical columns in all five datasets as
+plain object dtype with `np.nan` for missing values. Missing counts, numeric
+columns, row counts and the raw caches are unchanged. The helper raises an error if
+it finds a placeholder string (`"nan"`, `"None"`, `"<NA>"`, `"?"`), so that a
+placeholder is never silently counted as missing or kept as a category.
+
+**Why `sg`, `al` and `su` stay numeric.** These CKD columns are ordered scales with
+5 to 6 distinct values, and one-hot encoding would discard the order. They are
+listed in `meta["ordinal_as_numeric"]`.
+
+**New tests:**
+
+- `test_preprocessor_fits_on_all_datasets`: 5 datasets x scale on/off. Fits on the
+  train fold only and checks both folds for finite, numeric output of the right size.
+  No earlier test fit the preprocessor on CKD, which is how the crash went unnoticed.
+- `test_preprocessor_fits_on_small_training_fraction`: fits on a 10% training subset
+  and transforms the full test fold, including categories the subset never saw.
+- `test_categoricals_are_object_dtype_without_pd_na`: checks categorical storage in
+  all five datasets.
+- `test_ckd_ordinal_columns_numeric`: checks where `sg`, `al` and `su` are routed.
+- Two synthetic `_normalize_categoricals` tests: missing markers and placeholder
+  rejection, neither of which the real data fully exercises.
+
+## Phase 2a
+
+**What was built:**
+
+- `src/metrics.py`: `compute_metrics` (AUROC, F1, balanced accuracy, Brier, log loss,
+  ECE).
+- `src/models.py`: `MODEL_REGISTRY` with logistic regression, random forest, XGBoost and
+  LightGBM, plus `build_pipeline`.
+- `src/tuning.py`: `tune_model`, the shared Optuna setup. Every model gets 20 TPE trials
+  scored by mean AUROC over 3 inner folds, using training data only.
+- `src/runner.py`: `run_task`, which runs one (dataset, model, outer split) task and
+  supports resume.
+- `scripts/run_phase2a.py`: the command-line runner.
+- `scripts/report_phase2a.py`: read-only verification checks, tables and flags.
+
+**How to run (from the project root, with the virtual environment active):**
+
+```bash
+# Smoke test: pima_diabetes, logreg and xgb, split 0, 3 trials, writes to results_smoke/
+python scripts/run_phase2a.py --smoke
+
+# Full run: 200 tasks, writes to results/. Re-run the same command to resume after an
+# interruption; finished tasks are skipped.
+python scripts/run_phase2a.py --workers 4
+
+# Verification, tables and flags for the full run
+python scripts/report_phase2a.py
+```
+
+**ECE definition.** Binary expected calibration error on the positive-class probability,
+with 10 equal-width bins over [0, 1]:
+`ECE = sum over bins of (n_bin / n) * |mean(y_true in bin) - mean(y_prob in bin)|`,
+skipping empty bins. Bins include their lower edge and exclude their upper edge, except
+the last, which also includes 1.0.
+
+**Conventions:**
+
+- Hyperparameters are tuned once, on the full (100%) training fold, and reused for the
+  smaller fractions. Phase 2a.1 scales the leaf-size settings; everything else is reused
+  unchanged.
+- No model uses native missing-value handling. All four receive the output of the shared
+  preprocessor (median imputation), which is dense and contains no NaN. `class_weight` and
+  early stopping are not used.
+- Model input widths come from the fitted preprocessor output, never from a hardcoded
+  number, because one-hot width depends on the categories in the training data.
+
+## Phase 2a.1 patch
+
+**Why leaf-size settings are scaled.** Leaf-size constraints tuned at 100% training size
+are measured in absolute rows or hessian units. Reused on a small subset, they can forbid
+every split, and the model then predicts the same value for every patient (AUROC exactly
+0.5). `effective_params(model_name, params, fraction)` keeps their relative size constant:
+
+| model | rule |
+|-------|------|
+| `xgb` | `min_child_weight = max(1.0, min_child_weight * fraction)`, an unrounded float |
+| `lgbm` | `min_child_samples = max(1, round(min_child_samples * fraction))` |
+| `rf` | `min_samples_leaf = max(1, round(min_samples_leaf * fraction))` |
+| `logreg` | unchanged, because `C` already scales with sample size |
+
+At fraction 1.0 the parameters are exactly the tuned ones. `round` is Python's built-in, so
+exact halves go to the nearest even number. Tuning itself is unchanged, and
+`results/tuning/*.json` holds the tuned values.
+
+**New columns.** `results/raw/*.csv` gains `n_unique_probs` (unique predicted probabilities
+after rounding to 8 decimals) and `constant_prediction` (true when that number is 1), right
+after `predict_time_s`. Both are empty on failed rows. A constant row keeps status `ok`,
+prints a warning, and is listed at the end of the run. CSVs without these columns count as
+incomplete and rerun on resume.
+
+**New `params_json` format.** A JSON object with exactly three keys: `tuned` (from tuning
+at 100%), `effective` (actually used for that fraction) and `fraction`.
+
+**Verbose option.** `load_dataset(name, verbose=False)` prints nothing, except the warning
+about conflicting labels, which always prints. The runner uses `verbose=False`, and the
+default behaviour is unchanged.
+
+**Calibration convention.** A constant prediction can look well calibrated while being
+unable to rank patients, so analyses of calibration must exclude or separately flag rows
+where `constant_prediction` is true. The full Phase 2a run has no such rows.
+
+## Phase 2b
+
+**What was built.** Three deep models were added to the same harness, tuning protocol and
+result-CSV format as Phase 2a/2a.1: MLP, FT-Transformer and TabNet. They receive the output
+of the same shared preprocessor (median imputation, one-hot, scaling) as the classical
+models, so the comparison stays fair. TabPFN is **not** part of this phase: it is not
+imported, installed, configured or tested anywhere in this codebase.
+
+**Models and search spaces** (Optuna, `TPESampler`, 20 trials, 3 inner folds — identical
+budget to the classical models):
+
+| model | hyperparameters tuned |
+|-------|------------------------|
+| `mlp` | `n_layers` (1-3), `hidden` (16-256, log), `dropout` (0-0.5), `lr` (1e-4 to 1e-2, log), `weight_decay` (1e-6 to 1e-2, log), `batch_size` (16/32/64/128) |
+| `ftt` | `d_token` (16/32/64), `n_blocks` (1-3), `dropout` (0-0.4), `lr` (1e-4 to 3e-3, log), `weight_decay` (1e-6 to 1e-2, log), `batch_size` (16/32/64/128) |
+| `tabnet` | `n_d` = `n_a` (8/16/32), `n_steps` (2-5), `gamma` (1.0-2.0), `lambda_sparse` (1e-5 to 1e-2, log), `lr` (1e-3 to 3e-2, log), `batch_size` (16/32/64/128) |
+
+MLP is a plain stack of `n_layers` equal-width `Linear -> ReLU -> Dropout` blocks (no batch
+norm — batches on the small training fractions are tiny) ending in one logit. FT-Transformer
+follows Gorishniy et al. (2021): a learnable CLS token, `n_blocks` pre-norm Transformer blocks
+(4 attention heads, feed-forward width `2 * d_token`), and a linear head on the CLS token.
+**Simplification:** every encoded column (including one-hot columns) is tokenized as a
+numeric feature — there is no separate categorical-embedding path. TabNet wraps
+`pytorch_tabnet.tab_model.TabNetClassifier` directly.
+
+**Training-schedule rule.** `training_schedule(n_train_part, batch_size)` keeps the number of
+gradient steps roughly constant across the four training fractions, instead of a constant
+epoch count: `effective_batch = min(batch_size, max(8, n_train_part // 4))`,
+`steps_per_epoch = ceil(n_train_part / effective_batch)`, `max_epochs = min(500,
+ceil(600 / steps_per_epoch))`, `patience_epochs = max(5, ceil(60 / steps_per_epoch))`. Early
+stopping monitors validation log loss on a 15%-of-training-fold split
+(`split_validation`), restoring the best weights at the end. When a class has fewer than 4
+samples in the fit set no validation split is possible, so the model trains for a fixed 200
+steps instead and records `early_stopping=False`. This is an asymmetry with the tree models
+(`rf`/`xgb`/`lgbm`) and `logreg`, which have no early stopping and no validation carve-out at
+all — their full tuned training fold is used for fitting at every fraction.
+
+**TabNet singleton-batch rule.** `pytorch_tabnet`'s internal network uses `BatchNorm1d`, which
+raises on a batch of exactly 1 sample in training mode. Because `effective_batch` is derived
+from the training-fold size and the tuned `batch_size`, a remainder of exactly 1
+(`n_train_part % effective_batch == 1`) produces a final mini-batch of 1 row and crashes.
+`_avoid_singleton_remainder(total, chunk)` bumps `chunk` up by one whenever this would happen,
+applied to both `effective_batch` (against `n_train_part`) and `virtual_batch_size` (against
+`effective_batch`, Ghost Batch Normalization's internal chunk size). This was found live
+during timing runs (not by the unit tests' tiny synthetic datasets) on
+`breast_wisconsin__tabnet` and `ilpd__tabnet`.
+
+**Environments.** The deep models run only in `.venv-deep` (torch 2.15.0+cu132,
+pytorch-tabnet 4.1.0, plus the same classical package versions as `.venv`). The four
+classical models run identically in either environment; `requirements.txt` pins `.venv`
+(classical-only, no torch) and `requirements-deep.txt` pins the full `.venv-deep` freeze.
+`src/models.py` imports `src.deep_models` (and therefore torch) lazily, only inside the three
+new models' `_make_*` functions, so the classical registry, classical pipelines and classical
+tests work unchanged in an environment without torch at all — verified by a dedicated test
+that checks `torch` is absent from `sys.modules` after building and fitting the four
+classical pipelines in a fresh subprocess.
+
+GPU: NVIDIA RTX 4060 (CUDA 13.2, driver matching torch 2.15.0+cu132).
+
+**How to run (from the project root, `.venv-deep\Scripts\python.exe` explicitly):**
+
+```bash
+# Smoke test: pima_diabetes, all three deep models, split 0, 3 trials, writes to results_smoke_2b/
+.venv-deep\Scripts\python.exe scripts/run_phase2b.py --smoke
+
+# Full run: 150 deep-model tasks (5 datasets x 3 models x 10 splits), writes into results/
+# alongside the classical results. Re-run the same command to resume after an interruption;
+# finished tasks (raw + tuning + predictions + models + diagnostics all present) are skipped.
+.venv-deep\Scripts\python.exe scripts/run_phase2b.py --workers 3
+
+# Or split into two resumable pieces, run separately:
+.venv-deep\Scripts\python.exe scripts/run_phase2b.py --models mlp ftt --workers 3
+.venv-deep\Scripts\python.exe scripts/run_phase2b.py --models tabnet --workers 3
+```
+
+**New result files.** `results/diagnostics/{dataset}__{model}__split{split}.json`, written
+only for the three deep models, keyed by fraction, holding each `training_info_` dict
+(`n_fit`, `n_train_part`, `n_val`, `early_stopping`, `effective_batch`, `steps_per_epoch`,
+`max_epochs`, `patience_epochs`, `epochs_run`, `best_epoch`, `best_val_logloss`,
+`n_parameters`, `device`, `peak_gpu_mem_mb`, `nan_loss`). The `results/raw/*.csv` schema is
+unchanged from Phase 2a.1. `results/all_runs.csv` aggregates all seven models'
+`results/raw/*.csv` files (1400 rows: 350 tasks x 4 fractions); `results/phase2a_all_runs.csv`
+is untouched.
+
+**TabPFN.** Not part of this phase. It is excluded from every environment-verification step,
+is not imported or invoked anywhere in `src/` or `scripts/`, and no model weights or API
+tokens were obtained for it.

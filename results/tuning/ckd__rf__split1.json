@@ -1,0 +1,19 @@
+{
+  "dataset": "ckd",
+  "model": "rf",
+  "split_idx": 1,
+  "seed": 43,
+  "best_params": {
+    "n_estimators": 189,
+    "max_depth": 14,
+    "min_samples_leaf": 1,
+    "max_features": "sqrt"
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 1.0,
+    "tuning_time_s": 24.914004100006423,
+    "failed_trial_errors": []
+  }
+}

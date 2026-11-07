@@ -1,0 +1,21 @@
+{
+  "dataset": "ilpd",
+  "model": "mlp",
+  "split_idx": 9,
+  "seed": 51,
+  "best_params": {
+    "n_layers": 3,
+    "hidden": 18,
+    "dropout": 0.17165183627129615,
+    "lr": 0.0019410622078709727,
+    "weight_decay": 1.3704146572139011e-05,
+    "batch_size": 16
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.7683456456081091,
+    "tuning_time_s": 45.52495329998783,
+    "failed_trial_errors": []
+  }
+}

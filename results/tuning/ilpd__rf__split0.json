@@ -1,0 +1,19 @@
+{
+  "dataset": "ilpd",
+  "model": "rf",
+  "split_idx": 0,
+  "seed": 42,
+  "best_params": {
+    "n_estimators": 123,
+    "max_depth": 13,
+    "min_samples_leaf": 10,
+    "max_features": "log2"
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.7403900112233446,
+    "tuning_time_s": 23.432517700013705,
+    "failed_trial_errors": []
+  }
+}

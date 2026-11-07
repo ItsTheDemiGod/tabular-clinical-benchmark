@@ -1,0 +1,22 @@
+{
+  "dataset": "ckd",
+  "model": "lgbm",
+  "split_idx": 1,
+  "seed": 43,
+  "best_params": {
+    "n_estimators": 238,
+    "num_leaves": 5,
+    "learning_rate": 0.1453064001440626,
+    "min_child_samples": 9,
+    "subsample": 0.9797786353526542,
+    "colsample_bytree": 0.5668956398205384,
+    "reg_lambda": 0.12730274095798388
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.9997512437810946,
+    "tuning_time_s": 4.367008300003363,
+    "failed_trial_errors": []
+  }
+}

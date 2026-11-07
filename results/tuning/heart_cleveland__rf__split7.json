@@ -1,0 +1,19 @@
+{
+  "dataset": "heart_cleveland",
+  "model": "rf",
+  "split_idx": 7,
+  "seed": 49,
+  "best_params": {
+    "n_estimators": 238,
+    "max_depth": 17,
+    "min_samples_leaf": 10,
+    "max_features": "log2"
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.8966630478258386,
+    "tuning_time_s": 10.455583799994201,
+    "failed_trial_errors": []
+  }
+}

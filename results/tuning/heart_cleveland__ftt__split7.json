@@ -1,0 +1,21 @@
+{
+  "dataset": "heart_cleveland",
+  "model": "ftt",
+  "split_idx": 7,
+  "seed": 49,
+  "best_params": {
+    "d_token": 64,
+    "n_blocks": 2,
+    "dropout": 0.21989194976319218,
+    "lr": 0.00017063798897735835,
+    "weight_decay": 4.4840874889083114e-05,
+    "batch_size": 64
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.9148858160486067,
+    "tuning_time_s": 118.82691050000722,
+    "failed_trial_errors": []
+  }
+}

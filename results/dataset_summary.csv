@@ -1,0 +1,6 @@
+dataset,n_rows_before_dedup,n_duplicates_found,n_rows,n_features,n_numeric,n_categorical,positive_fraction,missing_fraction,n_conflicting_label_rows,source
+pima_diabetes,768,0,768,8,8,0,0.349,0.1061,0,OpenML diabetes v1 (id 37)
+heart_cleveland,303,0,303,13,6,7,0.4587,0.0015,0,"UCI Heart Disease, Cleveland subset (id 45)"
+ckd,400,0,400,24,14,10,0.625,0.1054,0,UCI Chronic Kidney Disease (id 336)
+ilpd,583,13,570,10,9,1,0.7123,0.0007,0,UCI ILPD Indian Liver Patient Dataset (id 225)
+breast_wisconsin,569,0,569,30,30,0,0.3726,0.0,0,UCI Breast Cancer Wisconsin Diagnostic (id 17)

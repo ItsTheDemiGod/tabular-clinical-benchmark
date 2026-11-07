@@ -1,0 +1,21 @@
+{
+  "dataset": "breast_wisconsin",
+  "model": "mlp",
+  "split_idx": 8,
+  "seed": 50,
+  "best_params": {
+    "n_layers": 1,
+    "hidden": 102,
+    "dropout": 0.01491741718022943,
+    "lr": 0.001379217933071685,
+    "weight_decay": 2.481958674428667e-05,
+    "batch_size": 16
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.9959097304665172,
+    "tuning_time_s": 42.0747181000188,
+    "failed_trial_errors": []
+  }
+}

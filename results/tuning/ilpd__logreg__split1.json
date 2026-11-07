@@ -1,0 +1,16 @@
+{
+  "dataset": "ilpd",
+  "model": "logreg",
+  "split_idx": 1,
+  "seed": 43,
+  "best_params": {
+    "C": 0.5079384173175662
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.743333924193216,
+    "tuning_time_s": 2.0331398000125773,
+    "failed_trial_errors": []
+  }
+}

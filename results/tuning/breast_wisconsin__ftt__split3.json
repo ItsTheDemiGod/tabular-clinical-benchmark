@@ -1,0 +1,21 @@
+{
+  "dataset": "breast_wisconsin",
+  "model": "ftt",
+  "split_idx": 3,
+  "seed": 45,
+  "best_params": {
+    "d_token": 16,
+    "n_blocks": 1,
+    "dropout": 0.26797655260957076,
+    "lr": 0.0004292961936829037,
+    "weight_decay": 0.00012169817790147334,
+    "batch_size": 128
+  },
+  "info": {
+    "n_trials": 20,
+    "n_failed_trials": 0,
+    "best_value": 0.9924075539726509,
+    "tuning_time_s": 77.66118479997385,
+    "failed_trial_errors": []
+  }
+}
