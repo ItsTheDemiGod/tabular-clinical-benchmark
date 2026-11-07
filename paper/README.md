@@ -65,3 +65,26 @@ SUPPORTED / PARTLY / NOT SUPPORTED / DESCRIPTIVE status for every candidate
 claim (C1-C11) plus a "STATEMENTS THAT MUST NOT BE MADE" list. Draft every
 results/discussion sentence against this file, not from memory of earlier
 phase summaries.
+
+## Phase 4c additions: authors, figures, table, Overleaf bundle
+
+**Authors (names only, in this order):** Demian Sharwin Xaxa (first author,
+proposed corresponding author), Aaron John Langan, Nithy Maria Mathew,
+Gangavarapu V Vasu; all from [DEPARTMENT NAME], Karunya Institute of
+Technology and Sciences, Coimbatore, India. **Emails are never stored in this
+repository**: `main.tex` carries the placeholder `[EMAIL]`, and the real
+addresses are added by hand in Overleaf at the very end.
+
+**EMBC 2027 limits:** strict 4+1 pages, at most 20 references, at most 35 authors.
+
+**Generated files** (re-create with `scripts/make_paper_figures.py`,
+`scripts/make_paper_tables.py`, `scripts/make_overleaf_bundle.py`):
+
+| file | final size |
+|---|---|
+| `figures/fig_main_learning_calibration.pdf/.png` | 7.16 x 2.4 in (double column), 3 panels |
+| `figures/fig_main_robustness.pdf/.png` | 7.16 x 2.2 in (double column), 2 panels |
+| `figures/SOURCES.txt` | source CSVs with SHA-256 and filters |
+| `tables/table_main.tex` | `table*`, double column; every number is `\N{key}` |
+| `tables/supp_slopes_per_dataset.tex/.csv`, `tables/supp_noise_comparison.tex/.csv` | supplementary (arXiv/repository only) |
+| `overleaf_bundle.zip` | upload bundle (git-ignored) |

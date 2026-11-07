@@ -754,3 +754,13 @@ paper skeleton under `paper/`.
   into `paper/figures/` with a `SOURCES.txt` provenance log (written but not run in this phase --
   no figure has been selected yet). `scripts/check_paper_layout.py` checks citation-key count
   (<=20), author count (<=35), and (once a PDF exists) page count (<=5) and page-5 content.
+
+## Phase 4c: paper figures, main table and Overleaf bundle
+
+No result file or model was changed. New: `scripts/make_paper_figures.py` (two double-column figures at their final size, PDF with embedded TrueType fonts + 300 dpi PNG, `paper/figures/SOURCES.txt` with source CSVs and SHA-256), `scripts/make_paper_tables.py` (`paper/tables/table_main.tex`, whose numeric cells are all `\N{key}` macros, plus two supplementary tables), `scripts/make_overleaf_bundle.py` (git-ignored `paper/overleaf_bundle.zip`), the four-author block in `paper/main.tex` (names only; emails are added by hand in Overleaf and never stored here) and `tests/test_phase4c.py` (19 tests).
+
+```
+.venv-deep\Scripts\python.exe scripts\make_paper_figures.py
+.venv-deep\Scripts\python.exe scripts\make_paper_tables.py
+.venv-deep\Scripts\python.exe scripts\make_overleaf_bundle.py
+```

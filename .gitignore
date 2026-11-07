@@ -9,3 +9,13 @@ results_smoke_2b/
 .claude/scheduled_tasks.lock
 *.log
 .vscode/
+
+# LaTeX build artifacts and the Overleaf bundle (Phase 4c)
+*.aux
+*.bbl
+*.blg
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+paper/overleaf_bundle.zip
