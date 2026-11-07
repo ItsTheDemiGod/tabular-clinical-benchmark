@@ -79,12 +79,12 @@ tabular-clinical-benchmark/
     run_phase2b.py        # deep-model command-line runner
     report_phase2a.py     # verification checks, tables and flags
     phase2c_diagnostics.py  # Phase 2c: endpoints / tabnet / sensitivity / sensitivity-report / xgb-wide-range / all
-  data/                   # cached raw dataset downloads (*_raw.pkl), gitignored
+  data/                   # cached raw dataset downloads (*_raw.pkl), tracked in git
   results/
     raw/                  # one CSV per (dataset, model, split) task
     tuning/                # one JSON per task: tuned hyperparameters
     predictions/           # one .npz per task: test_idx, y_true, prob_{fraction}
-    models/                 # one .joblib per task (fraction 1.0 only), gitignored (regenerable)
+    models/                 # one .joblib per task (fraction 1.0 only), tracked in git
     diagnostics/            # one JSON per deep-model task: training_info_ per fraction
     phase2a_all_runs.csv    # frozen Phase 2a/2a.1 classical snapshot (800 rows)
     all_runs.csv            # Phase 2a+2b aggregate (1400 rows)
@@ -406,9 +406,20 @@ and FT-Transformer barely move either way (all changes under 0.01 AUROC). Decidi
 rerun the full deep-model benchmark with a different schedule is a decision for Demian; see
 CLAUDE.md section 8.
 
-**Git.** The project is under git locally (no remote; never push or add a remote without
-Demian's consent). `results/models/` and `data/*.pkl` are gitignored (regenerable from the code
-and from the public sources respectively). `results/MANIFEST_sha256.txt` (created 2026-11-07,
-1552 file hashes) records the SHA-256 of every file in `results/raw`, `tuning`, `predictions`,
-`models`, `diagnostics`, plus `phase2a_all_runs.csv` and `all_runs.csv`, so a future session can
-verify nothing in those folders has changed.
+**Git.** The project is under git, with a GitHub remote `origin` added 2026-11-07 (see "Code
+availability" below). The first push is Demian's to make; after that, Claude Code may push with
+plain `git push origin main` at the end of a phase, only once tests pass and the secret scan is
+clean, never with `--force` or to any branch but `main`, and never rewriting history.
+`results/models/` and `data/*.pkl` are tracked (not gitignored) as of 2026-11-07.
+`results/MANIFEST_sha256.txt` (created 2026-11-07, 1552 file hashes) records the SHA-256 of
+every file in `results/raw`, `tuning`, `predictions`, `models`, `diagnostics`, plus
+`phase2a_all_runs.csv` and `all_runs.csv`, so a future session can verify nothing in those
+folders has changed.
+
+## Code availability
+
+This repository is at <https://github.com/ItsTheDemiGod/tabular-clinical-benchmark.git>.
+`results/models/` (the saved fraction-1.0 pipelines) and the raw dataset caches in `data/` are
+included in the repository. Not included: the `.venv`/`.venv-deep` Python environments,
+`results_smoke`/`results_smoke_2b` (disposable smoke-test output), and local editor/session
+settings (`.claude/settings.local.json`).
