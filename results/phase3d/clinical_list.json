@@ -1,0 +1,109 @@
+{
+  "date": "2026-11-08",
+  "datasets": {
+    "pima_diabetes": {
+      "plain_language": [
+        "glucose",
+        "BMI",
+        "age",
+        "diabetes pedigree function",
+        "number of pregnancies"
+      ],
+      "columns": [
+        "plas",
+        "mass",
+        "age",
+        "pedi",
+        "preg"
+      ]
+    },
+    "heart_cleveland": {
+      "plain_language": [
+        "chest pain type",
+        "number of major vessels",
+        "thalassemia",
+        "ST depression",
+        "maximum heart rate",
+        "exercise-induced angina",
+        "sex",
+        "age"
+      ],
+      "columns": [
+        "cp",
+        "ca",
+        "thal",
+        "oldpeak",
+        "thalach",
+        "exang",
+        "sex",
+        "age"
+      ]
+    },
+    "ckd": {
+      "plain_language": [
+        "hemoglobin",
+        "serum creatinine",
+        "specific gravity",
+        "albumin",
+        "packed cell volume",
+        "red blood cell count",
+        "hypertension",
+        "diabetes mellitus"
+      ],
+      "columns": [
+        "hemo",
+        "sc",
+        "sg",
+        "al",
+        "pcv",
+        "rbcc",
+        "htn",
+        "dm"
+      ]
+    },
+    "ilpd": {
+      "plain_language": [
+        "total bilirubin",
+        "direct bilirubin",
+        "alkaline phosphatase",
+        "ALT (SGPT)",
+        "AST (SGOT)",
+        "albumin"
+      ],
+      "columns": [
+        "TB",
+        "DB",
+        "Alkphos",
+        "Sgpt",
+        "Sgot",
+        "ALB"
+      ]
+    },
+    "breast_wisconsin": {
+      "plain_language": [
+        "columns starting with radius",
+        "columns starting with perimeter",
+        "columns starting with area",
+        "columns starting with concavity",
+        "columns starting with concave"
+      ],
+      "columns": [
+        "radius1",
+        "perimeter1",
+        "area1",
+        "concavity1",
+        "concave_points1",
+        "radius2",
+        "perimeter2",
+        "area2",
+        "concavity2",
+        "concave_points2",
+        "radius3",
+        "perimeter3",
+        "area3",
+        "concavity3",
+        "concave_points3"
+      ]
+    }
+  }
+}
