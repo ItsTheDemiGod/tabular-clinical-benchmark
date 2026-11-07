@@ -1,0 +1,16 @@
+dataset,level,nonneg_columns,frac_negative_noise,frac_negative_noise_cont
+pima_diabetes,0.1,"preg,plas,pres,skin,insu,mass,pedi,age",0.009964245456290273,0.009783188008127169
+pima_diabetes,0.25,"preg,plas,pres,skin,insu,mass,pedi,age",0.01520641895010902,0.01533111110246537
+pima_diabetes,0.5,"preg,plas,pres,skin,insu,mass,pedi,age",0.030892518499476683,0.03129311706736639
+heart_cleveland,0.1,"age,trestbps,chol,thalach,oldpeak,ca",0.07948646339802125,0.028920178609878267
+heart_cleveland,0.25,"age,trestbps,chol,thalach,oldpeak,ca",0.07711838341774593,0.03228212842242319
+heart_cleveland,0.5,"age,trestbps,chol,thalach,oldpeak,ca",0.08374263382561253,0.035681448092583404
+ckd,0.1,"age,bp,sg,al,su,bgr,bu,sc,sod,pot,hemo,pcv,wbcc,rbcc",0.05305970089833947,0.0033664039808765584
+ckd,0.25,"age,bp,sg,al,su,bgr,bu,sc,sod,pot,hemo,pcv,wbcc,rbcc",0.06548881785325043,0.014232083580598793
+ckd,0.5,"age,bp,sg,al,su,bgr,bu,sc,sod,pot,hemo,pcv,wbcc,rbcc",0.08174808822188118,0.02891222635497556
+ilpd,0.1,"Age,TB,DB,Alkphos,Sgpt,Sgot,TP,ALB,A/G Ratio",0.0402838693957115,0.03960271229288499
+ilpd,0.25,"Age,TB,DB,Alkphos,Sgpt,Sgot,TP,ALB,A/G Ratio",0.099080698708577,0.09676238121345028
+ilpd,0.5,"Age,TB,DB,Alkphos,Sgpt,Sgot,TP,ALB,A/G Ratio",0.1434845196759259,0.14280084978070173
+breast_wisconsin,0.1,"radius1,texture1,perimeter1,area1,smoothness1,compactness1,concavity1,concave_points1,symmetry1,fractal_dimension1,radius2,texture2,perimeter2,area2,smoothness2,compactness2,concavity2,concave_points2,symmetry2,fractal_dimension2,radius3,texture3,perimeter3,area3,smoothness3,compactness3,concavity3,concave_points3,symmetry3,fractal_dimension3",0.0039016715830875125,0.0039661025720643785
+breast_wisconsin,0.25,"radius1,texture1,perimeter1,area1,smoothness1,compactness1,concavity1,concave_points1,symmetry1,fractal_dimension1,radius2,texture2,perimeter2,area2,smoothness2,compactness2,concavity2,concave_points2,symmetry2,fractal_dimension2,radius3,texture3,perimeter3,area3,smoothness3,compactness3,concavity3,concave_points3,symmetry3,fractal_dimension3",0.009444444444444445,0.009766547637530404
+breast_wisconsin,0.5,"radius1,texture1,perimeter1,area1,smoothness1,compactness1,concavity1,concave_points1,symmetry1,fractal_dimension1,radius2,texture2,perimeter2,area2,smoothness2,compactness2,concavity2,concave_points2,symmetry2,fractal_dimension2,radius3,texture3,perimeter3,area3,smoothness3,compactness3,concavity3,concave_points3,symmetry3,fractal_dimension3",0.02844951612068519,0.02828044299539409

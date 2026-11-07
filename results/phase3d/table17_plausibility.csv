@@ -1,0 +1,16 @@
+dataset,model,precision_mean,precision_ci_lo,precision_ci_hi,chance_precision,list_size,m_features
+pima_diabetes,logreg,1.000,1.000,1.000,0.625,5,8
+pima_diabetes,rf,0.880,0.820,0.940,0.625,5,8
+pima_diabetes,mlp,1.000,1.000,1.000,0.625,5,8
+heart_cleveland,logreg,0.980,0.940,1.000,0.615,8,13
+heart_cleveland,rf,0.880,0.820,0.940,0.615,8,13
+heart_cleveland,mlp,0.960,0.900,1.000,0.615,8,13
+ckd,logreg,0.960,0.900,1.000,0.333,8,24
+ckd,rf,1.000,1.000,1.000,0.333,8,24
+ckd,mlp,1.000,1.000,1.000,0.333,8,24
+ilpd,logreg,0.700,0.640,0.760,0.600,6,10
+ilpd,rf,0.980,0.940,1.000,0.600,6,10
+ilpd,mlp,0.640,0.560,0.720,0.600,6,10
+breast_wisconsin,logreg,0.720,0.620,0.780,0.500,15,30
+breast_wisconsin,rf,1.000,1.000,1.000,0.500,15,30
+breast_wisconsin,mlp,0.940,0.880,1.000,0.500,15,30

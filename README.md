@@ -82,7 +82,9 @@ tabular-clinical-benchmark/
     phase3a_stats.py        # Phase 3a: tests / ci / figures / tables / all
     phase3b_calibration.py  # Phase 3b: verify / metrics / posthoc / figures / tables / all
     phase3c_robustness.py   # Phase 3c: verify / run / analyze / figures / tables / all
-  analysis/                # Phase 3a/3b/3c helper package (ranks, Friedman/Wilcoxon/Nadeau-Bengio, bootstrap, tables, plotting, calibration, robustness)
+    phase3d_noise_continuous.py  # Phase 3d Part 3: diagnostic / run / analyze / figures / tables / all
+    phase3d_shap.py          # Phase 3d Part 4: verify / run / analyze / figures / tables / all
+  analysis/                # Phase 3a-3d helper package (ranks, Friedman/Wilcoxon/Nadeau-Bengio, bootstrap, tables, plotting, calibration, robustness, explain)
   data/                   # cached raw dataset downloads (*_raw.pkl), tracked in git
   results/
     raw/                  # one CSV per (dataset, model, split) task
@@ -98,6 +100,7 @@ tabular-clinical-benchmark/
     phase3a/                 # Phase 3a stats/CI/figures/tables outputs (see "Phase 3a" below)
     phase3b/                 # Phase 3b calibration outputs (see "Phase 3b" below)
     phase3c/                 # Phase 3c robustness outputs (see "Phase 3c" below)
+    phase3d/                 # Phase 3d supplementary noise variant + SHAP outputs (see "Phase 3d" below)
   results_smoke/            # smoke-test output (classical), gitignored, disposable
   results_smoke_2b/          # smoke-test output (deep models), gitignored, disposable
   tests/
@@ -111,6 +114,7 @@ tabular-clinical-benchmark/
     test_phase3a.py           # fast, no GPU fit required
     test_phase3b.py           # fast, no GPU fit required
     test_phase3c.py           # fast, no GPU fit required
+    test_phase3d.py           # fast, no GPU fit required
   notebooks/                 # reserved for future exploratory analysis
 ```
 
@@ -611,3 +615,51 @@ mechanism is simulated); the bootstrap resamples the 10 splits within each datas
 between-dataset variability; degradation is always relative to that model's own clean
 performance, so a model that starts lower can degrade less in absolute terms. No file states
 that a model is "more robust" or "significantly better" -- only numbers are reported.
+
+## Phase 3d
+
+A supplementary robustness variant plus the explanation (SHAP) analysis. Everything here loads
+the SAVED fraction-1.0 pipelines in `results/models/` and the stored test rows; nothing is ever
+fitted, refitted or tuned. New code: `analysis/robustness_supp.py`, `analysis/explain.py`,
+`scripts/phase3d_noise_continuous.py`, `scripts/phase3d_shap.py`. Outputs are under
+`results/phase3d/` (the SHAP outputs additionally under `results/phase3d/shap/`, the
+continuous-noise outputs under `results/phase3d/noise_continuous/`).
+
+**Pre-registration.** Before any SHAP value was computed, a clinical feature-relevance list was
+fixed and written to `results/phase3d/clinical_list.json` (SHA-256 in `clinical_list.sha256`).
+It must never be edited after that commit; any later change needs a separate
+`clinical_list_amendment.md` stating what changed and why. The SHAP analysis code verifies the
+SHA-256 at runtime and refuses to run on a mismatch.
+
+**Part 3 -- continuous-only noise variant**, via
+`.venv-deep\Scripts\python.exe scripts/phase3d_noise_continuous.py <subcommand>`
+(`diagnostic`, `run`, `analyze`, `figures`, `tables`, `all`): identical to Phase 3c's NOISE
+perturbation except that CKD's `sg`/`al`/`su` and Cleveland's `ca` (ordinal numeric scales)
+receive no noise at all. CKD's `bp` also has <=10 distinct values but was deliberately kept IN
+(ordinary noisy continuous blood pressure) -- a discrepancy the ordinal-column check surfaced,
+resolved by explicit confirmation rather than decided silently. Outputs: Table 13 (AUROC/log
+loss, continuous-only vs. original noise), Table 14 (degradation difference to logreg at the
+highest level, both variants), Figure 9.
+
+**Part 4 -- SHAP explanation agreement**, via
+`.venv-deep\Scripts\python.exe scripts/phase3d_shap.py <subcommand>`
+(`verify`, `run`, `analyze`, `figures`, `tables`, `all`): explains `logreg`, `rf` and `mlp` (the
+Phase 3a-rule best model of each family) on the ENCODED feature matrix, mapped back to ORIGINAL
+features via the fitted pipeline's `ColumnTransformer.output_indices_` and the one-hot encoder's
+`categories_` (never by parsing column-name strings), aggregating each feature's encoded SHAP
+values by a SIGNED sum per row before taking the mean absolute value. `shap` 0.54.1 (+ `slicer`)
+was installed into `.venv-deep` for this phase -- the dry-run plan only added packages, so no
+fallback to permutation importance was needed. Agreement (top-5 Jaccard, Spearman) is measured
+per dataset/split between the 3 model pairs and compared with within-model stability and the
+exact chance level; plausibility is the top-5 precision against the pre-registered clinical
+list vs. chance. Outputs: Table 15 (top-5 features), Table 16 (agreement), Table 17
+(plausibility), Figures 10-11.
+
+**Caveats** (full statements in `results/phase3d/noise_continuous/robustness_notes.md` and
+`results/phase3d/explanation_notes.md`): `logreg` is explained in log-odds, `rf`/`mlp` in
+probability, so only RANKINGS are compared, never raw SHAP magnitudes; the `mlp` KernelExplainer
+uses a 50-row training background; the 10 splits of a dataset overlap (repeated
+cross-validation) and are not independent; no direction-of-effect check is performed; correlated
+features (especially Breast Wisconsin's mean/standard-error/worst triplets) can substitute for
+one another in a top-5 set. No file states that models "agree" or that a feature is
+"plausible" -- only numbers (Jaccard, Spearman, precision) are reported.

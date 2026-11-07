@@ -1,0 +1,37 @@
+\begin{tabular}{lrrr}
+\toprule
+dataset & pair & jaccard\_mean & spearman\_mean \\
+\midrule
+pima\_diabetes & logreg-rf & 0.800 & 0.779 \\
+pima\_diabetes & logreg-mlp & 1.000 & 0.950 \\
+pima\_diabetes & rf-mlp & 0.800 & 0.821 \\
+heart\_cleveland & logreg-rf & 0.548 & 0.838 \\
+heart\_cleveland & logreg-mlp & 0.667 & 0.858 \\
+heart\_cleveland & rf-mlp & 0.530 & 0.763 \\
+ckd & logreg-rf & 0.530 & 0.840 \\
+ckd & logreg-mlp & 0.710 & 0.911 \\
+ckd & rf-mlp & 0.510 & 0.867 \\
+ilpd & logreg-rf & 0.363 & 0.246 \\
+ilpd & logreg-mlp & 0.399 & 0.285 \\
+ilpd & rf-mlp & 0.405 & 0.310 \\
+breast\_wisconsin & logreg-rf & 0.401 & 0.705 \\
+breast\_wisconsin & logreg-mlp & 0.312 & 0.772 \\
+breast\_wisconsin & rf-mlp & 0.644 & 0.799 \\
+pima\_diabetes & within\_model\_stability & 0.921 & 0.918 \\
+pima\_diabetes & chance & 0.471 & 0.000 \\
+heart\_cleveland & within\_model\_stability & 0.717 & 0.887 \\
+heart\_cleveland & chance & 0.254 & 0.000 \\
+ckd & within\_model\_stability & 0.750 & 0.912 \\
+ckd & chance & 0.126 & 0.000 \\
+ilpd & within\_model\_stability & 0.668 & 0.614 \\
+ilpd & chance & 0.350 & 0.000 \\
+breast\_wisconsin & within\_model\_stability & 0.634 & 0.845 \\
+breast\_wisconsin & chance & 0.099 & 0.000 \\
+ALL5 & logreg-rf & 0.528 & 0.682 \\
+NO\_CKD & logreg-rf & 0.528 & 0.642 \\
+ALL5 & logreg-mlp & 0.617 & 0.755 \\
+NO\_CKD & logreg-mlp & 0.594 & 0.716 \\
+ALL5 & rf-mlp & 0.578 & 0.712 \\
+NO\_CKD & rf-mlp & 0.595 & 0.674 \\
+\bottomrule
+\end{tabular}
