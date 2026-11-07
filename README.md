@@ -81,7 +81,8 @@ tabular-clinical-benchmark/
     phase2c_diagnostics.py  # Phase 2c: endpoints / tabnet / sensitivity / sensitivity-report / xgb-wide-range / all
     phase3a_stats.py        # Phase 3a: tests / ci / figures / tables / all
     phase3b_calibration.py  # Phase 3b: verify / metrics / posthoc / figures / tables / all
-  analysis/                # Phase 3a/3b helper package (ranks, Friedman/Wilcoxon/Nadeau-Bengio, bootstrap, tables, plotting, calibration)
+    phase3c_robustness.py   # Phase 3c: verify / run / analyze / figures / tables / all
+  analysis/                # Phase 3a/3b/3c helper package (ranks, Friedman/Wilcoxon/Nadeau-Bengio, bootstrap, tables, plotting, calibration, robustness)
   data/                   # cached raw dataset downloads (*_raw.pkl), tracked in git
   results/
     raw/                  # one CSV per (dataset, model, split) task
@@ -96,6 +97,7 @@ tabular-clinical-benchmark/
     phase2c/                # Phase 2c diagnostic outputs (see "Phase 2c" below)
     phase3a/                 # Phase 3a stats/CI/figures/tables outputs (see "Phase 3a" below)
     phase3b/                 # Phase 3b calibration outputs (see "Phase 3b" below)
+    phase3c/                 # Phase 3c robustness outputs (see "Phase 3c" below)
   results_smoke/            # smoke-test output (classical), gitignored, disposable
   results_smoke_2b/          # smoke-test output (deep models), gitignored, disposable
   tests/
@@ -108,6 +110,7 @@ tabular-clinical-benchmark/
     test_phase2c.py           # fast, no GPU fit required
     test_phase3a.py           # fast, no GPU fit required
     test_phase3b.py           # fast, no GPU fit required
+    test_phase3c.py           # fast, no GPU fit required
   notebooks/                 # reserved for future exploratory analysis
 ```
 
@@ -547,3 +550,64 @@ under the baseline training schedule, every mlp cap hit is a "budget hit" (the 6
 translated into a per-task `max_epochs` below 500); the literal 500-epoch hard limit is only ever
 hit under the Phase 2c sensitivity check's longer-budget variants, and only for mlp/ftt at
 fraction 0.1.
+
+## Phase 3c
+
+Robustness analysis on the SAVED fraction-1.0 pipelines in `results/models/*.joblib` (350
+fitted pipelines). Phase 3c perturbs only the TEST features and never fits, refits or tunes
+any model; it only reads `results/models`, `results/predictions`, `results/all_runs.csv` and
+(via `load_dataset`/`make_splits`) the raw datasets. New code: `analysis/robustness.py` (helper
+module) and `scripts/phase3c_robustness.py` (CLI). All new outputs are under `results/phase3c/`.
+
+**Design:** two perturbation kinds, each with 3 levels and 5 independent draws per
+(dataset, split, kind, level) -- the SAME perturbed test matrix is reused across all 7 models for
+a given draw (paired design; the perturbation functions take no model argument).
+- **missing**: every cell (numeric and categorical) is independently set to NaN with probability
+  r in (0.10, 0.20, 0.30) -- Missing Completely At Random. Cells already missing stay missing.
+- **noise**: Gaussian noise `N(0, (s * sigma_j)^2)` is added to every non-missing value of each
+  numeric column j, s in (0.10, 0.25, 0.50), with sigma_j the TRAINING-fold standard deviation
+  (ddof=0) of that column -- never the test rows. CKD's `sg`/`al`/`su` and Cleveland's `ca` are
+  ordinal numeric scales and receive continuous noise like every other numeric column.
+
+**What was computed**, via `.venv-deep\Scripts\python.exe scripts/phase3c_robustness.py <subcommand>`:
+
+```bash
+.venv-deep\Scripts\python.exe scripts/phase3c_robustness.py verify   # STOP-gated recomputation check
+.venv-deep\Scripts\python.exe scripts/phase3c_robustness.py run      # timing-gated, resumable, writes robustness_runs.csv
+.venv-deep\Scripts\python.exe scripts/phase3c_robustness.py analyze  # per-dataset/averaged/diff-vs-logreg tables
+.venv-deep\Scripts\python.exe scripts/phase3c_robustness.py figures  # degradation curves, diff-vs-logreg plot
+.venv-deep\Scripts\python.exe scripts/phase3c_robustness.py tables   # Tables 9-12
+.venv-deep\Scripts\python.exe scripts/phase3c_robustness.py all      # all five, in order (verify first STOPs before the rest if it fails)
+```
+
+- **`verify`** (STOP-gated): loads every one of the 350 pipelines, predicts on the CLEAN test
+  rows and compares to the stored `prob_1.0`, and checks the split/label alignment against a
+  fresh `load_dataset`/`make_splits` call. STOPs on any structural/alignment problem or any
+  difference above 1e-3 (none found: max difference was exactly 0.0 for every model).
+- **`run`**: times one full 31-prediction task (1 clean + 3 missing levels x 5 draws + 3 noise
+  levels x 5 draws) per model on one dataset first and STOPs if the extrapolated total for all
+  350 tasks exceeds 90 minutes (estimated 4.5 min; actual full run took ~3 min). Resumable (skips
+  tasks already written to `results/phase3c/runs_parts/`); frees GPU memory between tasks. Writes
+  `robustness_runs.csv` (10850 rows = 350 tasks x 31 prediction sets) and one compressed npz of
+  probabilities per task under `results/phase3c/predictions/`.
+- **`analyze`**: averages the 5 draws per (dataset, model, split, kind, level), computes
+  degradation relative to each model's own clean performance on that split, and gives 95%
+  bootstrap CIs (seed 42, B=5000) per dataset, dataset-averaged (ALL5/NO_CKD), and as a paired
+  difference to logreg in degradation. Writes `robustness_per_dataset.csv`,
+  `robustness_averaged.csv`, `robustness_diff_vs_logreg.csv`.
+- **`figures`**: Figure 7/7b (NO_CKD AUROC/log-loss degradation curves) and 7c/7d (ALL5
+  versions), Figure 7e (per-dataset AUROC, supplementary), Figure 8 (AUROC degradation
+  difference to logreg at the highest levels). PNG (300 dpi) and PDF, captions in
+  `figure_captions.md`.
+- **`tables`**: Table 9 (AUROC vs. missing level), Table 10 (AUROC vs. noise level), Table 11
+  (log loss, both kinds), Table 12 (degradation difference to logreg at the highest levels), each
+  ALL5 and NO_CKD. Notes in `robustness_notes.md`.
+
+**Robustness caveats** (full statement in `results/phase3c/robustness_notes.md`): the saved
+pipeline's preprocessor (median/most-frequent imputation fitted on the training fold) is part of
+every result, so these numbers describe MODEL + IMPUTER together, not the model alone; tree
+models use no native NaN handling; missingness is MCAR only (no informative-missingness
+mechanism is simulated); the bootstrap resamples the 10 splits within each dataset and ignores
+between-dataset variability; degradation is always relative to that model's own clean
+performance, so a model that starts lower can degrade less in absolute terms. No file states
+that a model is "more robust" or "significantly better" -- only numbers are reported.

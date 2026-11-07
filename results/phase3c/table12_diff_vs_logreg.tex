@@ -1,0 +1,54 @@
+\begin{tabular}{llllrrrrr}
+\toprule
+model & kind & level & metric & dataset\_set & diff\_mean & ci\_lo & ci\_hi & n\_positive/n\_total \\
+\midrule
+rf & missing & 0.3 & auroc & ALL5 & 0.0034 & 0.0005 & 0.0063 & 2/5 \\
+rf & missing & 0.3 & auroc & NO\_CKD & 0.0045 & 0.0008 & 0.0081 & 2/4 \\
+rf & missing & 0.3 & log\_loss & ALL5 & 0.0119 & 0.0069 & 0.0165 & 3/5 \\
+rf & missing & 0.3 & log\_loss & NO\_CKD & 0.0068 & 0.0018 & 0.0115 & 2/4 \\
+rf & noise & 0.5 & auroc & ALL5 & -0.0026 & -0.0068 & 0.0012 & 1/5 \\
+rf & noise & 0.5 & auroc & NO\_CKD & -0.0020 & -0.0071 & 0.0025 & 1/4 \\
+rf & noise & 0.5 & log\_loss & ALL5 & 0.0261 & 0.0164 & 0.0357 & 3/5 \\
+rf & noise & 0.5 & log\_loss & NO\_CKD & 0.0018 & -0.0087 & 0.0124 & 2/4 \\
+xgb & missing & 0.3 & auroc & ALL5 & 0.0005 & -0.0026 & 0.0038 & 1/5 \\
+xgb & missing & 0.3 & auroc & NO\_CKD & 0.0026 & -0.0012 & 0.0067 & 1/4 \\
+xgb & missing & 0.3 & log\_loss & ALL5 & 0.0289 & 0.0209 & 0.0382 & 3/5 \\
+xgb & missing & 0.3 & log\_loss & NO\_CKD & 0.0161 & 0.0078 & 0.0269 & 2/4 \\
+xgb & noise & 0.5 & auroc & ALL5 & -0.0083 & -0.0130 & -0.0037 & 1/5 \\
+xgb & noise & 0.5 & auroc & NO\_CKD & -0.0042 & -0.0097 & 0.0014 & 1/4 \\
+xgb & noise & 0.5 & log\_loss & ALL5 & 0.0394 & 0.0262 & 0.0524 & 4/5 \\
+xgb & noise & 0.5 & log\_loss & NO\_CKD & -0.0060 & -0.0196 & 0.0070 & 3/4 \\
+lgbm & missing & 0.3 & auroc & ALL5 & 0.0013 & -0.0019 & 0.0046 & 1/5 \\
+lgbm & missing & 0.3 & auroc & NO\_CKD & 0.0022 & -0.0018 & 0.0063 & 1/4 \\
+lgbm & missing & 0.3 & log\_loss & ALL5 & 0.0136 & 0.0046 & 0.0235 & 3/5 \\
+lgbm & missing & 0.3 & log\_loss & NO\_CKD & 0.0127 & 0.0029 & 0.0239 & 2/4 \\
+lgbm & noise & 0.5 & auroc & ALL5 & -0.0085 & -0.0125 & -0.0046 & 1/5 \\
+lgbm & noise & 0.5 & auroc & NO\_CKD & -0.0043 & -0.0090 & 0.0000 & 1/4 \\
+lgbm & noise & 0.5 & log\_loss & ALL5 & 0.0877 & 0.0689 & 0.1106 & 4/5 \\
+lgbm & noise & 0.5 & log\_loss & NO\_CKD & 0.0031 & -0.0096 & 0.0156 & 3/4 \\
+mlp & missing & 0.3 & auroc & ALL5 & 0.0044 & 0.0018 & 0.0072 & 4/5 \\
+mlp & missing & 0.3 & auroc & NO\_CKD & 0.0055 & 0.0021 & 0.0088 & 3/4 \\
+mlp & missing & 0.3 & log\_loss & ALL5 & -0.0083 & -0.0140 & -0.0021 & 1/5 \\
+mlp & missing & 0.3 & log\_loss & NO\_CKD & -0.0069 & -0.0127 & -0.0007 & 1/4 \\
+mlp & noise & 0.5 & auroc & ALL5 & 0.0039 & 0.0012 & 0.0067 & 3/5 \\
+mlp & noise & 0.5 & auroc & NO\_CKD & 0.0049 & 0.0016 & 0.0082 & 2/4 \\
+mlp & noise & 0.5 & log\_loss & ALL5 & -0.0065 & -0.0175 & 0.0045 & 4/5 \\
+mlp & noise & 0.5 & log\_loss & NO\_CKD & -0.0142 & -0.0256 & -0.0027 & 3/4 \\
+ftt & missing & 0.3 & auroc & ALL5 & 0.0048 & 0.0014 & 0.0085 & 3/5 \\
+ftt & missing & 0.3 & auroc & NO\_CKD & 0.0062 & 0.0020 & 0.0107 & 3/4 \\
+ftt & missing & 0.3 & log\_loss & ALL5 & 0.0081 & -0.0021 & 0.0193 & 3/5 \\
+ftt & missing & 0.3 & log\_loss & NO\_CKD & -0.0033 & -0.0125 & 0.0051 & 2/4 \\
+ftt & noise & 0.5 & auroc & ALL5 & -0.0023 & -0.0078 & 0.0029 & 2/5 \\
+ftt & noise & 0.5 & auroc & NO\_CKD & 0.0033 & -0.0014 & 0.0083 & 2/4 \\
+ftt & noise & 0.5 & log\_loss & ALL5 & 0.1148 & 0.0658 & 0.1669 & 4/5 \\
+ftt & noise & 0.5 & log\_loss & NO\_CKD & 0.0009 & -0.0112 & 0.0133 & 3/4 \\
+tabnet & missing & 0.3 & auroc & ALL5 & -0.0008 & -0.0081 & 0.0074 & 3/5 \\
+tabnet & missing & 0.3 & auroc & NO\_CKD & -0.0022 & -0.0111 & 0.0073 & 2/4 \\
+tabnet & missing & 0.3 & log\_loss & ALL5 & 0.0063 & -0.0065 & 0.0183 & 2/5 \\
+tabnet & missing & 0.3 & log\_loss & NO\_CKD & 0.0043 & -0.0098 & 0.0185 & 1/4 \\
+tabnet & noise & 0.5 & auroc & ALL5 & -0.0072 & -0.0125 & -0.0016 & 1/5 \\
+tabnet & noise & 0.5 & auroc & NO\_CKD & -0.0074 & -0.0141 & -0.0006 & 1/4 \\
+tabnet & noise & 0.5 & log\_loss & ALL5 & 0.0172 & 0.0039 & 0.0303 & 4/5 \\
+tabnet & noise & 0.5 & log\_loss & NO\_CKD & 0.0127 & -0.0021 & 0.0269 & 3/4 \\
+\bottomrule
+\end{tabular}
