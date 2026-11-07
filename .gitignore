@@ -8,3 +8,4 @@ results_smoke_2b/
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
 *.log
+.vscode/
