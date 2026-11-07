@@ -80,7 +80,8 @@ tabular-clinical-benchmark/
     report_phase2a.py     # verification checks, tables and flags
     phase2c_diagnostics.py  # Phase 2c: endpoints / tabnet / sensitivity / sensitivity-report / xgb-wide-range / all
     phase3a_stats.py        # Phase 3a: tests / ci / figures / tables / all
-  analysis/                # Phase 3a helper package (ranks, Friedman/Wilcoxon/Nadeau-Bengio, bootstrap, tables, plotting)
+    phase3b_calibration.py  # Phase 3b: verify / metrics / posthoc / figures / tables / all
+  analysis/                # Phase 3a/3b helper package (ranks, Friedman/Wilcoxon/Nadeau-Bengio, bootstrap, tables, plotting, calibration)
   data/                   # cached raw dataset downloads (*_raw.pkl), tracked in git
   results/
     raw/                  # one CSV per (dataset, model, split) task
@@ -94,6 +95,7 @@ tabular-clinical-benchmark/
     MANIFEST_sha256.txt      # SHA-256 of every file above, for integrity checks
     phase2c/                # Phase 2c diagnostic outputs (see "Phase 2c" below)
     phase3a/                 # Phase 3a stats/CI/figures/tables outputs (see "Phase 3a" below)
+    phase3b/                 # Phase 3b calibration outputs (see "Phase 3b" below)
   results_smoke/            # smoke-test output (classical), gitignored, disposable
   results_smoke_2b/          # smoke-test output (deep models), gitignored, disposable
   tests/
@@ -105,6 +107,7 @@ tabular-clinical-benchmark/
     test_deep_models.py      # needs torch; run from .venv-deep
     test_phase2c.py           # fast, no GPU fit required
     test_phase3a.py           # fast, no GPU fit required
+    test_phase3b.py           # fast, no GPU fit required
   notebooks/                 # reserved for future exploratory analysis
 ```
 
@@ -477,3 +480,70 @@ deep-model rerun with a longer schedule (the baseline schedule stays primary); t
 the same-endpoint rule; TabNet's heart_cleveland collapses are not fixed by a longer schedule; the
 "MLP hits a hard 500-epoch cap" claim is unsupported by the actual mean epochs run and is recorded
 as unexplained.
+
+## Phase 3b
+
+Calibration analysis of the existing predictions in `results/predictions/*.npz` (350 files: 5
+datasets x 7 models x 10 splits). Phase 3b only reads `results/predictions`, `results/all_runs.csv`
+and (read-only) `results/phase2c/sensitivity_runs.csv` / `results/diagnostics/*.json`; it never
+modifies any existing result file and never fits or reruns any of the 7 benchmark models (the
+cross-fitted post-hoc recalibration check is a separate, descriptive, in-memory analysis, not a
+pipeline change). New code: `analysis/calibration.py` (helper module) and
+`scripts/phase3b_calibration.py` (CLI). All new outputs are under `results/phase3b/`.
+
+**Pooling caveat:** every pooled analysis below pools the 10 CV splits of a dataset, so each test
+row appears **twice** in the pool (once per repeat of the 5-fold cross-validation) -- pooled
+analyses use 2 x n_rows predictions per (dataset, model, fraction), not n_rows.
+
+**What was computed**, via `.venv-deep\Scripts\python.exe scripts/phase3b_calibration.py <subcommand>`:
+
+```bash
+.venv-deep\Scripts\python.exe scripts/phase3b_calibration.py verify   # STOP-gated recomputation check
+.venv-deep\Scripts\python.exe scripts/phase3b_calibration.py metrics  # pooled ECE/slope/intercept + bootstrap CIs
+.venv-deep\Scripts\python.exe scripts/phase3b_calibration.py posthoc  # cross-fitted Platt/isotonic check
+.venv-deep\Scripts\python.exe scripts/phase3b_calibration.py figures  # reliability diagrams, slope plot, post-hoc bars
+.venv-deep\Scripts\python.exe scripts/phase3b_calibration.py tables   # Tables 4b, 6, 7, 8
+.venv-deep\Scripts\python.exe scripts/phase3b_calibration.py all      # all five, in order
+```
+
+- **`verify`** (STOP-gated): loads every prediction file, checks array presence/shape/range,
+  confirms `y_true` matches `y[test_idx]` from a fresh `load_dataset` call, and recomputes
+  auroc/brier/log_loss/ece from the stored probabilities for all 1400 (file x fraction)
+  combinations, comparing to `results/all_runs.csv`. STOPs on any structural/alignment problem or
+  any recomputed difference above 1e-6 (none found: max absolute difference was exactly 0.0 for
+  every metric).
+- **`metrics`**: per (dataset, model, fraction) pooled `ece_ew` (equal-width, identical to
+  `src.metrics`), `ece_em` (equal-mass, 10 groups), the Platt calibration slope/intercept (MLE via
+  `scipy.optimize`, undefined/NaN when the two classes are exactly separable in logit space), and
+  95% bootstrap CIs (seed 42, B=2000, resampling the 10 splits). Also dataset-averaged values
+  (ALL5/NO_CKD) and the paired bootstrap difference to logreg for pooled `ece_ew`. Writes
+  `calibration_metrics.csv`, `calibration_bootstrap_ci.csv`, `calibration_averaged.csv`,
+  `calibration_brier_logloss_averaged.csv`, `calibration_diff_vs_logreg.csv`.
+- **`posthoc`** (descriptive, NOT part of the pipeline): inner stratified 5-fold cross-fitting on
+  each split's test predictions (seed 42 + split_idx); each fold's Platt/isotonic calibrator is
+  fit on the other 4 folds (about 48-123 rows) and applied only to the held-out fold, with an
+  identity-map fallback when a fit fold has a single class (or, for Platt, is separable). Writes
+  `posthoc_per_split.csv` and `posthoc_summary.csv`.
+- **`figures`**: Figure 4/4b (equal-mass reliability diagrams, NO_CKD pooled, fractions 1.0/0.1),
+  Figure 4c (per-dataset compact grid, fraction 1.0), Figure 5 (pooled calibration slope with 95%
+  CIs, coloured by model, one marker per dataset), Figure 6 (post-hoc Brier/log-loss change,
+  ALL5/NO_CKD). PNG (300 dpi) and PDF, captions in `figure_captions.md`.
+- **`tables`**: Table 6/7 (fraction 1.0/0.1: Brier, log loss, ece_ew, ece_em, NO_CKD slope and
+  intercept), Table 8 (post-hoc Brier/log-loss/ece_ew change and fallback counts), Table 4b (mean
+  rank at fractions 0.25/0.5, BLOCK unit, descriptive only, reusing Phase 3a's ranking helper).
+  Notes in `table_captions.md` and `calibration_notes.md`.
+
+**Calibration caveats** (full statement in `results/phase3b/calibration_notes.md`): ECE on small
+samples is biased and noisy; equal-width and equal-mass ECE can disagree; the calibration slope
+and intercept are undefined when the two classes are exactly separable in logit space (this never
+happened at the pooled point-estimate level in this run, even for CKD, but several CKD bootstrap
+replicates were separable and dropped from that cell's CI); the post-hoc analysis is cross-fitted
+on the test predictions themselves and is descriptive only, not a pipeline component, and
+isotonic regression's AUROC can change through tie-breaking. No file in `results/phase3b/` states
+that a model is "significantly better" or "better calibrated" -- only numbers are reported.
+
+**Epoch-cap re-check** (`results/phase3b/epoch_cap_check.csv`, see CLAUDE.md section 7 item 5):
+under the baseline training schedule, every mlp cap hit is a "budget hit" (the 600-step budget
+translated into a per-task `max_epochs` below 500); the literal 500-epoch hard limit is only ever
+hit under the Phase 2c sensitivity check's longer-budget variants, and only for mlp/ftt at
+fraction 0.1.
