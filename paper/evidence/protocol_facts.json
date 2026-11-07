@@ -1,0 +1,514 @@
+{
+  "datasets": {
+    "pima_diabetes": {
+      "name": "pima_diabetes",
+      "source": "OpenML diabetes v1 (id 37)",
+      "raw_rows": 768,
+      "duplicates_dropped": 0,
+      "rows_used": 768,
+      "raw_features": 8,
+      "numeric_features": 8,
+      "categorical_features": 0,
+      "encoded_width_min": 8,
+      "encoded_width_max": 8,
+      "positive_fraction": 0.349,
+      "missing_fraction": 0.1061,
+      "test_fold_n_min": 153,
+      "test_fold_n_max": 154,
+      "min_train_n_at_frac0.1": 61
+    },
+    "heart_cleveland": {
+      "name": "heart_cleveland",
+      "source": "UCI Heart Disease, Cleveland subset (id 45)",
+      "raw_rows": 303,
+      "duplicates_dropped": 0,
+      "rows_used": 303,
+      "raw_features": 13,
+      "numeric_features": 6,
+      "categorical_features": 7,
+      "encoded_width_min": 25,
+      "encoded_width_max": 25,
+      "positive_fraction": 0.4587,
+      "missing_fraction": 0.0015,
+      "test_fold_n_min": 60,
+      "test_fold_n_max": 61,
+      "min_train_n_at_frac0.1": 24
+    },
+    "ckd": {
+      "name": "ckd",
+      "source": "UCI Chronic Kidney Disease (id 336)",
+      "raw_rows": 400,
+      "duplicates_dropped": 0,
+      "rows_used": 400,
+      "raw_features": 24,
+      "numeric_features": 14,
+      "categorical_features": 10,
+      "encoded_width_min": 34,
+      "encoded_width_max": 34,
+      "positive_fraction": 0.625,
+      "missing_fraction": 0.1054,
+      "test_fold_n_min": 80,
+      "test_fold_n_max": 80,
+      "min_train_n_at_frac0.1": 32
+    },
+    "ilpd": {
+      "name": "ilpd",
+      "source": "UCI ILPD Indian Liver Patient Dataset (id 225)",
+      "raw_rows": 583,
+      "duplicates_dropped": 13,
+      "rows_used": 570,
+      "raw_features": 10,
+      "numeric_features": 9,
+      "categorical_features": 1,
+      "encoded_width_min": 11,
+      "encoded_width_max": 11,
+      "positive_fraction": 0.7123,
+      "missing_fraction": 0.0007,
+      "test_fold_n_min": 114,
+      "test_fold_n_max": 114,
+      "min_train_n_at_frac0.1": 45
+    },
+    "breast_wisconsin": {
+      "name": "breast_wisconsin",
+      "source": "UCI Breast Cancer Wisconsin Diagnostic (id 17)",
+      "raw_rows": 569,
+      "duplicates_dropped": 0,
+      "rows_used": 569,
+      "raw_features": 30,
+      "numeric_features": 30,
+      "categorical_features": 0,
+      "encoded_width_min": 30,
+      "encoded_width_max": 30,
+      "positive_fraction": 0.3726,
+      "missing_fraction": 0.0,
+      "test_fold_n_min": 113,
+      "test_fold_n_max": 114,
+      "min_train_n_at_frac0.1": 45
+    }
+  },
+  "protocol": {
+    "n_models": 7,
+    "models": [
+      "logreg",
+      "rf",
+      "xgb",
+      "lgbm",
+      "mlp",
+      "ftt",
+      "tabnet"
+    ],
+    "n_datasets": 5,
+    "n_datasets_no_ckd": 4,
+    "outer_splits_total": 10,
+    "outer_splits_description": "5-fold x 2 repeats (RepeatedStratifiedKFold)",
+    "fractions": [
+      0.1,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "n_tasks": 350,
+    "n_result_rows": 1400,
+    "tuning_n_trials": 20,
+    "tuning_inner_folds": 3,
+    "tuning_sampler": "TPESampler",
+    "tuning_objective": "mean inner-CV AUROC",
+    "global_seed": 42,
+    "deep_max_steps": 600,
+    "deep_patience_steps": 60,
+    "deep_validation_fraction": 0.15,
+    "deep_fixed_steps_no_validation": 200,
+    "deep_max_epochs_cap": 500,
+    "deep_effective_batch_rule": "min(batch_size, max(8, n_train_part // 4))",
+    "ece_definition": "Binary expected calibration error on the positive-class probability."
+  },
+  "search_space": {
+    "logreg": [
+      {
+        "name": "C",
+        "low": 0.001,
+        "high": 100.0,
+        "log": true,
+        "type": "float",
+        "choices": null
+      }
+    ],
+    "rf": [
+      {
+        "name": "n_estimators",
+        "low": 100,
+        "high": 300,
+        "log": false,
+        "type": "int",
+        "choices": null
+      },
+      {
+        "name": "max_depth",
+        "low": 2,
+        "high": 20,
+        "log": false,
+        "type": "int",
+        "choices": null
+      },
+      {
+        "name": "min_samples_leaf",
+        "low": 1,
+        "high": 10,
+        "log": false,
+        "type": "int",
+        "choices": null
+      },
+      {
+        "name": "max_features",
+        "low": null,
+        "high": null,
+        "log": false,
+        "type": "categorical",
+        "choices": [
+          "sqrt",
+          "log2",
+          0.5
+        ]
+      }
+    ],
+    "xgb": [
+      {
+        "name": "n_estimators",
+        "low": 50,
+        "high": 400,
+        "log": false,
+        "type": "int",
+        "choices": null
+      },
+      {
+        "name": "max_depth",
+        "low": 2,
+        "high": 8,
+        "log": false,
+        "type": "int",
+        "choices": null
+      },
+      {
+        "name": "learning_rate",
+        "low": 0.01,
+        "high": 0.3,
+        "log": true,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "subsample",
+        "low": 0.5,
+        "high": 1.0,
+        "log": false,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "colsample_bytree",
+        "low": 0.5,
+        "high": 1.0,
+        "log": false,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "reg_lambda",
+        "low": 0.01,
+        "high": 10,
+        "log": true,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "min_child_weight",
+        "low": 1,
+        "high": 10,
+        "log": false,
+        "type": "int",
+        "choices": null
+      }
+    ],
+    "lgbm": [
+      {
+        "name": "n_estimators",
+        "low": 50,
+        "high": 400,
+        "log": false,
+        "type": "int",
+        "choices": null
+      },
+      {
+        "name": "num_leaves",
+        "low": 4,
+        "high": 31,
+        "log": false,
+        "type": "int",
+        "choices": null
+      },
+      {
+        "name": "learning_rate",
+        "low": 0.01,
+        "high": 0.3,
+        "log": true,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "min_child_samples",
+        "low": 2,
+        "high": 30,
+        "log": false,
+        "type": "int",
+        "choices": null
+      },
+      {
+        "name": "subsample",
+        "low": 0.5,
+        "high": 1.0,
+        "log": false,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "colsample_bytree",
+        "low": 0.5,
+        "high": 1.0,
+        "log": false,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "reg_lambda",
+        "low": 0.01,
+        "high": 10,
+        "log": true,
+        "type": "float",
+        "choices": null
+      }
+    ],
+    "mlp": [
+      {
+        "name": "n_layers",
+        "low": 1,
+        "high": 3,
+        "log": false,
+        "type": "int",
+        "choices": null
+      },
+      {
+        "name": "hidden",
+        "low": 16,
+        "high": 256,
+        "log": true,
+        "type": "int",
+        "choices": null
+      },
+      {
+        "name": "dropout",
+        "low": 0.0,
+        "high": 0.5,
+        "log": false,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "lr",
+        "low": 0.0001,
+        "high": 0.01,
+        "log": true,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "weight_decay",
+        "low": 1e-06,
+        "high": 0.01,
+        "log": true,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "batch_size",
+        "low": null,
+        "high": null,
+        "log": false,
+        "type": "categorical",
+        "choices": [
+          16,
+          32,
+          64,
+          128
+        ]
+      }
+    ],
+    "ftt": [
+      {
+        "name": "d_token",
+        "low": null,
+        "high": null,
+        "log": false,
+        "type": "categorical",
+        "choices": [
+          16,
+          32,
+          64
+        ]
+      },
+      {
+        "name": "n_blocks",
+        "low": 1,
+        "high": 3,
+        "log": false,
+        "type": "int",
+        "choices": null
+      },
+      {
+        "name": "dropout",
+        "low": 0.0,
+        "high": 0.4,
+        "log": false,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "lr",
+        "low": 0.0001,
+        "high": 0.003,
+        "log": true,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "weight_decay",
+        "low": 1e-06,
+        "high": 0.01,
+        "log": true,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "batch_size",
+        "low": null,
+        "high": null,
+        "log": false,
+        "type": "categorical",
+        "choices": [
+          16,
+          32,
+          64,
+          128
+        ]
+      }
+    ],
+    "tabnet": [
+      {
+        "name": "n_d",
+        "low": null,
+        "high": null,
+        "log": false,
+        "type": "categorical",
+        "choices": [
+          8,
+          16,
+          32
+        ]
+      },
+      {
+        "name": "n_steps",
+        "low": 2,
+        "high": 5,
+        "log": false,
+        "type": "int",
+        "choices": null
+      },
+      {
+        "name": "gamma",
+        "low": 1.0,
+        "high": 2.0,
+        "log": false,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "lambda_sparse",
+        "low": 1e-05,
+        "high": 0.01,
+        "log": true,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "lr",
+        "low": 0.001,
+        "high": 0.03,
+        "log": true,
+        "type": "float",
+        "choices": null
+      },
+      {
+        "name": "batch_size",
+        "low": null,
+        "high": null,
+        "log": false,
+        "type": "categorical",
+        "choices": [
+          16,
+          32,
+          64,
+          128
+        ]
+      }
+    ]
+  },
+  "software_hardware": {
+    "python": "3.12.4",
+    "numpy": "2.5.4",
+    "pandas": "3.1.0",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "xgboost": "3.4.1",
+    "lightgbm": "4.7.0",
+    "optuna": "5.0.0",
+    "torch": "2.15.0+cu132",
+    "joblib": "1.6.0",
+    "matplotlib": "3.11.2",
+    "pytorch_tabnet": "4.1.0",
+    "shap": "0.54.1",
+    "torch_cuda": "13.2",
+    "gpu_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "nvidia_smi": "NVIDIA GeForce RTX 4060 Laptop GPU, 8188 MiB, 617.14",
+    "environment_split": ".venv = classical only (no torch); .venv-deep = classical + torch + pytorch-tabnet + shap"
+  },
+  "timing": {
+    "logreg": {
+      "mean_fit_time_s": 0.024354750002094076,
+      "mean_predict_time_s": 0.008502159999043215
+    },
+    "rf": {
+      "mean_fit_time_s": 0.3606643780009472,
+      "mean_predict_time_s": 0.028062355999427385
+    },
+    "xgb": {
+      "mean_fit_time_s": 0.06576388600165957,
+      "mean_predict_time_s": 0.006652905999217182
+    },
+    "lgbm": {
+      "mean_fit_time_s": 0.06178590800060192,
+      "mean_predict_time_s": 0.009103718000988012
+    },
+    "mlp": {
+      "mean_fit_time_s": 1.4580679580016294,
+      "mean_predict_time_s": 0.009665580001310447
+    },
+    "ftt": {
+      "mean_fit_time_s": 2.1275803719996476,
+      "mean_predict_time_s": 0.0231890120008029
+    },
+    "tabnet": {
+      "mean_fit_time_s": 6.663617979999399,
+      "mean_predict_time_s": 0.045688001998933025
+    },
+    "note": "fit/predict times measured with 3 to 4 parallel workers; rough"
+  }
+}

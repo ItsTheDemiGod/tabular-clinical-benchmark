@@ -84,6 +84,8 @@ tabular-clinical-benchmark/
     phase3c_robustness.py   # Phase 3c: verify / run / analyze / figures / tables / all
     phase3d_noise_continuous.py  # Phase 3d Part 3: diagnostic / run / analyze / figures / tables / all
     phase3d_shap.py          # Phase 3d Part 4: verify / run / analyze / figures / tables / all
+    build_numbers.py         # Phase 4a: protocol facts, numbers book, LaTeX macros, inventory
+    check_paper_numbers.py   # Phase 4a: heuristic draft-vs-numbers-book checker
   analysis/                # Phase 3a-3d helper package (ranks, Friedman/Wilcoxon/Nadeau-Bengio, bootstrap, tables, plotting, calibration, robustness, explain)
   data/                   # cached raw dataset downloads (*_raw.pkl), tracked in git
   results/
@@ -101,6 +103,8 @@ tabular-clinical-benchmark/
     phase3b/                 # Phase 3b calibration outputs (see "Phase 3b" below)
     phase3c/                 # Phase 3c robustness outputs (see "Phase 3c" below)
     phase3d/                 # Phase 3d supplementary noise variant + SHAP outputs (see "Phase 3d" below)
+  paper/
+    evidence/                # Phase 4a evidence pack: protocol_facts, numbers.json/.tex/.md, inventory (see "Phase 4a" below)
   results_smoke/            # smoke-test output (classical), gitignored, disposable
   results_smoke_2b/          # smoke-test output (deep models), gitignored, disposable
   tests/
@@ -115,6 +119,7 @@ tabular-clinical-benchmark/
     test_phase3b.py           # fast, no GPU fit required
     test_phase3c.py           # fast, no GPU fit required
     test_phase3d.py           # fast, no GPU fit required
+    test_phase4a.py           # fast, no GPU fit required
   notebooks/                 # reserved for future exploratory analysis
 ```
 
@@ -663,3 +668,42 @@ cross-validation) and are not independent; no direction-of-effect check is perfo
 features (especially Breast Wisconsin's mean/standard-error/worst triplets) can substitute for
 one another in a top-5 set. No file states that models "agree" or that a feature is
 "plausible" -- only numbers (Jaccard, Spearman, precision) are reported.
+
+## Phase 4a: evidence pack
+
+All experiments are finished (Phases 1-3d). This phase builds the machinery that lets the
+paper be written without any hand-typed result number. Everything lives under `paper/evidence/`
+and is generated entirely from the existing result CSVs/JSONs by two new scripts:
+
+```bash
+.venv-deep\Scripts\python.exe scripts\build_numbers.py           # rebuilds everything below
+.venv-deep\Scripts\python.exe scripts\check_paper_numbers.py path\to\draft.tex   # checks a draft
+```
+
+- **`protocol_facts.json` / `.md`** -- dataset facts (rows, features, encoded width, missingness,
+  test-fold sizes), protocol constants (model/dataset/split counts, the tuning budget, the deep
+  schedule constants), the full hyperparameter search space per model, software/hardware
+  versions, and fit/predict timing -- all read programmatically (e.g. the deep schedule constants
+  are imported directly from `src.deep_models`, never retyped).
+- **`numbers.json` / `.csv` / `.tex` / `.md` / `numbers_index.md`** -- the numbers book: 1628
+  entries, each with a `key`, `value` (full precision), `formatted` string, `role`
+  (primary/descriptive/supplementary), and full provenance (`source_file`, `selector`,
+  `source_sha256`, `phase`). **No value in numbers.json was hand-typed** -- every one is read from
+  a result file with an explicit selector, and the build STOPs with a clear error if a file,
+  column or row is missing. `numbers.tex` defines one `\csname num:KEY\endcsname` per entry, plus
+  `\newcommand{\N}[1]{\csname num:#1\endcsname}`: write `\N{key}` in the paper's LaTeX source
+  after `\input{paper/evidence/numbers.tex}`. **An undefined key makes LaTeX fail to compile --
+  this is intended**, since it means that number does not exist in the numbers book yet. Rounding
+  rules and the key-naming scheme are documented in `numbers.md`.
+- **`inventory.csv` / `.md`** -- every figure and table produced in Phases 2c-3d (37 items): file
+  paths, what each one shows (copied verbatim from its own captions file), pixel/physical size for
+  figures, row/column counts and a one-column-width fit estimate for tables, its data source, and
+  known issues (for example which tables only cover 2 of the 4 fractions). Does not propose which
+  items belong in the paper.
+- **`scripts/check_paper_numbers.py`** -- a heuristic checker (it says so in its own output) that
+  scans a `.tex`/`.md`/`.txt` draft for decimal numbers and percentages outside `\N{...}`,
+  comments, citations and labels/refs, and reports each as an exact match, a rounded match, or
+  UNMATCHED against `numbers.json`, plus any `\N{key}` whose key does not exist. It also verifies
+  every source file's current SHA-256 against the hash recorded at build time and warns if stale.
+  Exits non-zero on any UNMATCHED number or unknown key (`--warn-only` forces exit 0). **Run it
+  after every change to a draft, and it must pass before the draft is shared.**
