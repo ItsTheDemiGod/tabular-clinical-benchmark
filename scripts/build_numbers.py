@@ -826,6 +826,134 @@ def build_group7_sensitivity(book: NumbersBook) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Phase 4b: new quantities needed by the claim map, group "4b".
+#
+# C3 needs the dataset-averaged DIFFERENCE OF DIFFERENCES in AUROC gap to
+# logreg between fraction 0.1 and fraction 1.0, per model. C6 needs the
+# paired AUROC/log-loss... (log loss only, per the claim text) difference
+# between the dataset-averaged log-loss LEADER and the SECOND-best model, at
+# each (fraction, dataset_set), for the two leader/second-best pairs that do
+# NOT already involve logreg (the two that do -- f1.0/NO_CKD: logreg vs mlp;
+# f0.1/NO_CKD: rf vs logreg -- reuse the existing logloss-diff-logreg-* keys
+# instead of being recomputed here).
+#
+# Both use the SAME nested-bootstrap procedure as Phases 3a/3c: seed 42,
+# B = 5000, resample the 10 splits WITHIN each dataset (same resampled
+# indices reused for every series compared for that dataset, so pairing is
+# preserved under resampling), then average the per-dataset bootstrap means.
+# ---------------------------------------------------------------------------
+def _diff_of_diff_bootstrap(
+    all_runs: pd.DataFrame, model: str, metric: str, datasets: list[str], seed: int, b: int = 5000,
+) -> tuple[float, float, float, list[float]]:
+    """CI for dataset-averaged (model-logreg diff @ f0.1) - (model-logreg diff @ f1.0).
+
+    Returns (point, ci_lo, ci_hi, point_per_dataset) -- the last for the
+    per-dataset sign-agreement count used by the claim-map status rule.
+    """
+    rng = np.random.default_rng(seed)
+    boot_per_dataset = []
+    point_per_dataset = []
+    for ds in datasets:
+        series = {}
+        for frac in (0.1, 1.0):
+            for who in (model, "logreg"):
+                vals = (
+                    all_runs[(all_runs.dataset == ds) & (all_runs.model == who) & (all_runs.fraction == frac)]
+                    .sort_values("split_idx")[metric]
+                    .to_numpy()
+                )
+                if len(vals) != 10:
+                    raise RuntimeError(f"expected 10 split values for {ds}/{who}/frac={frac}/{metric}, got {len(vals)}")
+                series[(frac, who)] = vals
+        n = 10
+        idx = rng.integers(0, n, size=(b, n))
+        diff01_boot = series[(0.1, model)][idx].mean(axis=1) - series[(0.1, "logreg")][idx].mean(axis=1)
+        diff10_boot = series[(1.0, model)][idx].mean(axis=1) - series[(1.0, "logreg")][idx].mean(axis=1)
+        dod_boot = diff01_boot - diff10_boot
+        boot_per_dataset.append(dod_boot)
+        diff01_point = series[(0.1, model)].mean() - series[(0.1, "logreg")].mean()
+        diff10_point = series[(1.0, model)].mean() - series[(1.0, "logreg")].mean()
+        point_per_dataset.append(float(diff01_point - diff10_point))
+    boot_avg = np.mean(np.vstack(boot_per_dataset), axis=0)
+    point = float(np.mean(point_per_dataset))
+    lo, hi = np.percentile(boot_avg, [2.5, 97.5])
+    return point, float(lo), float(hi), point_per_dataset
+
+
+def build_group8_phase4b_claims(book: NumbersBook) -> None:
+    from analysis.bootstrap import bootstrap_diff_ci_averaged
+
+    all_runs_path = PROJECT_ROOT / "results" / "all_runs.csv"
+    all_runs = pd.read_csv(all_runs_path)
+    selector_note = (
+        "all_runs.csv, nested bootstrap seed=42 B=5000 resampling the 10 splits per dataset "
+        "(same resampled indices reused across all series compared for that dataset), "
+        "dataset-averaged (model-logreg diff @ f0.1) - (model-logreg diff @ f1.0), auroc"
+    )
+
+    # C3: diff-of-differences (AUROC gap to logreg at f0.1 minus at f1.0), per model.
+    for model in MODELS:
+        if model == "logreg":
+            continue
+        for set_name, datasets in (("ALL5", DATASETS_ALL5), ("NO_CKD", DATASETS_NO_CKD)):
+            seed = 42  # fixed seed, per-model/per-dataset-set reproducibility is from re-deriving the rng fresh each call
+            point, lo, hi, per_ds = _diff_of_diff_bootstrap(all_runs, model, "auroc", datasets, seed)
+            n_total = len(datasets)
+            n_agree = sum(1 for v in per_ds if (v > 0) == (point > 0)) if point != 0 else sum(1 for v in per_ds if v == 0)
+            base = make_key("auroc-dod-f0.1-f1.0", model, ds_label(set_name))
+            book.add(f"{base}-point", point, "diff", "", "primary", all_runs_path, selector_note + f" | model={model} dataset_set={set_name}", "4b")
+            book.add(f"{base}-ci-lo", lo, "ci", "", "primary", all_runs_path, selector_note + " | ci_lo", "4b")
+            book.add(f"{base}-ci-hi", hi, "ci", "", "primary", all_runs_path, selector_note + " | ci_hi", "4b")
+            book.add(f"{base}-nsign-agree", n_agree, "count", "datasets", "descriptive", all_runs_path,
+                      selector_note + " | count of per-dataset point estimates sharing the overall point estimate's sign", "4b")
+            book.add(f"{base}-ntotal", n_total, "count", "datasets", "descriptive", all_runs_path,
+                      selector_note + " | number of datasets in this dataset_set", "4b")
+
+    # C6: paired log-loss difference, dataset-averaged leader vs. second-best, for
+    # the two (fraction, ALL5) cells whose leader/second-best pair does not already
+    # involve logreg (f1.0/NO_CKD and f0.1/NO_CKD are logreg-involving and already
+    # covered by the existing logloss-diff-logreg-* keys from build_group2).
+    new_pairs = [
+        (1.0, "ALL5", "mlp", "xgb"),  # f1.0 ALL5 leader=mlp, second=xgb
+        (0.1, "ALL5", "rf", "xgb"),   # f0.1 ALL5 leader=rf, second=xgb
+    ]
+    for frac, set_name, leader, second in new_pairs:
+        datasets = DATASETS_ALL5 if set_name == "ALL5" else DATASETS_NO_CKD
+        leader_by_ds = [
+            all_runs[(all_runs.dataset == d) & (all_runs.model == leader) & (all_runs.fraction == frac)].sort_values("split_idx")["log_loss"].to_numpy()
+            for d in datasets
+        ]
+        second_by_ds = [
+            all_runs[(all_runs.dataset == d) & (all_runs.model == second) & (all_runs.fraction == frac)].sort_values("split_idx")["log_loss"].to_numpy()
+            for d in datasets
+        ]
+        rng = np.random.default_rng(42)
+        point, lo, hi = bootstrap_diff_ci_averaged(leader_by_ds, second_by_ds, rng, 5000)
+        frac_tag = "f1.0" if frac == 1.0 else "f0.1"
+        base = make_key("logloss-diff-leader-2nd", leader, second, ds_label(set_name), frac_tag)
+        sel = (
+            f"all_runs.csv model in {{{leader},{second}}} fraction=={frac} dataset_set=={set_name}, "
+            "nested bootstrap seed=42 B=5000 (same analysis.bootstrap.bootstrap_diff_ci_averaged as Phase 3a), "
+            f"dataset-averaged ({leader} - {second}) log_loss"
+        )
+        book.add(f"{base}-point", point, "diff", "", "primary", all_runs_path, sel, "4b")
+        book.add(f"{base}-ci-lo", lo, "ci", "", "primary", all_runs_path, sel + " | ci_lo", "4b")
+        book.add(f"{base}-ci-hi", hi, "ci", "", "primary", all_runs_path, sel + " | ci_hi", "4b")
+
+    # C11: fit-time ratios to logreg, dataset-averaged ALL5, fraction 1.0.
+    timing_path = PROJECT_ROOT / "results" / "phase3a" / "table5_calibration_timing.csv"
+    timing = pd.read_csv(timing_path)
+    logreg_time = float(_one_row(timing, timing.model == "logreg", "timing[logreg]").fit_time_s)
+    for model in MODELS:
+        if model == "logreg":
+            continue
+        model_time = float(_one_row(timing, timing.model == model, f"timing[{model}]").fit_time_s)
+        ratio = model_time / logreg_time
+        book.add(make_key("fit-time-ratio-logreg", model), ratio, "diff", "x", "descriptive", timing_path,
+                  f"table5_calibration_timing.csv, fit_time_s[{model}] / fit_time_s[logreg] (measured with 3-4 parallel workers; rough)", "4b")
+
+
+# ---------------------------------------------------------------------------
 # Output writers: numbers.json / .csv / .tex / .md / numbers_index.md
 # ---------------------------------------------------------------------------
 _LATEX_ESCAPE = {"%": r"\%", "#": r"\#", "&": r"\&", "_": r"\_"}
@@ -1138,6 +1266,7 @@ def main() -> None:
     build_group5_robustness(book)
     build_group6_explanations(book)
     build_group7_sensitivity(book)
+    build_group8_phase4b_claims(book)
     write_numbers_outputs(book)
     n_undefined = sum(1 for e in book.entries if e["undefined"])
     print(f"numbers.json: {len(book.entries)} entries, {n_undefined} undefined")

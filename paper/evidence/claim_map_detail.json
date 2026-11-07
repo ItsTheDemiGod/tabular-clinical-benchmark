@@ -1,0 +1,2199 @@
+{
+  "C1": {
+    "claim_id": "C1",
+    "per_model": [
+      {
+        "model": "rf",
+        "all5_point": -0.0025,
+        "all5_ci_lo": -0.0062,
+        "all5_ci_hi": 0.0014,
+        "all5_nagree": 4,
+        "all5_ntotal": 5,
+        "nockd_point": -0.0031,
+        "nockd_ci_lo": -0.0079,
+        "nockd_ci_hi": 0.002,
+        "nockd_nagree": 3,
+        "nockd_ntotal": 4,
+        "status": "NOT SUPPORTED"
+      },
+      {
+        "model": "xgb",
+        "all5_point": -0.0043,
+        "all5_ci_lo": -0.0087,
+        "all5_ci_hi": 0.0004,
+        "all5_nagree": 4,
+        "all5_ntotal": 5,
+        "nockd_point": -0.005,
+        "nockd_ci_lo": -0.0105,
+        "nockd_ci_hi": 0.0007,
+        "nockd_nagree": 3,
+        "nockd_ntotal": 4,
+        "status": "NOT SUPPORTED"
+      },
+      {
+        "model": "lgbm",
+        "all5_point": -0.007,
+        "all5_ci_lo": -0.0112,
+        "all5_ci_hi": -0.0028,
+        "all5_nagree": 4,
+        "all5_ntotal": 5,
+        "nockd_point": -0.0087,
+        "nockd_ci_lo": -0.0136,
+        "nockd_ci_hi": -0.0034,
+        "nockd_nagree": 3,
+        "nockd_ntotal": 4,
+        "status": "SUPPORTED"
+      },
+      {
+        "model": "mlp",
+        "all5_point": -0.0014,
+        "all5_ci_lo": -0.0047,
+        "all5_ci_hi": 0.0017,
+        "all5_nagree": 3,
+        "all5_ntotal": 5,
+        "nockd_point": -0.0018,
+        "nockd_ci_lo": -0.0059,
+        "nockd_ci_hi": 0.002,
+        "nockd_nagree": 3,
+        "nockd_ntotal": 4,
+        "status": "NOT SUPPORTED"
+      },
+      {
+        "model": "ftt",
+        "all5_point": -0.0084,
+        "all5_ci_lo": -0.0136,
+        "all5_ci_hi": -0.0035,
+        "all5_nagree": 5,
+        "all5_ntotal": 5,
+        "nockd_point": -0.0101,
+        "nockd_ci_lo": -0.0167,
+        "nockd_ci_hi": -0.0038,
+        "nockd_nagree": 4,
+        "nockd_ntotal": 4,
+        "status": "SUPPORTED"
+      },
+      {
+        "model": "tabnet",
+        "all5_point": -0.0414,
+        "all5_ci_lo": -0.0563,
+        "all5_ci_hi": -0.0284,
+        "all5_nagree": 5,
+        "all5_ntotal": 5,
+        "nockd_point": -0.0456,
+        "nockd_ci_lo": -0.0597,
+        "nockd_ci_hi": -0.0328,
+        "nockd_nagree": 4,
+        "nockd_ntotal": 4,
+        "status": "SUPPORTED"
+      }
+    ],
+    "exceptions": [
+      {
+        "dataset": "pima_diabetes",
+        "model": "rf",
+        "fraction": 1.0,
+        "model_mean_auroc": 0.8391,
+        "logreg_mean_auroc": 0.8341,
+        "excess": 0.005
+      },
+      {
+        "dataset": "pima_diabetes",
+        "model": "xgb",
+        "fraction": 1.0,
+        "model_mean_auroc": 0.8416,
+        "logreg_mean_auroc": 0.8341,
+        "excess": 0.0075
+      },
+      {
+        "dataset": "pima_diabetes",
+        "model": "lgbm",
+        "fraction": 1.0,
+        "model_mean_auroc": 0.8386,
+        "logreg_mean_auroc": 0.8341,
+        "excess": 0.0045
+      },
+      {
+        "dataset": "pima_diabetes",
+        "model": "mlp",
+        "fraction": 1.0,
+        "model_mean_auroc": 0.8357,
+        "logreg_mean_auroc": 0.8341,
+        "excess": 0.0016
+      },
+      {
+        "dataset": "ckd",
+        "model": "mlp",
+        "fraction": 1.0,
+        "model_mean_auroc": 1.0,
+        "logreg_mean_auroc": 0.9999,
+        "excess": 0.0001
+      }
+    ],
+    "n_models_supported": 3,
+    "n_models_total": 6
+  },
+  "C2": {
+    "claim_id": "C2",
+    "per_model": [
+      {
+        "model": "rf",
+        "all5_point": -0.0021,
+        "all5_ci_lo": -0.0082,
+        "all5_ci_hi": 0.004,
+        "all5_nagree": 2,
+        "all5_ntotal": 5,
+        "nockd_point": -0.0026,
+        "nockd_ci_lo": -0.0101,
+        "nockd_ci_hi": 0.005,
+        "nockd_nagree": 2,
+        "nockd_ntotal": 4,
+        "status": "NOT SUPPORTED"
+      },
+      {
+        "model": "xgb",
+        "all5_point": -0.0117,
+        "all5_ci_lo": -0.0187,
+        "all5_ci_hi": -0.0049,
+        "all5_nagree": 4,
+        "all5_ntotal": 5,
+        "nockd_point": -0.0123,
+        "nockd_ci_lo": -0.0209,
+        "nockd_ci_hi": -0.0039,
+        "nockd_nagree": 3,
+        "nockd_ntotal": 4,
+        "status": "SUPPORTED"
+      },
+      {
+        "model": "lgbm",
+        "all5_point": -0.013,
+        "all5_ci_lo": -0.0203,
+        "all5_ci_hi": -0.0058,
+        "all5_nagree": 5,
+        "all5_ntotal": 5,
+        "nockd_point": -0.0146,
+        "nockd_ci_lo": -0.0237,
+        "nockd_ci_hi": -0.0056,
+        "nockd_nagree": 4,
+        "nockd_ntotal": 4,
+        "status": "SUPPORTED"
+      },
+      {
+        "model": "mlp",
+        "all5_point": -0.011,
+        "all5_ci_lo": -0.0191,
+        "all5_ci_hi": -0.0044,
+        "all5_nagree": 3,
+        "all5_ntotal": 5,
+        "nockd_point": -0.0141,
+        "nockd_ci_lo": -0.0238,
+        "nockd_ci_hi": -0.0058,
+        "nockd_nagree": 3,
+        "nockd_ntotal": 4,
+        "status": "SUPPORTED"
+      },
+      {
+        "model": "ftt",
+        "all5_point": -0.0251,
+        "all5_ci_lo": -0.0392,
+        "all5_ci_hi": -0.014,
+        "all5_nagree": 5,
+        "all5_ntotal": 5,
+        "nockd_point": -0.0308,
+        "nockd_ci_lo": -0.048,
+        "nockd_ci_hi": -0.0171,
+        "nockd_nagree": 4,
+        "nockd_ntotal": 4,
+        "status": "SUPPORTED"
+      },
+      {
+        "model": "tabnet",
+        "all5_point": -0.162,
+        "all5_ci_lo": -0.2035,
+        "all5_ci_hi": -0.1228,
+        "all5_nagree": 5,
+        "all5_ntotal": 5,
+        "nockd_point": -0.1389,
+        "nockd_ci_lo": -0.17,
+        "nockd_ci_hi": -0.1083,
+        "nockd_nagree": 4,
+        "nockd_ntotal": 4,
+        "status": "SUPPORTED"
+      }
+    ],
+    "exceptions": [
+      {
+        "dataset": "heart_cleveland",
+        "model": "rf",
+        "fraction": 0.1,
+        "model_mean_auroc": 0.887,
+        "logreg_mean_auroc": 0.8851,
+        "excess": 0.0019
+      },
+      {
+        "dataset": "ckd",
+        "model": "rf",
+        "fraction": 0.1,
+        "model_mean_auroc": 0.9975,
+        "logreg_mean_auroc": 0.9973,
+        "excess": 0.0002
+      },
+      {
+        "dataset": "ckd",
+        "model": "mlp",
+        "fraction": 0.1,
+        "model_mean_auroc": 0.9987,
+        "logreg_mean_auroc": 0.9973,
+        "excess": 0.0013
+      },
+      {
+        "dataset": "ilpd",
+        "model": "rf",
+        "fraction": 0.1,
+        "model_mean_auroc": 0.7152,
+        "logreg_mean_auroc": 0.7003,
+        "excess": 0.0149
+      },
+      {
+        "dataset": "ilpd",
+        "model": "xgb",
+        "fraction": 0.1,
+        "model_mean_auroc": 0.7056,
+        "logreg_mean_auroc": 0.7003,
+        "excess": 0.0053
+      },
+      {
+        "dataset": "breast_wisconsin",
+        "model": "mlp",
+        "fraction": 0.1,
+        "model_mean_auroc": 0.99,
+        "logreg_mean_auroc": 0.9898,
+        "excess": 0.0002
+      }
+    ],
+    "n_models_supported": 5,
+    "n_models_total": 6
+  },
+  "C3": {
+    "claim_id": "C3",
+    "per_model": [
+      {
+        "model": "rf",
+        "all5_point": 0.0005,
+        "all5_ci_lo": -0.005,
+        "all5_ci_hi": 0.0057,
+        "nockd_point": 0.0005,
+        "nockd_ci_lo": -0.0065,
+        "nockd_ci_hi": 0.007,
+        "status": "NOT SUPPORTED",
+        "note": "expected ~flat (claimed exception)"
+      },
+      {
+        "model": "xgb",
+        "all5_point": -0.0074,
+        "all5_ci_lo": -0.015,
+        "all5_ci_hi": -0.0002,
+        "nockd_point": -0.0073,
+        "nockd_ci_lo": -0.0166,
+        "nockd_ci_hi": 0.0018,
+        "status": "PARTLY",
+        "note": "expected negative (gap larger/more negative at f0.1)"
+      },
+      {
+        "model": "lgbm",
+        "all5_point": -0.006,
+        "all5_ci_lo": -0.0144,
+        "all5_ci_hi": 0.0021,
+        "nockd_point": -0.0059,
+        "nockd_ci_lo": -0.0165,
+        "nockd_ci_hi": 0.0044,
+        "status": "NOT SUPPORTED",
+        "note": "expected negative (gap larger/more negative at f0.1)"
+      },
+      {
+        "model": "mlp",
+        "all5_point": -0.0097,
+        "all5_ci_lo": -0.0171,
+        "all5_ci_hi": -0.0028,
+        "nockd_point": -0.0124,
+        "nockd_ci_lo": -0.0216,
+        "nockd_ci_hi": -0.0036,
+        "status": "SUPPORTED",
+        "note": "expected negative (gap larger/more negative at f0.1)"
+      },
+      {
+        "model": "ftt",
+        "all5_point": -0.0167,
+        "all5_ci_lo": -0.0309,
+        "all5_ci_hi": -0.0043,
+        "nockd_point": -0.0207,
+        "nockd_ci_lo": -0.0391,
+        "nockd_ci_hi": -0.0054,
+        "status": "SUPPORTED",
+        "note": "expected negative (gap larger/more negative at f0.1)"
+      },
+      {
+        "model": "tabnet",
+        "all5_point": -0.1207,
+        "all5_ci_lo": -0.166,
+        "all5_ci_hi": -0.0757,
+        "nockd_point": -0.0933,
+        "nockd_ci_lo": -0.1269,
+        "nockd_ci_hi": -0.0608,
+        "status": "SUPPORTED",
+        "note": "expected negative (gap larger/more negative at f0.1)"
+      }
+    ]
+  },
+  "C4": {
+    "claim_id": "C4",
+    "n_total_cells": 120,
+    "n_sig_cells": 1,
+    "significant_cell": {
+      "dataset": "ckd",
+      "model": "xgb",
+      "metric": "auroc",
+      "fraction": 0.1,
+      "mean_diff_vs_logreg": -0.0092,
+      "t_statistic": -3.5739,
+      "p_holm": 0.0359
+    }
+  },
+  "C5": {
+    "claim_id": "C5",
+    "rows": [
+      {
+        "fraction": 1.0,
+        "model": "logreg",
+        "nockd_pooled_slope": 1.1376,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 1.0933,
+            "ci_lo": 0.9589,
+            "ci_hi": 1.2648
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 1.2207,
+            "ci_lo": 1.0009,
+            "ci_hi": 1.5572
+          },
+          {
+            "dataset": "ckd",
+            "slope": 10.7766,
+            "ci_lo": 9.3661,
+            "ci_hi": 17.6163
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 0.914,
+            "ci_lo": 0.7436,
+            "ci_hi": 1.136
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 1.3224,
+            "ci_lo": 0.9707,
+            "ci_hi": 2.0111
+          }
+        ]
+      },
+      {
+        "fraction": 1.0,
+        "model": "rf",
+        "nockd_pooled_slope": 1.2785,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 1.1197,
+            "ci_lo": 0.978,
+            "ci_hi": 1.289
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 1.5761,
+            "ci_lo": 1.2718,
+            "ci_hi": 1.9471
+          },
+          {
+            "dataset": "ckd",
+            "slope": 3.4214,
+            "ci_lo": 3.0615,
+            "ci_hi": 8.0781
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 0.9512,
+            "ci_lo": 0.8226,
+            "ci_hi": 1.1544
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 1.467,
+            "ci_lo": 1.297,
+            "ci_hi": 1.7359
+          }
+        ]
+      },
+      {
+        "fraction": 1.0,
+        "model": "xgb",
+        "nockd_pooled_slope": 1.0659,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 1.292,
+            "ci_lo": 1.1655,
+            "ci_hi": 1.4336
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 0.8756,
+            "ci_lo": 0.657,
+            "ci_hi": 1.1665
+          },
+          {
+            "dataset": "ckd",
+            "slope": 1.2714,
+            "ci_lo": 1.0539,
+            "ci_hi": 1.8369
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 1.2013,
+            "ci_lo": 0.9125,
+            "ci_hi": 1.7505
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 0.8946,
+            "ci_lo": 0.8028,
+            "ci_hi": 1.0546
+          }
+        ]
+      },
+      {
+        "fraction": 1.0,
+        "model": "lgbm",
+        "nockd_pooled_slope": 0.8073,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 1.0796,
+            "ci_lo": 0.9375,
+            "ci_hi": 1.2389
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 0.8265,
+            "ci_lo": 0.578,
+            "ci_hi": 1.1822
+          },
+          {
+            "dataset": "ckd",
+            "slope": 0.8643,
+            "ci_lo": 0.6843,
+            "ci_hi": 1.3965
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 0.7413,
+            "ci_lo": 0.5597,
+            "ci_hi": 1.0634
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 0.5818,
+            "ci_lo": 0.5019,
+            "ci_hi": 0.7375
+          }
+        ]
+      },
+      {
+        "fraction": 1.0,
+        "model": "mlp",
+        "nockd_pooled_slope": 0.9805,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 0.9885,
+            "ci_lo": 0.8831,
+            "ci_hi": 1.1003
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 1.034,
+            "ci_lo": 0.836,
+            "ci_hi": 1.3818
+          },
+          {
+            "dataset": "ckd",
+            "slope": 1.3801,
+            "ci_lo": 1.0966,
+            "ci_hi": 3.246
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 0.9203,
+            "ci_lo": 0.7531,
+            "ci_hi": 1.1737
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 0.9794,
+            "ci_lo": 0.7309,
+            "ci_hi": 1.319
+          }
+        ]
+      },
+      {
+        "fraction": 1.0,
+        "model": "ftt",
+        "nockd_pooled_slope": 0.9086,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 0.8496,
+            "ci_lo": 0.7348,
+            "ci_hi": 0.9691
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 0.7871,
+            "ci_lo": 0.674,
+            "ci_hi": 0.9555
+          },
+          {
+            "dataset": "ckd",
+            "slope": 0.8714,
+            "ci_lo": 0.7574,
+            "ci_hi": 1.1595
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 1.0202,
+            "ci_lo": 0.8915,
+            "ci_hi": 1.2162
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 0.9778,
+            "ci_lo": 0.8172,
+            "ci_hi": 1.1896
+          }
+        ]
+      },
+      {
+        "fraction": 1.0,
+        "model": "tabnet",
+        "nockd_pooled_slope": 0.8222,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 0.6782,
+            "ci_lo": 0.5546,
+            "ci_hi": 0.8353
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 0.7614,
+            "ci_lo": 0.6081,
+            "ci_hi": 0.9812
+          },
+          {
+            "dataset": "ckd",
+            "slope": 1.0951,
+            "ci_lo": 0.9499,
+            "ci_hi": 2.0295
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 0.8954,
+            "ci_lo": 0.6983,
+            "ci_hi": 1.2166
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 0.9539,
+            "ci_lo": 0.8132,
+            "ci_hi": 1.1408
+          }
+        ]
+      },
+      {
+        "fraction": 0.1,
+        "model": "logreg",
+        "nockd_pooled_slope": 1.3413,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 1.2987,
+            "ci_lo": 0.9224,
+            "ci_hi": 1.8983
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 2.104,
+            "ci_lo": 1.7117,
+            "ci_hi": 2.7562
+          },
+          {
+            "dataset": "ckd",
+            "slope": 1.7988,
+            "ci_lo": 1.2189,
+            "ci_hi": 4.6177
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 0.3901,
+            "ci_lo": 0.2976,
+            "ci_hi": 0.5993
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 1.5723,
+            "ci_lo": 1.1391,
+            "ci_hi": 2.375
+          }
+        ]
+      },
+      {
+        "fraction": 0.1,
+        "model": "rf",
+        "nockd_pooled_slope": 1.1513,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 0.9365,
+            "ci_lo": 0.8257,
+            "ci_hi": 1.0695
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 1.5191,
+            "ci_lo": 1.3431,
+            "ci_hi": 1.7749
+          },
+          {
+            "dataset": "ckd",
+            "slope": 3.6445,
+            "ci_lo": 3.18,
+            "ci_hi": 4.8067
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 0.6462,
+            "ci_lo": 0.5108,
+            "ci_hi": 0.8899
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 1.5036,
+            "ci_lo": 1.3459,
+            "ci_hi": 1.7881
+          }
+        ]
+      },
+      {
+        "fraction": 0.1,
+        "model": "xgb",
+        "nockd_pooled_slope": 0.9752,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 0.9919,
+            "ci_lo": 0.9017,
+            "ci_hi": 1.1062
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 1.0017,
+            "ci_lo": 0.8581,
+            "ci_hi": 1.2507
+          },
+          {
+            "dataset": "ckd",
+            "slope": 1.7288,
+            "ci_lo": 1.5108,
+            "ci_hi": 2.1294
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 0.7559,
+            "ci_lo": 0.5064,
+            "ci_hi": 1.5514
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 1.1511,
+            "ci_lo": 1.0759,
+            "ci_hi": 1.3087
+          }
+        ]
+      },
+      {
+        "fraction": 0.1,
+        "model": "lgbm",
+        "nockd_pooled_slope": 0.5478,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 0.7644,
+            "ci_lo": 0.6511,
+            "ci_hi": 0.9477
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 0.5839,
+            "ci_lo": 0.4582,
+            "ci_hi": 0.8683
+          },
+          {
+            "dataset": "ckd",
+            "slope": 0.7301,
+            "ci_lo": 0.5948,
+            "ci_hi": 0.9928
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 0.3349,
+            "ci_lo": 0.2163,
+            "ci_hi": 0.5699
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 0.5081,
+            "ci_lo": 0.4404,
+            "ci_hi": 0.6072
+          }
+        ]
+      },
+      {
+        "fraction": 0.1,
+        "model": "mlp",
+        "nockd_pooled_slope": 0.4491,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 0.3469,
+            "ci_lo": 0.1714,
+            "ci_hi": 1.0361
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 0.5989,
+            "ci_lo": 0.3835,
+            "ci_hi": 1.3228
+          },
+          {
+            "dataset": "ckd",
+            "slope": 0.8147,
+            "ci_lo": 0.4963,
+            "ci_hi": 2.3039
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 0.2047,
+            "ci_lo": 0.1314,
+            "ci_hi": 0.6193
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 0.646,
+            "ci_lo": 0.4711,
+            "ci_hi": 0.9278
+          }
+        ]
+      },
+      {
+        "fraction": 0.1,
+        "model": "ftt",
+        "nockd_pooled_slope": 0.3661,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 0.3254,
+            "ci_lo": 0.2085,
+            "ci_hi": 0.5947
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 0.2589,
+            "ci_lo": 0.2019,
+            "ci_hi": 0.5033
+          },
+          {
+            "dataset": "ckd",
+            "slope": 0.5096,
+            "ci_lo": 0.4386,
+            "ci_hi": 0.6928
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 0.3382,
+            "ci_lo": 0.2305,
+            "ci_hi": 0.5503
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 0.5418,
+            "ci_lo": 0.4082,
+            "ci_hi": 0.8533
+          }
+        ]
+      },
+      {
+        "fraction": 0.1,
+        "model": "tabnet",
+        "nockd_pooled_slope": 0.2724,
+        "per_dataset": [
+          {
+            "dataset": "pima_diabetes",
+            "slope": 0.1387,
+            "ci_lo": 0.1193,
+            "ci_hi": 0.1855
+          },
+          {
+            "dataset": "heart_cleveland",
+            "slope": 0.1252,
+            "ci_lo": 0.0441,
+            "ci_hi": 0.1719
+          },
+          {
+            "dataset": "ckd",
+            "slope": 0.4712,
+            "ci_lo": 0.3006,
+            "ci_hi": 0.7876
+          },
+          {
+            "dataset": "ilpd",
+            "slope": 0.2251,
+            "ci_lo": 0.173,
+            "ci_hi": 0.2996
+          },
+          {
+            "dataset": "breast_wisconsin",
+            "slope": 0.6006,
+            "ci_lo": 0.4698,
+            "ci_hi": 0.8193
+          }
+        ]
+      }
+    ]
+  },
+  "C6": {
+    "claim_id": "C6",
+    "leaders": [
+      {
+        "fraction": 1.0,
+        "dataset_set": "ALL5",
+        "leader": "mlp",
+        "second": "xgb",
+        "leader_mean": 0.3011,
+        "second_mean": 0.31,
+        "existing_pair": false,
+        "diff_leader_minus_second": {
+          "point": -0.009,
+          "ci_lo": -0.0213,
+          "ci_hi": 0.0018
+        }
+      },
+      {
+        "fraction": 1.0,
+        "dataset_set": "NO_CKD",
+        "leader": "logreg",
+        "second": "mlp",
+        "leader_mean": 0.3678,
+        "second_mean": 0.3719,
+        "existing_pair": true,
+        "diff_leader_minus_second": {
+          "point": -0.0042,
+          "ci_lo": -0.0112,
+          "ci_hi": 0.0026
+        }
+      },
+      {
+        "fraction": 0.1,
+        "dataset_set": "ALL5",
+        "leader": "rf",
+        "second": "xgb",
+        "leader_mean": 0.3771,
+        "second_mean": 0.3931,
+        "existing_pair": false,
+        "diff_leader_minus_second": {
+          "point": -0.0159,
+          "ci_lo": -0.0246,
+          "ci_hi": -0.0072
+        }
+      },
+      {
+        "fraction": 0.1,
+        "dataset_set": "NO_CKD",
+        "leader": "rf",
+        "second": "logreg",
+        "leader_mean": 0.4294,
+        "second_mean": 0.4433,
+        "existing_pair": true,
+        "diff_leader_minus_second": {
+          "point": -0.0139,
+          "ci_lo": -0.026,
+          "ci_hi": -0.0019
+        }
+      }
+    ]
+  },
+  "C7": {
+    "claim_id": "C7",
+    "rows": [
+      {
+        "perturbation": "30% missing",
+        "dataset_set": "ALL5",
+        "degradations": {
+          "logreg": -0.0244,
+          "rf": -0.021,
+          "xgb": -0.0239,
+          "lgbm": -0.023,
+          "mlp": -0.02,
+          "ftt": -0.0196,
+          "tabnet": -0.0252
+        },
+        "smallest_drop_model": "tabnet",
+        "smallest_drop": -0.0252,
+        "largest_drop_model": "ftt",
+        "largest_drop": -0.0196,
+        "range": 0.0056
+      },
+      {
+        "perturbation": "30% missing",
+        "dataset_set": "NO_CKD",
+        "degradations": {
+          "logreg": -0.0297,
+          "rf": -0.0252,
+          "xgb": -0.0271,
+          "lgbm": -0.0275,
+          "mlp": -0.0243,
+          "ftt": -0.0236,
+          "tabnet": -0.0319
+        },
+        "smallest_drop_model": "tabnet",
+        "smallest_drop": -0.0319,
+        "largest_drop_model": "ftt",
+        "largest_drop": -0.0236,
+        "range": 0.0084
+      },
+      {
+        "perturbation": "noise 0.5 (original)",
+        "dataset_set": "ALL5",
+        "degradations": {
+          "logreg": -0.0209,
+          "rf": -0.0235,
+          "xgb": -0.0293,
+          "lgbm": -0.0295,
+          "mlp": -0.017,
+          "ftt": -0.0232,
+          "tabnet": -0.0282
+        },
+        "smallest_drop_model": "lgbm",
+        "smallest_drop": -0.0295,
+        "largest_drop_model": "mlp",
+        "largest_drop": -0.017,
+        "range": 0.0125
+      },
+      {
+        "perturbation": "noise 0.5 (original)",
+        "dataset_set": "NO_CKD",
+        "degradations": {
+          "logreg": -0.0253,
+          "rf": -0.0274,
+          "xgb": -0.0295,
+          "lgbm": -0.0297,
+          "mlp": -0.0205,
+          "ftt": -0.022,
+          "tabnet": -0.0327
+        },
+        "smallest_drop_model": "tabnet",
+        "smallest_drop": -0.0327,
+        "largest_drop_model": "mlp",
+        "largest_drop": -0.0205,
+        "range": 0.0123
+      },
+      {
+        "perturbation": "noise 0.5 (continuous-only)",
+        "dataset_set": "ALL5",
+        "degradations": {
+          "logreg": -0.0161,
+          "rf": -0.0203,
+          "xgb": -0.0217,
+          "lgbm": -0.0189,
+          "mlp": -0.0125,
+          "ftt": -0.0145,
+          "tabnet": -0.0236
+        },
+        "smallest_drop_model": "tabnet",
+        "smallest_drop": -0.0236,
+        "largest_drop_model": "mlp",
+        "largest_drop": -0.0125,
+        "range": 0.0112
+      },
+      {
+        "perturbation": "noise 0.5 (continuous-only)",
+        "dataset_set": "NO_CKD",
+        "degradations": {
+          "logreg": -0.0198,
+          "rf": -0.0249,
+          "xgb": -0.0248,
+          "lgbm": -0.022,
+          "mlp": -0.0153,
+          "ftt": -0.0173,
+          "tabnet": -0.029
+        },
+        "smallest_drop_model": "tabnet",
+        "smallest_drop": -0.029,
+        "largest_drop_model": "mlp",
+        "largest_drop": -0.0153,
+        "range": 0.0137
+      }
+    ]
+  },
+  "C8": {
+    "claim_id": "C8",
+    "rows": [
+      {
+        "perturbation": "miss30",
+        "metric": "auroc",
+        "model": "rf",
+        "dataset_set": "ALL5",
+        "point": 0.0034,
+        "ci_lo": 0.0005,
+        "ci_hi": 0.0063,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "auroc",
+        "model": "rf",
+        "dataset_set": "NO_CKD",
+        "point": 0.0045,
+        "ci_lo": 0.0008,
+        "ci_hi": 0.0081,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "auroc",
+        "model": "xgb",
+        "dataset_set": "ALL5",
+        "point": 0.0005,
+        "ci_lo": -0.0026,
+        "ci_hi": 0.0038,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "auroc",
+        "model": "xgb",
+        "dataset_set": "NO_CKD",
+        "point": 0.0026,
+        "ci_lo": -0.0012,
+        "ci_hi": 0.0067,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "auroc",
+        "model": "lgbm",
+        "dataset_set": "ALL5",
+        "point": 0.0013,
+        "ci_lo": -0.0019,
+        "ci_hi": 0.0046,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "auroc",
+        "model": "lgbm",
+        "dataset_set": "NO_CKD",
+        "point": 0.0022,
+        "ci_lo": -0.0018,
+        "ci_hi": 0.0063,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "auroc",
+        "model": "mlp",
+        "dataset_set": "ALL5",
+        "point": 0.0044,
+        "ci_lo": 0.0018,
+        "ci_hi": 0.0072,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "auroc",
+        "model": "mlp",
+        "dataset_set": "NO_CKD",
+        "point": 0.0055,
+        "ci_lo": 0.0021,
+        "ci_hi": 0.0088,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "auroc",
+        "model": "ftt",
+        "dataset_set": "ALL5",
+        "point": 0.0048,
+        "ci_lo": 0.0014,
+        "ci_hi": 0.0085,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "auroc",
+        "model": "ftt",
+        "dataset_set": "NO_CKD",
+        "point": 0.0062,
+        "ci_lo": 0.002,
+        "ci_hi": 0.0107,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "auroc",
+        "model": "tabnet",
+        "dataset_set": "ALL5",
+        "point": -0.0008,
+        "ci_lo": -0.0081,
+        "ci_hi": 0.0074,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "auroc",
+        "model": "tabnet",
+        "dataset_set": "NO_CKD",
+        "point": -0.0022,
+        "ci_lo": -0.0111,
+        "ci_hi": 0.0073,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "log_loss",
+        "model": "rf",
+        "dataset_set": "ALL5",
+        "point": 0.0119,
+        "ci_lo": 0.0069,
+        "ci_hi": 0.0165,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "log_loss",
+        "model": "rf",
+        "dataset_set": "NO_CKD",
+        "point": 0.0068,
+        "ci_lo": 0.0018,
+        "ci_hi": 0.0115,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "log_loss",
+        "model": "xgb",
+        "dataset_set": "ALL5",
+        "point": 0.0289,
+        "ci_lo": 0.0209,
+        "ci_hi": 0.0382,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "log_loss",
+        "model": "xgb",
+        "dataset_set": "NO_CKD",
+        "point": 0.0161,
+        "ci_lo": 0.0078,
+        "ci_hi": 0.0269,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "log_loss",
+        "model": "lgbm",
+        "dataset_set": "ALL5",
+        "point": 0.0136,
+        "ci_lo": 0.0046,
+        "ci_hi": 0.0235,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "log_loss",
+        "model": "lgbm",
+        "dataset_set": "NO_CKD",
+        "point": 0.0127,
+        "ci_lo": 0.0029,
+        "ci_hi": 0.0239,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "log_loss",
+        "model": "mlp",
+        "dataset_set": "ALL5",
+        "point": -0.0083,
+        "ci_lo": -0.014,
+        "ci_hi": -0.0021,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "log_loss",
+        "model": "mlp",
+        "dataset_set": "NO_CKD",
+        "point": -0.0069,
+        "ci_lo": -0.0127,
+        "ci_hi": -0.0007,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "log_loss",
+        "model": "ftt",
+        "dataset_set": "ALL5",
+        "point": 0.0081,
+        "ci_lo": -0.0021,
+        "ci_hi": 0.0193,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "log_loss",
+        "model": "ftt",
+        "dataset_set": "NO_CKD",
+        "point": -0.0033,
+        "ci_lo": -0.0125,
+        "ci_hi": 0.0051,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "log_loss",
+        "model": "tabnet",
+        "dataset_set": "ALL5",
+        "point": 0.0063,
+        "ci_lo": -0.0065,
+        "ci_hi": 0.0183,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "miss30",
+        "metric": "log_loss",
+        "model": "tabnet",
+        "dataset_set": "NO_CKD",
+        "point": 0.0043,
+        "ci_lo": -0.0098,
+        "ci_hi": 0.0185,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "auroc",
+        "model": "rf",
+        "dataset_set": "ALL5",
+        "point": -0.0026,
+        "ci_lo": -0.0068,
+        "ci_hi": 0.0012,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "auroc",
+        "model": "rf",
+        "dataset_set": "NO_CKD",
+        "point": -0.002,
+        "ci_lo": -0.0071,
+        "ci_hi": 0.0025,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "auroc",
+        "model": "xgb",
+        "dataset_set": "ALL5",
+        "point": -0.0083,
+        "ci_lo": -0.013,
+        "ci_hi": -0.0037,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "auroc",
+        "model": "xgb",
+        "dataset_set": "NO_CKD",
+        "point": -0.0042,
+        "ci_lo": -0.0097,
+        "ci_hi": 0.0014,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "auroc",
+        "model": "lgbm",
+        "dataset_set": "ALL5",
+        "point": -0.0085,
+        "ci_lo": -0.0125,
+        "ci_hi": -0.0046,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "auroc",
+        "model": "lgbm",
+        "dataset_set": "NO_CKD",
+        "point": -0.0043,
+        "ci_lo": -0.009,
+        "ci_hi": 0.0,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "auroc",
+        "model": "mlp",
+        "dataset_set": "ALL5",
+        "point": 0.0039,
+        "ci_lo": 0.0012,
+        "ci_hi": 0.0067,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "auroc",
+        "model": "mlp",
+        "dataset_set": "NO_CKD",
+        "point": 0.0049,
+        "ci_lo": 0.0016,
+        "ci_hi": 0.0082,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "auroc",
+        "model": "ftt",
+        "dataset_set": "ALL5",
+        "point": -0.0023,
+        "ci_lo": -0.0078,
+        "ci_hi": 0.0029,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "auroc",
+        "model": "ftt",
+        "dataset_set": "NO_CKD",
+        "point": 0.0033,
+        "ci_lo": -0.0014,
+        "ci_hi": 0.0083,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "auroc",
+        "model": "tabnet",
+        "dataset_set": "ALL5",
+        "point": -0.0072,
+        "ci_lo": -0.0125,
+        "ci_hi": -0.0016,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "auroc",
+        "model": "tabnet",
+        "dataset_set": "NO_CKD",
+        "point": -0.0074,
+        "ci_lo": -0.0141,
+        "ci_hi": -0.0006,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "log_loss",
+        "model": "rf",
+        "dataset_set": "ALL5",
+        "point": 0.0261,
+        "ci_lo": 0.0164,
+        "ci_hi": 0.0357,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "log_loss",
+        "model": "rf",
+        "dataset_set": "NO_CKD",
+        "point": 0.0018,
+        "ci_lo": -0.0087,
+        "ci_hi": 0.0124,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "log_loss",
+        "model": "xgb",
+        "dataset_set": "ALL5",
+        "point": 0.0394,
+        "ci_lo": 0.0262,
+        "ci_hi": 0.0524,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "log_loss",
+        "model": "xgb",
+        "dataset_set": "NO_CKD",
+        "point": -0.006,
+        "ci_lo": -0.0196,
+        "ci_hi": 0.007,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "log_loss",
+        "model": "lgbm",
+        "dataset_set": "ALL5",
+        "point": 0.0877,
+        "ci_lo": 0.0689,
+        "ci_hi": 0.1106,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "log_loss",
+        "model": "lgbm",
+        "dataset_set": "NO_CKD",
+        "point": 0.0031,
+        "ci_lo": -0.0096,
+        "ci_hi": 0.0156,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "log_loss",
+        "model": "mlp",
+        "dataset_set": "ALL5",
+        "point": -0.0065,
+        "ci_lo": -0.0175,
+        "ci_hi": 0.0045,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "log_loss",
+        "model": "mlp",
+        "dataset_set": "NO_CKD",
+        "point": -0.0142,
+        "ci_lo": -0.0256,
+        "ci_hi": -0.0027,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "log_loss",
+        "model": "ftt",
+        "dataset_set": "ALL5",
+        "point": 0.1148,
+        "ci_lo": 0.0658,
+        "ci_hi": 0.1669,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "log_loss",
+        "model": "ftt",
+        "dataset_set": "NO_CKD",
+        "point": 0.0009,
+        "ci_lo": -0.0112,
+        "ci_hi": 0.0133,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "log_loss",
+        "model": "tabnet",
+        "dataset_set": "ALL5",
+        "point": 0.0172,
+        "ci_lo": 0.0039,
+        "ci_hi": 0.0303,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-orig",
+        "metric": "log_loss",
+        "model": "tabnet",
+        "dataset_set": "NO_CKD",
+        "point": 0.0127,
+        "ci_lo": -0.0021,
+        "ci_hi": 0.0269,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "auroc",
+        "model": "rf",
+        "dataset_set": "ALL5",
+        "point": -0.0042,
+        "ci_lo": -0.0091,
+        "ci_hi": -0.0,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "auroc",
+        "model": "rf",
+        "dataset_set": "NO_CKD",
+        "point": -0.005,
+        "ci_lo": -0.0115,
+        "ci_hi": 0.0002,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "auroc",
+        "model": "xgb",
+        "dataset_set": "ALL5",
+        "point": -0.0056,
+        "ci_lo": -0.0112,
+        "ci_hi": -0.0002,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "auroc",
+        "model": "xgb",
+        "dataset_set": "NO_CKD",
+        "point": -0.005,
+        "ci_lo": -0.0118,
+        "ci_hi": 0.0015,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "auroc",
+        "model": "lgbm",
+        "dataset_set": "ALL5",
+        "point": -0.0028,
+        "ci_lo": -0.0076,
+        "ci_hi": 0.001,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "auroc",
+        "model": "lgbm",
+        "dataset_set": "NO_CKD",
+        "point": -0.0022,
+        "ci_lo": -0.0078,
+        "ci_hi": 0.0026,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "auroc",
+        "model": "mlp",
+        "dataset_set": "ALL5",
+        "point": 0.0037,
+        "ci_lo": 0.0009,
+        "ci_hi": 0.0062,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "auroc",
+        "model": "mlp",
+        "dataset_set": "NO_CKD",
+        "point": 0.0045,
+        "ci_lo": 0.0011,
+        "ci_hi": 0.0078,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "auroc",
+        "model": "ftt",
+        "dataset_set": "ALL5",
+        "point": 0.0016,
+        "ci_lo": -0.0021,
+        "ci_hi": 0.0056,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "auroc",
+        "model": "ftt",
+        "dataset_set": "NO_CKD",
+        "point": 0.0025,
+        "ci_lo": -0.0022,
+        "ci_hi": 0.0076,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "auroc",
+        "model": "tabnet",
+        "dataset_set": "ALL5",
+        "point": -0.0075,
+        "ci_lo": -0.0118,
+        "ci_hi": -0.0031,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "auroc",
+        "model": "tabnet",
+        "dataset_set": "NO_CKD",
+        "point": -0.0092,
+        "ci_lo": -0.0143,
+        "ci_hi": -0.0039,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "log_loss",
+        "model": "rf",
+        "dataset_set": "ALL5",
+        "point": 0.0227,
+        "ci_lo": 0.0116,
+        "ci_hi": 0.0331,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "log_loss",
+        "model": "rf",
+        "dataset_set": "NO_CKD",
+        "point": 0.0046,
+        "ci_lo": -0.0082,
+        "ci_hi": 0.0165,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "log_loss",
+        "model": "xgb",
+        "dataset_set": "ALL5",
+        "point": 0.0139,
+        "ci_lo": 0.0012,
+        "ci_hi": 0.0255,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "log_loss",
+        "model": "xgb",
+        "dataset_set": "NO_CKD",
+        "point": -0.0068,
+        "ci_lo": -0.0219,
+        "ci_hi": 0.0067,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "log_loss",
+        "model": "lgbm",
+        "dataset_set": "ALL5",
+        "point": 0.0188,
+        "ci_lo": 0.0075,
+        "ci_hi": 0.0298,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "log_loss",
+        "model": "lgbm",
+        "dataset_set": "NO_CKD",
+        "point": -0.0055,
+        "ci_lo": -0.019,
+        "ci_hi": 0.0072,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "log_loss",
+        "model": "mlp",
+        "dataset_set": "ALL5",
+        "point": -0.0069,
+        "ci_lo": -0.0171,
+        "ci_hi": 0.0032,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "log_loss",
+        "model": "mlp",
+        "dataset_set": "NO_CKD",
+        "point": -0.0114,
+        "ci_lo": -0.023,
+        "ci_hi": 0.0008,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "log_loss",
+        "model": "ftt",
+        "dataset_set": "ALL5",
+        "point": 0.0492,
+        "ci_lo": 0.0234,
+        "ci_hi": 0.0761,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "log_loss",
+        "model": "ftt",
+        "dataset_set": "NO_CKD",
+        "point": 0.0009,
+        "ci_lo": -0.0116,
+        "ci_hi": 0.0134,
+        "ci_excludes_0": false
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "log_loss",
+        "model": "tabnet",
+        "dataset_set": "ALL5",
+        "point": 0.0133,
+        "ci_lo": 0.0006,
+        "ci_hi": 0.026,
+        "ci_excludes_0": true
+      },
+      {
+        "perturbation": "noise50-cont",
+        "metric": "log_loss",
+        "model": "tabnet",
+        "dataset_set": "NO_CKD",
+        "point": 0.0153,
+        "ci_lo": -0.0,
+        "ci_hi": 0.0299,
+        "ci_excludes_0": false
+      }
+    ],
+    "statuses": {
+      "miss30|auroc|rf": "SUPPORTED",
+      "miss30|auroc|xgb": "NOT SUPPORTED",
+      "miss30|auroc|lgbm": "NOT SUPPORTED",
+      "miss30|auroc|mlp": "SUPPORTED",
+      "miss30|auroc|ftt": "SUPPORTED",
+      "miss30|auroc|tabnet": "NOT SUPPORTED",
+      "miss30|log_loss|rf": "SUPPORTED",
+      "miss30|log_loss|xgb": "SUPPORTED",
+      "miss30|log_loss|lgbm": "SUPPORTED",
+      "miss30|log_loss|mlp": "SUPPORTED",
+      "miss30|log_loss|ftt": "NOT SUPPORTED",
+      "miss30|log_loss|tabnet": "NOT SUPPORTED",
+      "noise50-orig|auroc|rf": "NOT SUPPORTED",
+      "noise50-orig|auroc|xgb": "PARTLY",
+      "noise50-orig|auroc|lgbm": "PARTLY",
+      "noise50-orig|auroc|mlp": "SUPPORTED",
+      "noise50-orig|auroc|ftt": "NOT SUPPORTED",
+      "noise50-orig|auroc|tabnet": "SUPPORTED",
+      "noise50-orig|log_loss|rf": "PARTLY",
+      "noise50-orig|log_loss|xgb": "PARTLY",
+      "noise50-orig|log_loss|lgbm": "PARTLY",
+      "noise50-orig|log_loss|mlp": "PARTLY",
+      "noise50-orig|log_loss|ftt": "PARTLY",
+      "noise50-orig|log_loss|tabnet": "PARTLY",
+      "noise50-cont|auroc|rf": "PARTLY",
+      "noise50-cont|auroc|xgb": "PARTLY",
+      "noise50-cont|auroc|lgbm": "NOT SUPPORTED",
+      "noise50-cont|auroc|mlp": "SUPPORTED",
+      "noise50-cont|auroc|ftt": "NOT SUPPORTED",
+      "noise50-cont|auroc|tabnet": "SUPPORTED",
+      "noise50-cont|log_loss|rf": "PARTLY",
+      "noise50-cont|log_loss|xgb": "PARTLY",
+      "noise50-cont|log_loss|lgbm": "PARTLY",
+      "noise50-cont|log_loss|mlp": "NOT SUPPORTED",
+      "noise50-cont|log_loss|ftt": "PARTLY",
+      "noise50-cont|log_loss|tabnet": "PARTLY"
+    }
+  },
+  "C9": {
+    "claim_id": "C9",
+    "rows": [
+      {
+        "dataset": "pima_diabetes",
+        "pair": "logreg-rf",
+        "jaccard_mean": 0.8,
+        "within_model_stability": 0.921,
+        "chance": 0.4707
+      },
+      {
+        "dataset": "pima_diabetes",
+        "pair": "logreg-mlp",
+        "jaccard_mean": 1.0,
+        "within_model_stability": 0.921,
+        "chance": 0.4707
+      },
+      {
+        "dataset": "pima_diabetes",
+        "pair": "rf-mlp",
+        "jaccard_mean": 0.8,
+        "within_model_stability": 0.921,
+        "chance": 0.4707
+      },
+      {
+        "dataset": "heart_cleveland",
+        "pair": "logreg-rf",
+        "jaccard_mean": 0.5476,
+        "within_model_stability": 0.7175,
+        "chance": 0.2537
+      },
+      {
+        "dataset": "heart_cleveland",
+        "pair": "logreg-mlp",
+        "jaccard_mean": 0.6667,
+        "within_model_stability": 0.7175,
+        "chance": 0.2537
+      },
+      {
+        "dataset": "heart_cleveland",
+        "pair": "rf-mlp",
+        "jaccard_mean": 0.5298,
+        "within_model_stability": 0.7175,
+        "chance": 0.2537
+      },
+      {
+        "dataset": "ckd",
+        "pair": "logreg-rf",
+        "jaccard_mean": 0.5298,
+        "within_model_stability": 0.7496,
+        "chance": 0.1264
+      },
+      {
+        "dataset": "ckd",
+        "pair": "logreg-mlp",
+        "jaccard_mean": 0.7095,
+        "within_model_stability": 0.7496,
+        "chance": 0.1264
+      },
+      {
+        "dataset": "ckd",
+        "pair": "rf-mlp",
+        "jaccard_mean": 0.5095,
+        "within_model_stability": 0.7496,
+        "chance": 0.1264
+      },
+      {
+        "dataset": "ilpd",
+        "pair": "logreg-rf",
+        "jaccard_mean": 0.3631,
+        "within_model_stability": 0.6683,
+        "chance": 0.3504
+      },
+      {
+        "dataset": "ilpd",
+        "pair": "logreg-mlp",
+        "jaccard_mean": 0.3988,
+        "within_model_stability": 0.6683,
+        "chance": 0.3504
+      },
+      {
+        "dataset": "ilpd",
+        "pair": "rf-mlp",
+        "jaccard_mean": 0.4048,
+        "within_model_stability": 0.6683,
+        "chance": 0.3504
+      },
+      {
+        "dataset": "breast_wisconsin",
+        "pair": "logreg-rf",
+        "jaccard_mean": 0.4008,
+        "within_model_stability": 0.6344,
+        "chance": 0.0993
+      },
+      {
+        "dataset": "breast_wisconsin",
+        "pair": "logreg-mlp",
+        "jaccard_mean": 0.3115,
+        "within_model_stability": 0.6344,
+        "chance": 0.0993
+      },
+      {
+        "dataset": "breast_wisconsin",
+        "pair": "rf-mlp",
+        "jaccard_mean": 0.644,
+        "within_model_stability": 0.6344,
+        "chance": 0.0993
+      }
+    ],
+    "below_within_model_stability": [
+      {
+        "dataset": "pima_diabetes",
+        "pair": "logreg-rf",
+        "jaccard_mean": 0.8,
+        "within_model_stability": 0.921
+      },
+      {
+        "dataset": "pima_diabetes",
+        "pair": "rf-mlp",
+        "jaccard_mean": 0.8,
+        "within_model_stability": 0.921
+      },
+      {
+        "dataset": "heart_cleveland",
+        "pair": "logreg-rf",
+        "jaccard_mean": 0.5476,
+        "within_model_stability": 0.7175
+      },
+      {
+        "dataset": "heart_cleveland",
+        "pair": "logreg-mlp",
+        "jaccard_mean": 0.6667,
+        "within_model_stability": 0.7175
+      },
+      {
+        "dataset": "heart_cleveland",
+        "pair": "rf-mlp",
+        "jaccard_mean": 0.5298,
+        "within_model_stability": 0.7175
+      },
+      {
+        "dataset": "ckd",
+        "pair": "logreg-rf",
+        "jaccard_mean": 0.5298,
+        "within_model_stability": 0.7496
+      },
+      {
+        "dataset": "ckd",
+        "pair": "logreg-mlp",
+        "jaccard_mean": 0.7095,
+        "within_model_stability": 0.7496
+      },
+      {
+        "dataset": "ckd",
+        "pair": "rf-mlp",
+        "jaccard_mean": 0.5095,
+        "within_model_stability": 0.7496
+      },
+      {
+        "dataset": "ilpd",
+        "pair": "logreg-rf",
+        "jaccard_mean": 0.3631,
+        "within_model_stability": 0.6683
+      },
+      {
+        "dataset": "ilpd",
+        "pair": "logreg-mlp",
+        "jaccard_mean": 0.3988,
+        "within_model_stability": 0.6683
+      },
+      {
+        "dataset": "ilpd",
+        "pair": "rf-mlp",
+        "jaccard_mean": 0.4048,
+        "within_model_stability": 0.6683
+      },
+      {
+        "dataset": "breast_wisconsin",
+        "pair": "logreg-rf",
+        "jaccard_mean": 0.4008,
+        "within_model_stability": 0.6344
+      },
+      {
+        "dataset": "breast_wisconsin",
+        "pair": "logreg-mlp",
+        "jaccard_mean": 0.3115,
+        "within_model_stability": 0.6344
+      }
+    ],
+    "within_0.05_of_chance": [
+      {
+        "dataset": "ilpd",
+        "pair": "logreg-rf",
+        "jaccard_mean": 0.3631,
+        "chance": 0.3504,
+        "diff_from_chance": 0.0127
+      },
+      {
+        "dataset": "ilpd",
+        "pair": "logreg-mlp",
+        "jaccard_mean": 0.3988,
+        "chance": 0.3504,
+        "diff_from_chance": 0.0484
+      }
+    ],
+    "breast_wisconsin_distinct_top5_sets_of_10": {
+      "logreg": 8,
+      "rf": 1,
+      "mlp": 9
+    }
+  },
+  "C10": {
+    "claim_id": "C10",
+    "rows": [
+      {
+        "dataset": "pima_diabetes",
+        "model": "logreg",
+        "precision": 1.0,
+        "ci_lo": 1.0,
+        "ci_hi": 1.0,
+        "chance": 0.625
+      },
+      {
+        "dataset": "pima_diabetes",
+        "model": "rf",
+        "precision": 0.88,
+        "ci_lo": 0.82,
+        "ci_hi": 0.94,
+        "chance": 0.625
+      },
+      {
+        "dataset": "pima_diabetes",
+        "model": "mlp",
+        "precision": 1.0,
+        "ci_lo": 1.0,
+        "ci_hi": 1.0,
+        "chance": 0.625
+      },
+      {
+        "dataset": "heart_cleveland",
+        "model": "logreg",
+        "precision": 0.98,
+        "ci_lo": 0.94,
+        "ci_hi": 1.0,
+        "chance": 0.6154
+      },
+      {
+        "dataset": "heart_cleveland",
+        "model": "rf",
+        "precision": 0.88,
+        "ci_lo": 0.82,
+        "ci_hi": 0.94,
+        "chance": 0.6154
+      },
+      {
+        "dataset": "heart_cleveland",
+        "model": "mlp",
+        "precision": 0.96,
+        "ci_lo": 0.9,
+        "ci_hi": 1.0,
+        "chance": 0.6154
+      },
+      {
+        "dataset": "ckd",
+        "model": "logreg",
+        "precision": 0.96,
+        "ci_lo": 0.9,
+        "ci_hi": 1.0,
+        "chance": 0.3333
+      },
+      {
+        "dataset": "ckd",
+        "model": "rf",
+        "precision": 1.0,
+        "ci_lo": 1.0,
+        "ci_hi": 1.0,
+        "chance": 0.3333
+      },
+      {
+        "dataset": "ckd",
+        "model": "mlp",
+        "precision": 1.0,
+        "ci_lo": 1.0,
+        "ci_hi": 1.0,
+        "chance": 0.3333
+      },
+      {
+        "dataset": "ilpd",
+        "model": "logreg",
+        "precision": 0.7,
+        "ci_lo": 0.64,
+        "ci_hi": 0.76,
+        "chance": 0.6
+      },
+      {
+        "dataset": "ilpd",
+        "model": "rf",
+        "precision": 0.98,
+        "ci_lo": 0.94,
+        "ci_hi": 1.0,
+        "chance": 0.6
+      },
+      {
+        "dataset": "ilpd",
+        "model": "mlp",
+        "precision": 0.64,
+        "ci_lo": 0.56,
+        "ci_hi": 0.72,
+        "chance": 0.6
+      },
+      {
+        "dataset": "breast_wisconsin",
+        "model": "logreg",
+        "precision": 0.72,
+        "ci_lo": 0.62,
+        "ci_hi": 0.78,
+        "chance": 0.5
+      },
+      {
+        "dataset": "breast_wisconsin",
+        "model": "rf",
+        "precision": 1.0,
+        "ci_lo": 1.0,
+        "ci_hi": 1.0,
+        "chance": 0.5
+      },
+      {
+        "dataset": "breast_wisconsin",
+        "model": "mlp",
+        "precision": 0.94,
+        "ci_lo": 0.88,
+        "ci_hi": 1.0,
+        "chance": 0.5
+      }
+    ],
+    "non_informative_datasets_chance_ge_0.60": [
+      "heart_cleveland",
+      "ilpd",
+      "pima_diabetes"
+    ]
+  },
+  "C11": {
+    "claim_id": "C11",
+    "rows": [
+      {
+        "model": "lgbm",
+        "fit_time_s": 0.0618,
+        "ratio_to_logreg": 2.533
+      },
+      {
+        "model": "xgb",
+        "fit_time_s": 0.0658,
+        "ratio_to_logreg": 2.697
+      },
+      {
+        "model": "rf",
+        "fit_time_s": 0.3607,
+        "ratio_to_logreg": 14.783
+      },
+      {
+        "model": "mlp",
+        "fit_time_s": 1.4581,
+        "ratio_to_logreg": 59.758
+      },
+      {
+        "model": "ftt",
+        "fit_time_s": 2.1276,
+        "ratio_to_logreg": 87.197
+      },
+      {
+        "model": "tabnet",
+        "fit_time_s": 6.6636,
+        "ratio_to_logreg": 273.098
+      }
+    ],
+    "logreg_fit_time_s": 0.0244,
+    "caveat": "fit_time_s measured with 3 to 4 parallel workers; rough, not a controlled single-process timing"
+  }
+}

@@ -707,3 +707,50 @@ and is generated entirely from the existing result CSVs/JSONs by two new scripts
   every source file's current SHA-256 against the hash recorded at build time and warns if stale.
   Exits non-zero on any UNMATCHED number or unknown key (`--warn-only` forces exit 0). **Run it
   after every change to a draft, and it must pass before the draft is shared.**
+
+## Phase 4b: paper preparation
+
+No paper prose is written in this phase; it builds the remaining machinery a drafting session
+needs: a mechanical claim map, a verified figure inventory, a writing-environment check, and a
+paper skeleton under `paper/`.
+
+```bash
+.venv-deep\Scripts\python.exe scripts\build_numbers.py        # adds the new phase=="4b" keys
+.venv-deep\Scripts\python.exe scripts\build_claim_map.py      # writes claim_map.md/.csv
+.venv-deep\Scripts\python.exe scripts\check_paper_layout.py paper\main.tex [--pdf path\to\main.pdf]
+.venv-deep\Scripts\python.exe scripts\check_paper_numbers.py paper\main.tex
+```
+
+- **`scripts/build_numbers.py`'s new `build_group8_phase4b_claims`** adds 72 keys (phase `"4b"`)
+  for the two genuinely new quantities the claim map needs: the dataset-averaged
+  diff-of-differences in AUROC gap to logreg between fraction 0.1 and 1.0 (`auroc-dod-f0.1-f1.0-*`,
+  per non-logreg model, ALL5/NO_CKD), and the paired log-loss difference between the two
+  leader/second-best models that do not already involve logreg
+  (`logloss-diff-leader-2nd-mlp-xgb-*`, `...-rf-xgb-*`), plus `fit-time-ratio-logreg-*`. Both new
+  bootstrap quantities use the same nested-resampling procedure as Phase 3a/3c (seed 42, B=5000,
+  same resampled split indices reused across every series compared for one dataset). All 1628
+  pre-existing keys are unchanged and the rebuild is idempotent (tested).
+- **`paper/evidence/claim_map.md` / `.csv` / `claim_map_detail.json`** -- mechanical
+  SUPPORTED/PARTLY/NOT SUPPORTED/DESCRIPTIVE status for 11 candidate claims (C1-C11), decided by a
+  fixed rule (CI-excludes-0 in both ALL5 and NO_CKD AND per-dataset sign agreement >=3/5 and
+  >=3/4) applied literally, never tuned after seeing results. Includes the full exception lists for
+  C1/C2 (every (dataset, model) cell where a model's AUROC beats logreg's, even though the
+  dataset-averaged diff favours logreg) and a "STATEMENTS THAT MUST NOT BE MADE" section.
+- **`paper/evidence/inventory_verified.csv`** -- Part 2's figure verification: every one of the 19
+  figure PNGs opened and checked against `inventory.csv`'s claimed panel count (0 discrepancies
+  found), legend visibility, independently re-measured pixel/physical size (0 discrepancies),
+  single/double-IEEE-column fit, and the minimum font size used in the plotting code that produced
+  it. Two real layout problems found: `fig7e` (9.65in tall) and `fig10` (14.75in tall) are far too
+  tall for any journal page at their current panel count and need resizing or splitting before use.
+- **Writing-environment check (Part 3)**: no LaTeX distribution exists on this machine (`pdflatex`,
+  `xelatex`, `latexmk`, `bibtex`, `biber`, `pandoc`, `kpsewhich` all absent); `pdftotext` (xpdf
+  4.06) is available but `pdfinfo` is not; `pypdf`/`PyPDF2` are not installed in `.venv-deep`.
+  Compiling LaTeX and extracting PDF text from an existing PDF are both possible once a PDF exists;
+  counting PDF pages relies on `pdftotext`'s form-feed page breaks as a fallback (no `pdfinfo`).
+- **`paper/` skeleton** -- `main.tex` (IEEEtran conference class commented out pending a LaTeX
+  install, with a plain-`article` fallback and a clear TODO), `sections/*.tex` (heading + TODO only,
+  no prose), an empty `references.bib` with a verification-required note and the 20-reference cap,
+  and `paper/README.md`. `scripts/copy_paper_figures.py` copies a given list of verified figure ids
+  into `paper/figures/` with a `SOURCES.txt` provenance log (written but not run in this phase --
+  no figure has been selected yet). `scripts/check_paper_layout.py` checks citation-key count
+  (<=20), author count (<=35), and (once a PDF exists) page count (<=5) and page-5 content.

@@ -1,0 +1,75 @@
+claim_id,item,status,all5_point,all5_ci_lo,all5_ci_hi,nockd_point,nockd_ci_lo,nockd_ci_hi
+C1,rf,NOT SUPPORTED,-0.0025,-0.0062,0.0014,-0.0031,-0.0079,0.002
+C1,xgb,NOT SUPPORTED,-0.0043,-0.0087,0.0004,-0.005,-0.0105,0.0007
+C1,lgbm,SUPPORTED,-0.007,-0.0112,-0.0028,-0.0087,-0.0136,-0.0034
+C1,mlp,NOT SUPPORTED,-0.0014,-0.0047,0.0017,-0.0018,-0.0059,0.002
+C1,ftt,SUPPORTED,-0.0084,-0.0136,-0.0035,-0.0101,-0.0167,-0.0038
+C1,tabnet,SUPPORTED,-0.0414,-0.0563,-0.0284,-0.0456,-0.0597,-0.0328
+C2,rf,NOT SUPPORTED,-0.0021,-0.0082,0.004,-0.0026,-0.0101,0.005
+C2,xgb,SUPPORTED,-0.0117,-0.0187,-0.0049,-0.0123,-0.0209,-0.0039
+C2,lgbm,SUPPORTED,-0.013,-0.0203,-0.0058,-0.0146,-0.0237,-0.0056
+C2,mlp,SUPPORTED,-0.011,-0.0191,-0.0044,-0.0141,-0.0238,-0.0058
+C2,ftt,SUPPORTED,-0.0251,-0.0392,-0.014,-0.0308,-0.048,-0.0171
+C2,tabnet,SUPPORTED,-0.162,-0.2035,-0.1228,-0.1389,-0.17,-0.1083
+C3,rf,NOT SUPPORTED,0.0005,-0.005,0.0057,0.0005,-0.0065,0.007
+C3,xgb,PARTLY,-0.0074,-0.015,-0.0002,-0.0073,-0.0166,0.0018
+C3,lgbm,NOT SUPPORTED,-0.006,-0.0144,0.0021,-0.0059,-0.0165,0.0044
+C3,mlp,SUPPORTED,-0.0097,-0.0171,-0.0028,-0.0124,-0.0216,-0.0036
+C3,ftt,SUPPORTED,-0.0167,-0.0309,-0.0043,-0.0207,-0.0391,-0.0054
+C3,tabnet,SUPPORTED,-0.1207,-0.166,-0.0757,-0.0933,-0.1269,-0.0608
+C4,nb-corrected-t-test,DESCRIPTIVE,1,,,120,,
+C5,calibration-slopes,DESCRIPTIVE,,,,,,
+C6,f1.0-ALL5-mlp-vs-xgb,DESCRIPTIVE,-0.009,-0.0213,0.0018,,,
+C6,f1.0-NO_CKD-logreg-vs-mlp,DESCRIPTIVE,-0.0042,-0.0112,0.0026,,,
+C6,f0.1-ALL5-rf-vs-xgb,DESCRIPTIVE,-0.0159,-0.0246,-0.0072,,,
+C6,f0.1-NO_CKD-rf-vs-logreg,DESCRIPTIVE,-0.0139,-0.026,-0.0019,,,
+C7,30% missing-ALL5,DESCRIPTIVE,0.0056,-0.0252,-0.0196,,,
+C7,30% missing-NO_CKD,DESCRIPTIVE,0.0084,-0.0319,-0.0236,,,
+C7,noise 0.5 (original)-ALL5,DESCRIPTIVE,0.0125,-0.0295,-0.017,,,
+C7,noise 0.5 (original)-NO_CKD,DESCRIPTIVE,0.0123,-0.0327,-0.0205,,,
+C7,noise 0.5 (continuous-only)-ALL5,DESCRIPTIVE,0.0112,-0.0236,-0.0125,,,
+C7,noise 0.5 (continuous-only)-NO_CKD,DESCRIPTIVE,0.0137,-0.029,-0.0153,,,
+C8,miss30|auroc|rf,SUPPORTED,,,,,,
+C8,miss30|auroc|xgb,NOT SUPPORTED,,,,,,
+C8,miss30|auroc|lgbm,NOT SUPPORTED,,,,,,
+C8,miss30|auroc|mlp,SUPPORTED,,,,,,
+C8,miss30|auroc|ftt,SUPPORTED,,,,,,
+C8,miss30|auroc|tabnet,NOT SUPPORTED,,,,,,
+C8,miss30|log_loss|rf,SUPPORTED,,,,,,
+C8,miss30|log_loss|xgb,SUPPORTED,,,,,,
+C8,miss30|log_loss|lgbm,SUPPORTED,,,,,,
+C8,miss30|log_loss|mlp,SUPPORTED,,,,,,
+C8,miss30|log_loss|ftt,NOT SUPPORTED,,,,,,
+C8,miss30|log_loss|tabnet,NOT SUPPORTED,,,,,,
+C8,noise50-orig|auroc|rf,NOT SUPPORTED,,,,,,
+C8,noise50-orig|auroc|xgb,PARTLY,,,,,,
+C8,noise50-orig|auroc|lgbm,PARTLY,,,,,,
+C8,noise50-orig|auroc|mlp,SUPPORTED,,,,,,
+C8,noise50-orig|auroc|ftt,NOT SUPPORTED,,,,,,
+C8,noise50-orig|auroc|tabnet,SUPPORTED,,,,,,
+C8,noise50-orig|log_loss|rf,PARTLY,,,,,,
+C8,noise50-orig|log_loss|xgb,PARTLY,,,,,,
+C8,noise50-orig|log_loss|lgbm,PARTLY,,,,,,
+C8,noise50-orig|log_loss|mlp,PARTLY,,,,,,
+C8,noise50-orig|log_loss|ftt,PARTLY,,,,,,
+C8,noise50-orig|log_loss|tabnet,PARTLY,,,,,,
+C8,noise50-cont|auroc|rf,PARTLY,,,,,,
+C8,noise50-cont|auroc|xgb,PARTLY,,,,,,
+C8,noise50-cont|auroc|lgbm,NOT SUPPORTED,,,,,,
+C8,noise50-cont|auroc|mlp,SUPPORTED,,,,,,
+C8,noise50-cont|auroc|ftt,NOT SUPPORTED,,,,,,
+C8,noise50-cont|auroc|tabnet,SUPPORTED,,,,,,
+C8,noise50-cont|log_loss|rf,PARTLY,,,,,,
+C8,noise50-cont|log_loss|xgb,PARTLY,,,,,,
+C8,noise50-cont|log_loss|lgbm,PARTLY,,,,,,
+C8,noise50-cont|log_loss|mlp,NOT SUPPORTED,,,,,,
+C8,noise50-cont|log_loss|ftt,PARTLY,,,,,,
+C8,noise50-cont|log_loss|tabnet,PARTLY,,,,,,
+C9,agreement-vs-stability-and-chance,DESCRIPTIVE,13,,,2,,
+C10,plausibility-vs-chance,DESCRIPTIVE,heart_cleveland;ilpd;pima_diabetes,,,,,
+C11,lgbm,DESCRIPTIVE,2.533,,,,,
+C11,xgb,DESCRIPTIVE,2.697,,,,,
+C11,rf,DESCRIPTIVE,14.783,,,,,
+C11,mlp,DESCRIPTIVE,59.758,,,,,
+C11,ftt,DESCRIPTIVE,87.197,,,,,
+C11,tabnet,DESCRIPTIVE,273.098,,,,,

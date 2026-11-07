@@ -1,0 +1,20 @@
+id,phase,actual_panel_count,inventory_panel_count,panel_count_match,legend_visible_in_panel,pixel_size,physical_size_in_300dpi,fits_single_column_3.5in,fits_double_column_7.2in,min_fontsize_in_code,min_labelsize_in_code,visible_problem
+fig1,3a,6,6,True,True,2068x1406,6.89x4.69,False,True,7,7,None
+fig1b,3a,6,6,True,True,2065x1406,6.88x4.69,False,True,7,7,None
+fig1c,3a,6,6,True,True,2068x1406,6.89x4.69,False,True,7,7,None
+fig2,3a,1,1,True,False (none needed; marker labels are text under the axis),2070x764,6.90x2.55,False,True,7,7,"Only one of 4 bundled files (frac1p0_ALL5) inspected visually; the other 3 (frac0p1_ALL5, frac0p1_NO_CKD, frac1p0_NO_CKD) were not individually opened, consistent with inventory.csv treating all 4 as one id/panel_count"
+fig3,3a,1,1,True,False,988x1046,3.29x3.49,True,True,7,7,"No in-panel legend distinguishing filled (ALL5) vs. open (NO_CKD) markers -- relies entirely on the caption text. Only frac1p0 of the 2 bundled files inspected."
+fig4,3b,7,7,True,True,1830x1310,6.10x4.37,False,True,5,5,"Smallest fontsize of any figure in the paper (5pt), well below typical print-readable minimum (~8pt)"
+fig4b,3b,7,7,True,True,1830x1310,6.10x4.37,False,True,5,5,"Smallest fontsize of any figure in the paper (5pt)"
+fig4c,3b,35,35,True,False (no legend; row/column headers label dataset/model),2067x1632,6.89x5.44,False,True,5,5,"5pt fontsize; 35 small panels in one figure -- individual panel content will be very hard to read at double-column width"
+fig5,3b,2,2,True,True,2066x1008,6.89x3.36,False,True,5,5,5pt fontsize
+fig6,3b,4,4,True,True,2073x1528,6.91x5.09,False,True,5,5,5pt fontsize
+fig7,3c,2,2,True,True,2070x910,6.90x3.03,False,True,6,6,None
+fig7b,3c,2,2,True,True,2086x910,6.95x3.03,False,True,6,6,None
+fig7c,3c,2,2,True,True,2070x910,6.90x3.03,False,True,6,6,None
+fig7d,3c,2,2,True,True,2050x910,6.83x3.03,False,True,6,6,None
+fig7e,3c,10,10,True,True,2071x2896,6.90x9.65,False,True,6,6,"Height 9.65in is far too tall for any journal page (even double-column pages are typically ~9in including margins); this figure cannot be used at its current panel count/size without major resizing or splitting"
+fig8,3c,1,1,True,False,987x926,3.29x3.09,True,True,6,6,"No in-panel legend distinguishing filled (ALL5) vs. open (NO_CKD) markers -- relies entirely on the caption text"
+fig10,3d,5,5,True,True,2063x4425,6.88x14.75,False,True,6,6,"Height 14.75in is drastically too tall for any journal page -- the most extreme layout problem of any figure in the inventory; needs major resizing/splitting (e.g. one dataset per sub-figure, or a much more compact bar layout) before it can appear in a 4+1-page paper"
+fig11,3d,2,2,True,True,2065x955,6.88x3.18,False,True,6,7,None
+fig9,3d-noise-cont,2,2,True,True,2068x981,6.89x3.27,False,True,7,7,None
