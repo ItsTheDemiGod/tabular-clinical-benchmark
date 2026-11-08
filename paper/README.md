@@ -1,6 +1,6 @@
 # Paper (Phase 4b skeleton)
 
-This directory holds the EMBC 2027 paper itself, built from the evidence pack
+This directory holds the paper itself (generic IEEE conference format, working length 6 pages including references; the EMBC 2027 target was dropped on 2026-11-08), built from the evidence pack
 in `paper/evidence/` (Phase 4a/4b). **No prose has been written yet** -- every
 file under `sections/` contains only a heading and a `TODO` comment. See
 `CLAUDE.md` section 8 for the writing plan and milestones.
@@ -25,14 +25,12 @@ latexmk -pdf main.tex      # or: pdflatex main.tex && bibtex main && pdflatex ma
 available, and remove the `IEEEauthorblockN`/`IEEEauthorblockA` fallback
 `\providecommand`s added for the placeholder class.
 
-## The 4+1 page rule and the 20-reference cap
+## Page and reference limits
 
-EMBC 2027 rules verified from the official 2027 pages on 2026-11-08
-(CLAUDE.md section 8): **strict 4+1 pages** (up to 4 pages of technical
-content, a 5th page reserved for acknowledgments and references only), **at
-most 20 references**, **at most 35 authors**. `scripts/check_paper_layout.py`
-checks the citation-key count, author count, and (once a PDF exists) the page
-count and page-5 content against these limits.
+Working defaults (decision of 2026-11-08): **6 pages including references**,
+reference ceiling about 35 (soft), at most 35 authors; stored in
+`paper/venue.json` and replaced when the venue is chosen. The former EMBC 2027
+rules (4+1 pages, 20 references) no longer apply.
 
 ## Every number is `\N{key}`
 
@@ -68,14 +66,14 @@ phase summaries.
 
 ## Phase 4c additions: authors, figures, table, Overleaf bundle
 
-**Authors (names only, in this order):** Demian Sharwin Xaxa (first author,
-proposed corresponding author), Aaron John Langan, Nithy Maria Mathew,
+**Authors (names only, in this order):** Demian Sharwin Xaxa (first author and
+corresponding author), Aaron John Langan, Nithy Maria Mathew,
 Gangavarapu V Vasu; all from [DEPARTMENT NAME], Karunya Institute of
 Technology and Sciences, Coimbatore, India. **Emails are never stored in this
 repository**: `main.tex` carries the placeholder `[EMAIL]`, and the real
 addresses are added by hand in Overleaf at the very end.
 
-**EMBC 2027 limits:** strict 4+1 pages, at most 20 references, at most 35 authors.
+**Limits:** see `venue.json` (6 pages including references, soft reference ceiling about 35, at most 35 authors).
 
 **Generated files** (re-create with `scripts/make_paper_figures.py`,
 `scripts/make_paper_tables.py`, `scripts/make_overleaf_bundle.py`):
