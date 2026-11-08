@@ -1,5 +1,6 @@
-% Paper skeleton (Phase 4b). NO PROSE is written in this phase -- every
-% section file under sections/ holds only a heading and a TODO comment.
+% Paper skeleton (Phase 4b, restructured in Phase 4d for a 6-page generic IEEE
+% conference paper). NO PROSE is written yet -- every file under sections/
+% holds only a heading and a TODO comment.
 %
 % TODO: No LaTeX distribution was found on this machine at Phase 4b time
 % (2026-11-08): pdflatex/xelatex/latexmk/bibtex/biber/pandoc and kpsewhich
@@ -29,29 +30,33 @@
 \title{When Does Deep Learning Help on Small Clinical Tabular Data?\\
 A Multi-Dataset Study of Accuracy, Calibration, Robustness and Explanation Agreement}
 
-% Authors (names only; Phase 4c). Emails are NEVER stored in the repository:
-% add them by hand in Overleaf at the end. Proposed corresponding author: the
-% first author -- TODO: add the corresponding-author footnote (thanks) by hand
-% in Overleaf. TODO: confirm the exact department name and the spelling of the
-% fourth author's name.
+% Authors (names only). Emails are NEVER stored in the repository: add them by
+% hand in Overleaf at the end. Demian Sharwin Xaxa is the corresponding author.
+% TODO: add the corresponding-author footnote by hand in Overleaf (the IEEEtran
+% thanks-footnote syntax could not be verified: nothing can be compiled here).
+% TODO: faculty supervisor undecided -- if added, use the placeholder [SUPERVISOR NAME].
 \author{
   \IEEEauthorblockN{Demian Sharwin Xaxa}
-  \IEEEauthorblockA{[DEPARTMENT NAME], Karunya Institute of Technology and Sciences\\
+  \IEEEauthorblockA{Department of Artificial Intelligence and Machine Learning,
+  Karunya Institute of Technology and Sciences\\
   Coimbatore, India\\
   [EMAIL]}
   \and
   \IEEEauthorblockN{Aaron John Langan}
-  \IEEEauthorblockA{[DEPARTMENT NAME], Karunya Institute of Technology and Sciences\\
+  \IEEEauthorblockA{Department of Artificial Intelligence and Machine Learning,
+  Karunya Institute of Technology and Sciences\\
   Coimbatore, India\\
   [EMAIL]}
   \and
   \IEEEauthorblockN{Nithy Maria Mathew}
-  \IEEEauthorblockA{[DEPARTMENT NAME], Karunya Institute of Technology and Sciences\\
+  \IEEEauthorblockA{Department of Artificial Intelligence and Machine Learning,
+  Karunya Institute of Technology and Sciences\\
   Coimbatore, India\\
   [EMAIL]}
   \and
   \IEEEauthorblockN{Gangavarapu V Vasu}
-  \IEEEauthorblockA{[DEPARTMENT NAME], Karunya Institute of Technology and Sciences\\
+  \IEEEauthorblockA{Department of Artificial Intelligence and Machine Learning,
+  Karunya Institute of Technology and Sciences\\
   Coimbatore, India\\
   [EMAIL]}
 }
@@ -65,16 +70,17 @@ A Multi-Dataset Study of Accuracy, Calibration, Robustness and Explanation Agree
 
 \input{sections/abstract}
 \input{sections/introduction}
-\input{sections/methods}
+\input{sections/related_work}
+\input{sections/datasets_protocol}
+\input{sections/models_training}
 \input{sections/results}
 \input{sections/discussion_and_limitations}
 \input{sections/conclusion}
 \input{sections/acknowledgments}
 
-% TODO: references.bib is currently empty. Every entry must be verified by
-% hand (author, venue, year, DOI) before use -- see paper/references.bib and
-% paper/README.md. EMBC 2027's reference cap is 20 (see CLAUDE.md section 8;
-% not yet verified for 2027 at time of writing where noted).
+% References section: the verified entries are pasted into references.bib in
+% Overleaf by hand (every entry verified by hand first; working ceiling about
+% 35; the chosen venue's limits are set in paper/venue.json).
 \bibliographystyle{IEEEtran}
 \bibliography{references}
 

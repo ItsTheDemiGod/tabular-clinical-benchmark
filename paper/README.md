@@ -86,3 +86,22 @@ addresses are added by hand in Overleaf at the very end.
 | `tables/table_main.tex` | `table*`, double column; every number is `\N{key}` |
 | `tables/supp_slopes_per_dataset.tex/.csv`, `tables/supp_noise_comparison.tex/.csv` | supplementary (arXiv/repository only) |
 | `overleaf_bundle.zip` | upload bundle (git-ignored) |
+
+## Phase 4d: working rules (these replace the former EMBC rules)
+
+- **Length:** 6 pages INCLUDING references, generic IEEE conference template (IEEEtran, two columns, US Letter);
+  reference ceiling about 35 (soft). The limits live in `venue.json`; when the venue is chosen, edit that file.
+- **Sections** (`main.tex` inputs them in this order): abstract, introduction, related_work, datasets_protocol,
+  models_training, results (A discrimination, B calibration, C robustness, D explanations),
+  discussion_and_limitations, conclusion, acknowledgments; the bibliography is `\bibliography{references}`.
+- **Drafting:** write from `evidence/drafting_sheet.md`; every result number is `\N{key}`.
+- **Emails:** by hand in Overleaf only; the repository carries `[EMAIL]` placeholders.
+- **References:** every entry in `references.bib` is verified by hand (never by Claude Code); pasted in Overleaf.
+- **Bundle:** `scripts/make_overleaf_bundle.py` writes `paper/overleaf_bundle.zip` (git-ignored); upload it to Overleaf.
+- **Checkers (run after every change):** `scripts/check_paper_numbers.py paper/main.tex` (and each section file) and
+  `scripts/check_paper_layout.py paper/main.tex [--pdf paper/build/main.pdf]`.
+- **Bringing a compiled PDF back:** download the PDF from Overleaf to `paper/build/main.pdf` (the folder is
+  git-ignored), then run `scripts/check_paper_layout.py paper/main.tex --pdf paper/build/main.pdf`.
+- **Figures/tables:** `fig_main_learning_calibration`, `fig_main_robustness`, `fig_main_explanations` (double
+  column), `fig_main_reliability` (single column); `table_main.tex`, `table_datasets.tex` (both `table*`).
+  Supplementary (arXiv/repository only): `tables/supp_*`.

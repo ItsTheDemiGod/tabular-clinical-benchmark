@@ -19,3 +19,6 @@ results_smoke_2b/
 *.fdb_latexmk
 *.synctex.gz
 paper/overleaf_bundle.zip
+
+# Locally compiled PDFs brought back from Overleaf (Phase 4d)
+paper/build/

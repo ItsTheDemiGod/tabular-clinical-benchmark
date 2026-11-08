@@ -1,0 +1,38 @@
+model,parameter,type,low,high,log_scale,choices
+logreg,C,float,0.001,100.0,True,
+rf,n_estimators,int,100,300,False,
+rf,max_depth,int,2,20,False,
+rf,min_samples_leaf,int,1,10,False,
+rf,max_features,categorical,,,False,sqrt log2 0.5
+xgb,n_estimators,int,50,400,False,
+xgb,max_depth,int,2,8,False,
+xgb,learning_rate,float,0.01,0.3,True,
+xgb,subsample,float,0.5,1.0,False,
+xgb,colsample_bytree,float,0.5,1.0,False,
+xgb,reg_lambda,float,0.01,10,True,
+xgb,min_child_weight,int,1,10,False,
+lgbm,n_estimators,int,50,400,False,
+lgbm,num_leaves,int,4,31,False,
+lgbm,learning_rate,float,0.01,0.3,True,
+lgbm,min_child_samples,int,2,30,False,
+lgbm,subsample,float,0.5,1.0,False,
+lgbm,colsample_bytree,float,0.5,1.0,False,
+lgbm,reg_lambda,float,0.01,10,True,
+mlp,n_layers,int,1,3,False,
+mlp,hidden,int,16,256,True,
+mlp,dropout,float,0.0,0.5,False,
+mlp,lr,float,0.0001,0.01,True,
+mlp,weight_decay,float,1e-06,0.01,True,
+mlp,batch_size,categorical,,,False,16 32 64 128
+ftt,d_token,categorical,,,False,16 32 64
+ftt,n_blocks,int,1,3,False,
+ftt,dropout,float,0.0,0.4,False,
+ftt,lr,float,0.0001,0.003,True,
+ftt,weight_decay,float,1e-06,0.01,True,
+ftt,batch_size,categorical,,,False,16 32 64 128
+tabnet,n_d,categorical,,,False,8 16 32
+tabnet,n_steps,int,2,5,False,
+tabnet,gamma,float,1.0,2.0,False,
+tabnet,lambda_sparse,float,1e-05,0.01,True,
+tabnet,lr,float,0.001,0.03,True,
+tabnet,batch_size,categorical,,,False,16 32 64 128

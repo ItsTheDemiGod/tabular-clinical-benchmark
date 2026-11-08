@@ -15,3 +15,139 @@
     filter: dataset_set == ALL5; panel a: kind==missing level==0.3 and kind==noise level==0.5, metric==auroc, degradation_mean with degradation_ci_lo/hi; panel b: kind==noise level==0.5, metric==log_loss (filled markers)
   source: results/phase3d/noise_continuous/noise_cont_averaged.csv  sha256=335402187d0e5bc5404c5631a1886e6b7889bf9efec19986120ead12c0889b94
     filter: dataset_set == ALL5, kind==noise_cont level==0.5, metric==log_loss (open markers, panel b)
+
+[fig_main_explanations]  size 7.16 x 2.4 in  files: fig_main_explanations.png (300 dpi), fig_main_explanations.pdf
+  source: results/phase3d/agreement_per_dataset.csv  sha256=ac38fe19e46a617e890c4615519308fd94d023c663baaa3ae3ba6635b0328a6a
+    filter: all 5 datasets; model pairs logreg-rf, logreg-mlp, rf-mlp; column jaccard_mean = dots (panel a)
+  source: results/phase3d/baselines.csv  sha256=204b0fdc09ac6010e013f0cf1859f250cd404a97b89ce381c652054be7a938a1
+    filter: type == within_model_mean_over_models (squares, jaccard_mean) and type == chance (crosses, jaccard_mean) (panel a)
+  source: results/phase3d/plausibility.csv  sha256=f047be2981c6c475e996ba763f716be87c024f5ac3d604e381f4c4901a306a45
+    filter: models logreg, rf, mlp; precision_mean with precision_ci_lo/hi (dots, 95% CI) and chance_precision (crosses) (panel b). DAGGER (†) on a dataset tick label of panel b = chance precision >= 0.60, i.e. plausibility non-informative (claim map C10); define it in the caption
+
+[fig_main_reliability]  size 3.45 x 2.7 in  files: fig_main_reliability.png (300 dpi), fig_main_reliability.pdf
+  source: results/phase3b/calibration_metrics.csv  sha256=2a0206c0b59336924c7f7fd94021f0c344959d19c2c4a2eb3302cb7b53150ef9
+    filter: fraction == 0.1, 4 NO_CKD datasets x logreg/rf/mlp, column ece_em: reference for the reproduction check only (not plotted)
+  source files (pattern): results/predictions/{pima_diabetes,heart_cleveland,ilpd,breast_wisconsin}__{logreg,rf,mlp}__split{0..9}.npz
+    filter: keys y_true and prob_0.1; the 4 datasets pooled per model (n = 2 x rows per dataset, summed); equal-mass 10 bins (scripts.phase3b_calibration._reliability_bins), Wilson 95% intervals (analysis.calibration.wilson_interval)
+    matching lines of results/MANIFEST_sha256.txt (120 files):
+      manifest: 565fae674d2cfbbe849482cdbcb73d4f132506c7c93d12ac314b9ae070634c43  results/predictions/breast_wisconsin__logreg__split0.npz
+      manifest: 0db9d591f94af88e06f32820d9f61f0b3743136b838785205a0a1e26a6848626  results/predictions/breast_wisconsin__logreg__split1.npz
+      manifest: 2fc1ec8cb79d6e3967c3e40472c9eba293b5f7309492fad566ad1b25dac2d3df  results/predictions/breast_wisconsin__logreg__split2.npz
+      manifest: fbfebf1d35d53f9e361ec0e7c31c937a0fc2e25a9d8a2195fa26eab3d0f8c783  results/predictions/breast_wisconsin__logreg__split3.npz
+      manifest: 8606cbb1f00dd50273aad33da7a377633532f2bcd611a031294c33ed5e797304  results/predictions/breast_wisconsin__logreg__split4.npz
+      manifest: d471cbbb2153ffe5ab7d5ff6d69290393d8114831b55b8d6a490564b91ec2a42  results/predictions/breast_wisconsin__logreg__split5.npz
+      manifest: 663923e9b95496d574cd4c347ebb6b819aec64178375762cd0997c657994dd4b  results/predictions/breast_wisconsin__logreg__split6.npz
+      manifest: 27327edbe82bea70ec7aa20721f8809f1afd891e1d4d488933c458b0fd607208  results/predictions/breast_wisconsin__logreg__split7.npz
+      manifest: 3e6e71dc0db3405bb2d1c41f970b77ab1d72fb0f31ac6a73e458cd60b393e4f3  results/predictions/breast_wisconsin__logreg__split8.npz
+      manifest: 5137786cd2bf2fd6593aef71b4e54d0d296c654c20488a95070e1767fdae3b42  results/predictions/breast_wisconsin__logreg__split9.npz
+      manifest: 9c411e0c6b35496883ac9b7af46721afff15303474045dda466866627ad0568a  results/predictions/breast_wisconsin__mlp__split0.npz
+      manifest: b4b3320a1fedf425da89ad5fb8ebdb5972a21d409f2d1f4bc3b1b6d3f2d2f412  results/predictions/breast_wisconsin__mlp__split1.npz
+      manifest: 98cb26a563a3fd96efc8d322978b18545b87300faeff326323cf911687070aa4  results/predictions/breast_wisconsin__mlp__split2.npz
+      manifest: 9fdb7b85b6d9e56e849a26023092b4636a5cc91bf131c18c35e8082f05125a2b  results/predictions/breast_wisconsin__mlp__split3.npz
+      manifest: 73c60c4deea17abb86f921a22b1ad66a5294409006d177286ea0f38e661509aa  results/predictions/breast_wisconsin__mlp__split4.npz
+      manifest: a239fd5832e37eaed77134fdb86b2973e24c579c057df4681eb0b78695866254  results/predictions/breast_wisconsin__mlp__split5.npz
+      manifest: 25b3d97748f84691da8486a3b554e5149972f63bb190bdbaa0483f597e28e800  results/predictions/breast_wisconsin__mlp__split6.npz
+      manifest: 6506bef1c545b2a30c9b135b2761386083fd108aed0ce2671e624fe35efd8a3b  results/predictions/breast_wisconsin__mlp__split7.npz
+      manifest: 023ae405604ab1de00bf68bdfec4f60392a00c73d98db770c805063ba41f5818  results/predictions/breast_wisconsin__mlp__split8.npz
+      manifest: 5dc5242de7d20648476004d394f8d0e49698df38ce0570bfee60e874d70922fb  results/predictions/breast_wisconsin__mlp__split9.npz
+      manifest: 94372915b55757f0ec61c17d786b591a21f08a0d2328c47f175113df43c9186c  results/predictions/breast_wisconsin__rf__split0.npz
+      manifest: 6b52d6f2dc9b149e16a53659810e4aa632cb15e355a6d5bbc3594bf7e20555c4  results/predictions/breast_wisconsin__rf__split1.npz
+      manifest: 5fe579361f74b7ad61f5221271c0e36710a496934972f11668076f2cc40f4939  results/predictions/breast_wisconsin__rf__split2.npz
+      manifest: be37a29efd5475f1a3b4d7b70139d9efc9550ccb24715df24d4a818136b5209c  results/predictions/breast_wisconsin__rf__split3.npz
+      manifest: c2cd57a988addf5c6ef62d6f45755da5f791493765f24614e7f47a9b13aad363  results/predictions/breast_wisconsin__rf__split4.npz
+      manifest: 3c441b57418cb67d5024a0e193079b4851fffa24933acc9f9f86ff1c474f6d69  results/predictions/breast_wisconsin__rf__split5.npz
+      manifest: c651dd190483c8b59fb43bbce8acbe9ca7b9e4f42d7166cae6b4d315594f0bdb  results/predictions/breast_wisconsin__rf__split6.npz
+      manifest: 90ee3d8d09f4562b985afcc2702c7b1c70a614e116578c14abab8a5a703e6a23  results/predictions/breast_wisconsin__rf__split7.npz
+      manifest: 0bf294289a15891b72b738d9ecc4eb31eaed13b596e21ef23061d3fc5276f224  results/predictions/breast_wisconsin__rf__split8.npz
+      manifest: df83c6e3e148dd37f3bc409780cdaf4d5991101bade446e15d9e371384be1e88  results/predictions/breast_wisconsin__rf__split9.npz
+      manifest: 914d05ddce2b9d2927fb72d96314affbb86bd97e28cd45ec89857ed0395a0351  results/predictions/heart_cleveland__logreg__split0.npz
+      manifest: d5df91d36ac6641016b0eeb59ec71eed74a48e8844c278dbaf3db8937e7a2f01  results/predictions/heart_cleveland__logreg__split1.npz
+      manifest: 284847883db6566fcbc76036193de872aaa821c0bd956c4ed9dc63222a701de4  results/predictions/heart_cleveland__logreg__split2.npz
+      manifest: 73a822485091aa0510e77441f51e00ecd9878b07d917b0c52de3c714364ad377  results/predictions/heart_cleveland__logreg__split3.npz
+      manifest: 473687ad68eade960d1d826aa966225cf274e9b71dadcb37486adbc1d4af653c  results/predictions/heart_cleveland__logreg__split4.npz
+      manifest: 619200d6ae95ac87bff24fdbf2b561fc9952360ddddd57c74a3f23d34ab4dee1  results/predictions/heart_cleveland__logreg__split5.npz
+      manifest: 15f6462c7cc6478f1bc966d2b90e15c1f06cc001faef011cdaa1e4305881266e  results/predictions/heart_cleveland__logreg__split6.npz
+      manifest: 59a4bc56068857be66fbf29cfc658ab4d61bafa63c4388026e3c599794b586e7  results/predictions/heart_cleveland__logreg__split7.npz
+      manifest: 70adba94b5feb30a1cf3789d5042cb94f029a9a9b105f6c7e4f7da023030a890  results/predictions/heart_cleveland__logreg__split8.npz
+      manifest: 372f7aa34b541984d3cca3463198126c8dcfce642f7862881541d1f645fc7a8d  results/predictions/heart_cleveland__logreg__split9.npz
+      manifest: c5b722ff65b82891b444af4751dce559d0bb8b21e52262b466b365d2bcf3bc8f  results/predictions/heart_cleveland__mlp__split0.npz
+      manifest: 9c439f8cb6fefa276004c215ccab84e96873cae8078ea67371316a5359d6149b  results/predictions/heart_cleveland__mlp__split1.npz
+      manifest: 2505a4c2ee71c6ac3287c5189a7e946c1b3442559767215e3b0a03ec62b6d025  results/predictions/heart_cleveland__mlp__split2.npz
+      manifest: cf56f942c6ac7f7de93df5f9c3152c7c7c297a3c070da89331c1bf55f5d635cf  results/predictions/heart_cleveland__mlp__split3.npz
+      manifest: 22afad762d87067b5e460d8b5b3fa70499d272f34d6ce7563d944202038db73f  results/predictions/heart_cleveland__mlp__split4.npz
+      manifest: 254e6945291d8cddc938d6ce1bc7e940ec188fbbb620a1ddcb46e86e65231534  results/predictions/heart_cleveland__mlp__split5.npz
+      manifest: 15886c287511fae1cb8be618ec98bb508b9ae05c83debc7e0c1b6926c74581ad  results/predictions/heart_cleveland__mlp__split6.npz
+      manifest: 584b325eae6f3927c1612a3381d1d352a74ab6ab7c48fac9ae10d3388e7e4016  results/predictions/heart_cleveland__mlp__split7.npz
+      manifest: efa7c5fe2c076253f073af9ad42456c81ce5d95331d8fbd242305fe9fe54a2b7  results/predictions/heart_cleveland__mlp__split8.npz
+      manifest: 4bb6cd8cca0dcaa237f68267803c86023847a6a26d28cc297eb499cbeca3b9c1  results/predictions/heart_cleveland__mlp__split9.npz
+      manifest: e159ab2b032cd1cf263946058db5a8bc8db454ef52864e1822417f816b266c57  results/predictions/heart_cleveland__rf__split0.npz
+      manifest: 553970d08dd8ccc5e341730a4d2316f02fe56f9950c9e4bb3ca0ba26f4a32923  results/predictions/heart_cleveland__rf__split1.npz
+      manifest: a2234156ffeba78b7ad665b3f61c0594b02776e201e803f2d51d7f331dcd6ef4  results/predictions/heart_cleveland__rf__split2.npz
+      manifest: ef62b084d55108ca9c4c53b345a7e0ba7558dbe3e79ee90e2c1f6cb4aa3760e8  results/predictions/heart_cleveland__rf__split3.npz
+      manifest: e971980800bd42975daba1f695bd31771200b6e97389a7edb5ae7c64d4270615  results/predictions/heart_cleveland__rf__split4.npz
+      manifest: 1c029d487f15ccc6ea1bd264f07bf9c2c34053b2aeb56285c0c193b43a8d8505  results/predictions/heart_cleveland__rf__split5.npz
+      manifest: 445cf215db784b7a6b9911b75b5a533b1a7c91cd81cd0b42353855a6d022a7e7  results/predictions/heart_cleveland__rf__split6.npz
+      manifest: 87843351bbdfd9680566637d737d1eea487fe5f27824b1e7c08eace461056c82  results/predictions/heart_cleveland__rf__split7.npz
+      manifest: 1b92257cabffd89498a8df55c5374601935e81cd9e49de451290a137d384b876  results/predictions/heart_cleveland__rf__split8.npz
+      manifest: 567ff0a04b72b4d0f6451d86d69d1640c40f167fd87a9ee9deb2dd9b90b8cff5  results/predictions/heart_cleveland__rf__split9.npz
+      manifest: 6fa39c29631d7dcfe3eab5a2182299b7c20e57338e676455c5e274a4594a8549  results/predictions/ilpd__logreg__split0.npz
+      manifest: 9bff538a91ddbccdd5509f5e53ce5954974301207620ddd2972f59900552c4f7  results/predictions/ilpd__logreg__split1.npz
+      manifest: d5e9b4a235817837e827f7ba549dc35503c16d835901d1ec2178c204e7118b10  results/predictions/ilpd__logreg__split2.npz
+      manifest: b7605d32259214b75fb1995059244e38b1b7435dd3c438acd674cea602329d73  results/predictions/ilpd__logreg__split3.npz
+      manifest: a64052ad055543dd0bf7961a4378d0340a11ab1f4d04c029bd8d91e721b6d536  results/predictions/ilpd__logreg__split4.npz
+      manifest: 0b8ee5cd2801d73548bd545b0669e25f8d4b446e7261833acfdee254e877610d  results/predictions/ilpd__logreg__split5.npz
+      manifest: 81388ee2af01500fd3c40169c5f84b54d3ad166c1b1d1bda2c4c3b97e3a4f1b9  results/predictions/ilpd__logreg__split6.npz
+      manifest: 7ec979862494a459444fad63cd9a62e82efd299d851536ceebdcf984e2926d3c  results/predictions/ilpd__logreg__split7.npz
+      manifest: ca9fc69c857430713829b751634c1c65ae09a5ae45d055cd238f39fc20e96a08  results/predictions/ilpd__logreg__split8.npz
+      manifest: b9174233b0b9b57be4ac47c989ece1619c766a03c673dd55391cdc5f09ae7183  results/predictions/ilpd__logreg__split9.npz
+      manifest: 69cfa4172de40b674a5c874d87ceae8e4111751ea78cfa05c8796f9689f3c42b  results/predictions/ilpd__mlp__split0.npz
+      manifest: 1725201666f1ac7e796ea281a576d620743a09e393c459e49057ddbe960e0616  results/predictions/ilpd__mlp__split1.npz
+      manifest: 5c70dc7e3314ba626fc72c4629d836b7f30b32a5bef32b8a8333ef2e091f86fd  results/predictions/ilpd__mlp__split2.npz
+      manifest: 284ea511589968e9ade978a99559f68e1fce0e58749e0ff6ff728ef125418d58  results/predictions/ilpd__mlp__split3.npz
+      manifest: c2ba2770b4e061fdc558e8c711dcbfcb7617540ffd2bee1a2752816353064703  results/predictions/ilpd__mlp__split4.npz
+      manifest: c870939620aa12440b8da6b477d742f2c54cee3347bd2b2ad5c44ece370f5ef0  results/predictions/ilpd__mlp__split5.npz
+      manifest: 104ae5f4d1233dc7f0b678e1a9302d8daaf1f37d3ea042a84206ef40b2d1b441  results/predictions/ilpd__mlp__split6.npz
+      manifest: fbfcb986e456b8b1f41a1371447613651349d96203e1253ba7dfb9e98da3cfc9  results/predictions/ilpd__mlp__split7.npz
+      manifest: 5c42763c294725f09d99a2a3445ce91fdc09a6b7fc051f627db037f0d5ec15d9  results/predictions/ilpd__mlp__split8.npz
+      manifest: 80867b98fef21ef26367e456984b352749be0f5b58a28a8cc09ebb11feac569f  results/predictions/ilpd__mlp__split9.npz
+      manifest: a11f5b2c02d91a94c235beceee7f217e1f9477efa1a2a98ccf66f8349dee51aa  results/predictions/ilpd__rf__split0.npz
+      manifest: 7b824411037dacbcd5f5b1b4455d6c9dbb332ce460afc9c83660673debbe1314  results/predictions/ilpd__rf__split1.npz
+      manifest: 20e6e499ae1fb7b4efc7c58bc098595a9825ef82a5c7ad7e8501cbb25461f77b  results/predictions/ilpd__rf__split2.npz
+      manifest: 665e5abfae5816ebfb7759138f3ee373f1c85afd4f3fd5f3fd881b87d59ee8e6  results/predictions/ilpd__rf__split3.npz
+      manifest: d1ae040dd0c483fea0b76f05bfecb49766369fef50851d986d8cfcaf8c307275  results/predictions/ilpd__rf__split4.npz
+      manifest: a63cb7249f68d60d34cc871b268ead2a54cab0bf9d260e7b31aba871edb873cf  results/predictions/ilpd__rf__split5.npz
+      manifest: 6bd68fb74975d64677218ad0c32c0ecd6306aa5f03c7b6ddffa76403238df3c5  results/predictions/ilpd__rf__split6.npz
+      manifest: 6fbcc3bc627a518c3a3cb50bf07effe78231c301a10456980c7ae1faed496824  results/predictions/ilpd__rf__split7.npz
+      manifest: 62af476f37648af4d31db7cb91a8f9f9a83cdbf4a6ecea051834b0496ff0e63e  results/predictions/ilpd__rf__split8.npz
+      manifest: 710e96056bfa58c4376bc2b319d85422558e4e77280bf54e61e6dad4978795cf  results/predictions/ilpd__rf__split9.npz
+      manifest: d3a94ac9dbdf301d3928a01518d18c2b703e2d9a4b78afce6207b165e2bc5508  results/predictions/pima_diabetes__logreg__split0.npz
+      manifest: ec97abb014f3cd84d09297fb0354f28513425c4fd1cd18092d5243de34c98074  results/predictions/pima_diabetes__logreg__split1.npz
+      manifest: 7baa9cbce939809f4df4aead9e4ecf7781bd527da2a9db58bdbfef849152544c  results/predictions/pima_diabetes__logreg__split2.npz
+      manifest: 9cc9cef59576e8a0ded7e29e75b8a9d877f45c71077a64f5764c8304ff787b7c  results/predictions/pima_diabetes__logreg__split3.npz
+      manifest: 24d17f7ded3e18bd87cb63e7d89b9528a8fdfd1aa1b9be2cd45f0d7284eca914  results/predictions/pima_diabetes__logreg__split4.npz
+      manifest: 290dea75450ea65ed130b1b39efa799b056a455d852ac9dd0dfebe25af179850  results/predictions/pima_diabetes__logreg__split5.npz
+      manifest: 904610116f02dc372084ac004fc5f773afc4386d44ccddafeac01ae245d95a5e  results/predictions/pima_diabetes__logreg__split6.npz
+      manifest: d468734c024e5063c568b6f878629f0ef3b0d672f67de6f7287f539de457596e  results/predictions/pima_diabetes__logreg__split7.npz
+      manifest: 1e6b9bc60bd035d98ec83c223df1b4a27fcd3c1aa4fac76f5958aedc082976f2  results/predictions/pima_diabetes__logreg__split8.npz
+      manifest: ab57b5edb0d0761c580df328b3fa200ce36690c9fa60fb993168ba95e0bed87a  results/predictions/pima_diabetes__logreg__split9.npz
+      manifest: 47b8cde6c87e41bddb3062a1dbccb57050e90b93003ad65833bdaf07c81415fe  results/predictions/pima_diabetes__mlp__split0.npz
+      manifest: fabae433f92aa1a560b353fa2f0aa0496f22474a505d4f3fe5b9990443cb6e7e  results/predictions/pima_diabetes__mlp__split1.npz
+      manifest: cb73ae134346df1713db881af3c9825f0f0740708c2f33c534c65ecc4a37c621  results/predictions/pima_diabetes__mlp__split2.npz
+      manifest: 4a4670bae71970724aaa5ad536e64eab6f86cad4974ecafef5a00487b0ea3154  results/predictions/pima_diabetes__mlp__split3.npz
+      manifest: 67eaed34e8e04410761c6f968f88cb864f9521a09f0344353e95bf019b8edc31  results/predictions/pima_diabetes__mlp__split4.npz
+      manifest: 80f6e249d62dc0b43e5b63cdc270b98dde7c969736abf883b11981dc15111da8  results/predictions/pima_diabetes__mlp__split5.npz
+      manifest: a888dba1bda645b1cb5ea84d47f1789f5408699ae417f9562b5e35c0cb0f70c8  results/predictions/pima_diabetes__mlp__split6.npz
+      manifest: 4e4a1e32e4542e1496fb20da7bfb279c4a0e57f420387e0bd1932c5e4cd6427f  results/predictions/pima_diabetes__mlp__split7.npz
+      manifest: 647add223602d7ed24dd6c1970ea99af9be52b9ed568511d482ce43a232985ae  results/predictions/pima_diabetes__mlp__split8.npz
+      manifest: b327d2aea1b26ed0b25770c52faab6e96e5dd1c5a352242c19fb527493a9976b  results/predictions/pima_diabetes__mlp__split9.npz
+      manifest: 53b1be6948621195fd7f71b1526413e0196ab0360713a676b74dbee7d3a5e424  results/predictions/pima_diabetes__rf__split0.npz
+      manifest: 08300d637847f6d8772759abbcbe3c295becaa4d494e49dd5fc37c001024933d  results/predictions/pima_diabetes__rf__split1.npz
+      manifest: 3aa4fe9b18f14e9db62019135c8bf8a83d49dc6315fc74f0e43e2219cd36d46e  results/predictions/pima_diabetes__rf__split2.npz
+      manifest: c2ef2377ae4e93f80232b5618b7ca7b9d41a87cb2c6fc3444251b2348b9f099e  results/predictions/pima_diabetes__rf__split3.npz
+      manifest: d7a7f6e059436dea48f29e0d154f16380f7d6c4982fb6a0674f711ed874e82d0  results/predictions/pima_diabetes__rf__split4.npz
+      manifest: 337ad52e6003c7891e60bcf582fae3d242f6e4f1ae8af9d7b5db8a1fe42d5e13  results/predictions/pima_diabetes__rf__split5.npz
+      manifest: 2f246cd84fc8d8f66124e018492ba68ce8ad92175a69edc44a6a55f042d6d8cb  results/predictions/pima_diabetes__rf__split6.npz
+      manifest: 545f84b0afd6ee340385332614353765ef6aea58d45cc9bed4f309905d11a435  results/predictions/pima_diabetes__rf__split7.npz
+      manifest: 0fbf13c535a202b65d1959f9eee101334f5dfccb4ac730a373d8779c988675ae  results/predictions/pima_diabetes__rf__split8.npz
+      manifest: e8b6cb6aeb2a5c2792477ccec753ceed4dae0f9f08a819a8cf02ef4e5d84e8b6  results/predictions/pima_diabetes__rf__split9.npz
+  reproduction check: max |binned equal-mass ECE - Phase 3b ece_em| = 1.388e-17

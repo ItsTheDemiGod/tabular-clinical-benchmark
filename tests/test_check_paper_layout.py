@@ -33,7 +33,7 @@ def test_citation_count_exactly_20_is_ok(tmp_path):
     keys = [f"ref{i}" for i in range(20)]
     tex = "".join(f"\\cite{{{k}}}\n" for k in keys)
     main = _write(tmp_path, "main.tex", tex)
-    code, report = cpl.run_check(main, None)
+    code, report = cpl.run_check(main, None, {**cpl.DEFAULT_LIMITS, "max_references": 20})
     assert report["n_citation_keys"] == 20
     assert report["citation_keys_ok"] is True
     assert code == 0
@@ -43,7 +43,7 @@ def test_planted_21_citations_violates_limit(tmp_path):
     keys = [f"ref{i}" for i in range(21)]
     tex = "".join(f"\\cite{{{k}}}\n" for k in keys)
     main = _write(tmp_path, "main.tex", tex)
-    code, report = cpl.run_check(main, None)
+    code, report = cpl.run_check(main, None, {**cpl.DEFAULT_LIMITS, "max_references": 20})
     assert report["n_citation_keys"] == 21
     assert report["citation_keys_ok"] is False
     assert code == 1
@@ -134,3 +134,71 @@ def test_check_page5_headings_allows_references_and_acknowledgments():
 def test_find_pdf_tool_returns_a_known_value():
     tool = cpl.find_pdf_tool()
     assert tool in ("pypdf", "pdfinfo", "pdftotext")
+
+
+# ---- Phase 4d: venue config ------------------------------------------------
+import json  # noqa: E402
+import subprocess  # noqa: E402
+
+_SCRIPT = Path(cpl.__file__)
+
+
+def _cfg(tmp_path: Path, **kw) -> Path:
+    base = {"max_pages": 6, "max_references": None, "reference_soft_limit": 35,
+            "max_authors": 35, "last_page_references_only": False}
+    base.update(kw)
+    p = tmp_path / "venue.json"
+    p.write_text(json.dumps(base), encoding="utf-8")
+    return p
+
+
+def test_config_values_are_read(tmp_path):
+    lim, src, warns = cpl.load_limits(_cfg(tmp_path, max_pages=8, max_authors=10))
+    assert lim["max_pages"] == 8 and lim["max_authors"] == 10
+    assert src["max_pages"] == "config venue.json" and warns == []
+
+
+def test_cli_overrides_win(tmp_path):
+    lim, src, _ = cpl.load_limits(_cfg(tmp_path, max_pages=8), max_pages=4, max_refs=12)
+    assert lim["max_pages"] == 4 and lim["max_references"] == 12
+    assert src["max_pages"] == "CLI --max-pages" and src["max_references"] == "CLI --max-refs"
+
+
+def test_null_max_references_warns_but_exits_zero(tmp_path):
+    main = _write(tmp_path, "main.tex", "".join(f"\cite{{r{i}}}\n" for i in range(36)))
+    r = subprocess.run([sys.executable, str(_SCRIPT), str(main), "--config", str(_cfg(tmp_path))],
+                       capture_output=True, text=True)
+    assert r.returncode == 0 and "WARNING" in r.stdout and "soft limit 35" in r.stdout
+
+
+def test_numeric_max_references_fails(tmp_path):
+    main = _write(tmp_path, "main.tex", "".join(f"\cite{{r{i}}}\n" for i in range(5)))
+    r = subprocess.run([sys.executable, str(_SCRIPT), str(main), "--config", str(_cfg(tmp_path, max_references=4))],
+                       capture_output=True, text=True)
+    assert r.returncode == 1
+
+
+def test_last_page_rule_toggles(tmp_path, monkeypatch):
+    main = _write(tmp_path, "main.tex", "x")
+    pdf = tmp_path / "a.pdf"
+    pdf.write_bytes(b"%PDF")
+    monkeypatch.setattr(cpl, "find_pdf_tool", lambda: "pdftotext")
+    monkeypatch.setattr(cpl, "page_count_and_last_page_text", lambda p, t: (6, "\section{Conclusion}"))
+    off, _ = cpl.run_check(main, pdf, {**cpl.DEFAULT_LIMITS, "last_page_references_only": False})
+    on, rep = cpl.run_check(main, pdf, {**cpl.DEFAULT_LIMITS, "last_page_references_only": True})
+    assert off == 0 and on == 1 and rep["pdf_check"]["page5_heading_problems"]
+
+
+def test_page_limit_uses_max_pages(tmp_path, monkeypatch):
+    main = _write(tmp_path, "main.tex", "x")
+    pdf = tmp_path / "a.pdf"
+    pdf.write_bytes(b"%PDF")
+    monkeypatch.setattr(cpl, "find_pdf_tool", lambda: "pdftotext")
+    monkeypatch.setattr(cpl, "page_count_and_last_page_text", lambda p, t: (7, ""))
+    assert cpl.run_check(main, pdf)[0] == 1
+    assert cpl.run_check(main, pdf, {**cpl.DEFAULT_LIMITS, "max_pages": 7})[0] == 0
+
+
+def test_missing_config_falls_back_with_warning(tmp_path):
+    lim, _, warns = cpl.load_limits(tmp_path / "nope.json")
+    assert lim == cpl.DEFAULT_LIMITS and len(warns) == 1

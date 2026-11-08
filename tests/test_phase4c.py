@@ -128,13 +128,16 @@ def test_missing_key_is_reported() -> None:
 
 
 def test_numbers_book_untouched_by_phase4c() -> None:
+    """Phase 4d follows a changed requirement: group "4d" legitimately ADDS keys, so the check is now
+    'every key of the Phase 4c commit (6a8d0ed) is still present with an identical entry'."""
     try:
-        head = subprocess.run(["git", "show", "HEAD:paper/evidence/numbers.json"], cwd=PROJECT_ROOT,
+        head = subprocess.run(["git", "show", "6a8d0ed:paper/evidence/numbers.json"], cwd=PROJECT_ROOT,
                               capture_output=True, check=True).stdout
     except Exception:
         pytest.skip("git not available")
-    cur = (PAPER / "evidence" / "numbers.json").read_bytes()
-    assert json.loads(cur) == json.loads(head)  # no key added/changed (no group 4c needed)
+    cur = {e["key"]: e for e in json.loads((PAPER / "evidence" / "numbers.json").read_bytes())}
+    for e in json.loads(head):
+        assert cur[e["key"]] == e, e["key"]
 
 
 # ---------------------------------------------------------------- authors / emails
@@ -148,12 +151,24 @@ def test_author_block_order_and_layout_checker() -> None:
     assert "Authors: 4" in r.stdout
 
 
+def _scannable(p: Path, data: bytes) -> bytes:
+    """Bytes worth scanning for an email: compressed PNG/PDF payloads can match the regex by chance, so
+    scan only PNG text metadata and PDF bytes outside stream...endstream (Phase 4d fix of a false positive)."""
+    if p.suffix.lower() == ".png":
+        with Image.open(p) as im:
+            return " ".join(str(v) for v in im.info.values()).encode("utf-8", "replace")
+    if p.suffix.lower() == ".pdf":
+        return re.sub(rb"stream.*?endstream", b"", data, flags=re.S)
+    return data
+
+
 def test_no_at_sign_or_email_under_paper() -> None:
     for p in PAPER.rglob("*"):
         if not p.is_file() or p.name == "overleaf_bundle.zip":
             continue
         data = p.read_bytes()
-        assert not EMAIL_RE.search(data), f"email-like pattern in {p}"
+        scan = _scannable(p, data)
+        assert not EMAIL_RE.search(scan), f"email-like pattern in {p}"
         # Frozen Phase 4a/4b evidence files use '@' as "at fraction" in selector text; everything
         # else under paper/ (text files) must not contain '@' at all.
         if "evidence" not in p.relative_to(PAPER).parts and p.suffix in {".tex", ".bib", ".md", ".txt", ".csv"}:
@@ -165,7 +180,8 @@ def test_bundle_contents_and_paths(tmp_path: Path) -> None:
     z = bundle.build(tmp_path / "b.zip")
     with zipfile.ZipFile(z) as zf:
         names = set(zf.namelist())
-        allowed = {"main.tex", "references.bib", "evidence/numbers.tex", "tables/table_main.tex", "BUNDLE_README.txt"}
+        allowed = {"main.tex", "references.bib", "evidence/numbers.tex", "tables/table_main.tex", "BUNDLE_README.txt",
+                   "tables/table_datasets.tex"}  # Phase 4d added Table I to the bundle
         allowed |= {f"sections/{p.name}" for p in (PAPER / "sections").glob("*.tex")}
         allowed |= {f"figures/{p.name}" for p in (PAPER / "figures").glob("*.pdf")}
         assert names == allowed

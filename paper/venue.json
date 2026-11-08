@@ -1,0 +1,10 @@
+{
+  "venue": "TBD: Indian IEEE-style conference, to be chosen",
+  "template": "IEEE conference, IEEEtran, US Letter, two columns",
+  "max_pages": 6,
+  "max_references": null,
+  "reference_soft_limit": 35,
+  "max_authors": 35,
+  "last_page_references_only": false,
+  "notes": "Working defaults (decision of 2026-11-08), replaced by the chosen venue's rules when the venue is known."
+}

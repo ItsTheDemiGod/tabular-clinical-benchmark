@@ -1,0 +1,16 @@
+dataset,model,top5_features,precision_ci,chance_precision
+pima_diabetes,logreg,"plas*, mass*, preg*, pedi*, age*","1.00 [1.00, 1.00]",0.625
+pima_diabetes,rf,"plas*, mass*, age*, pedi*, preg*","0.88 [0.82, 0.94]",0.625
+pima_diabetes,mlp,"plas*, mass*, preg*, pedi*, age*","1.00 [1.00, 1.00]",0.625
+heart_cleveland,logreg,"ca*, cp*, thal*, sex*, oldpeak*","0.98 [0.94, 1.00]",0.615
+heart_cleveland,rf,"thal*, cp*, ca*, exang*, slope","0.88 [0.82, 0.94]",0.615
+heart_cleveland,mlp,"ca*, cp*, thal*, oldpeak*, thalach*","0.96 [0.90, 1.00]",0.615
+ckd,logreg,"sg*, hemo*, al*, pcv*, htn*","0.96 [0.90, 1.00]",0.333
+ckd,rf,"hemo*, sg*, sc*, pcv*, htn*","1.00 [1.00, 1.00]",0.333
+ckd,mlp,"sg*, hemo*, pcv*, al*, rbcc*","1.00 [1.00, 1.00]",0.333
+ilpd,logreg,"DB*, ALB*, Sgpt*, TP, Sgot*","0.70 [0.64, 0.76]",0.600
+ilpd,rf,"TB*, DB*, Alkphos*, Sgot*, Sgpt*","0.98 [0.94, 1.00]",0.600
+ilpd,mlp,"Age, DB*, Alkphos*, Sgpt*, ALB*","0.64 [0.56, 0.72]",0.600
+breast_wisconsin,logreg,"texture3, concave_points3*, radius3*, radius2*, concave_points1*","0.72 [0.62, 0.78]",0.500
+breast_wisconsin,rf,"concave_points3*, perimeter3*, area3*, radius3*, concave_points1*","1.00 [1.00, 1.00]",0.500
+breast_wisconsin,mlp,"radius3*, concave_points3*, perimeter3*, concave_points1*, area3*","0.94 [0.88, 1.00]",0.500

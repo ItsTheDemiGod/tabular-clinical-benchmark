@@ -764,3 +764,30 @@ No result file or model was changed. New: `scripts/make_paper_figures.py` (two d
 .venv-deep\Scripts\python.exe scripts\make_paper_tables.py
 .venv-deep\Scripts\python.exe scripts\make_overleaf_bundle.py
 ```
+
+## Phase 4d: target change, paper skeleton, additional figures, drafting sheet
+
+No result file, model or `src/`/`analysis/` file was changed. The paper no longer targets EMBC 2027: it is
+written to the generic IEEE conference template (two columns, US Letter, IEEEtran), working length 6 pages
+including references, working reference ceiling about 35; the venue (an Indian conference, chosen later)
+then overrides these defaults through `paper/venue.json`, which `scripts/check_paper_layout.py` reads
+(`--config`, `--max-pages`, `--max-refs` override it).
+
+New or changed: `paper/main.tex` (four authors, the new section order, `\bibliography{references}`) and
+`paper/sections/*.tex` (headings only, no prose); `scripts/make_paper_figures.py` (Fig. 1 panel c now
+uses one marker shape per dataset; new Fig. 3 `fig_main_explanations`, new Fig. 4 `fig_main_reliability`);
+`scripts/make_paper_tables.py` (Table I `table_datasets.tex`, supplementary `supp_search_spaces` and
+`supp_explanations`); `scripts/build_numbers.py` (group "4d": additions only); the drafting sheet
+`paper/evidence/drafting_sheet.md/.csv` (`scripts/build_drafting_sheet.py`, facts only); the Overleaf bundle
+(`scripts/make_overleaf_bundle.py`). Compiled PDFs from Overleaf go to `paper/build/main.pdf` (git-ignored)
+for the page check.
+
+```
+.venv-deep\Scripts\python.exe scripts\build_numbers.py
+.venv-deep\Scripts\python.exe scripts\make_paper_figures.py
+.venv-deep\Scripts\python.exe scripts\make_paper_tables.py
+.venv-deep\Scripts\python.exe scripts\build_drafting_sheet.py
+.venv-deep\Scripts\python.exe scripts\make_overleaf_bundle.py
+.venv-deep\Scripts\python.exe scripts\check_paper_layout.py paper\main.tex [--pdf paper\build\main.pdf]
+.venv-deep\Scripts\python.exe scripts\check_paper_numbers.py paper\main.tex
+```

@@ -954,6 +954,83 @@ def build_group8_phase4b_claims(book: NumbersBook) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Phase 4d: dataset facts for Table I and the drafting sheet, group "4d".
+# Additions only: every value is read from dataset_summary.csv, all_runs.csv or the
+# cached dataset's meta (src.data.load_dataset); existing keys are untouched.
+# ---------------------------------------------------------------------------
+def build_group9_phase4d(book: NumbersBook) -> None:
+    summary_path = PROJECT_ROOT / "results" / "dataset_summary.csv"
+    summary = pd.read_csv(summary_path)
+    runs_path = PROJECT_ROOT / "results" / "all_runs.csv"
+    runs = pd.read_csv(runs_path)
+    for ds in DATASETS_ALL5:
+        row = _one_row(summary, summary.dataset == ds, f"dataset_summary[{ds}]")
+        for key, col, unit in (("n-numeric", "n_numeric", "features"), ("n-categorical", "n_categorical", "features"),
+                               ("n-rows-raw", "n_rows_before_dedup", "rows"), ("n-duplicates-dropped", "n_duplicates_found", "rows")):
+            book.add(make_key(key, ds), int(row[col]), "count", unit, "descriptive", summary_path,
+                     f"dataset_summary.csv row dataset=={ds}, column {col}", "4d")
+        sub = runs[runs.dataset == ds]
+        book.add(make_key("min-train-f0.1", ds), int(sub[sub.fraction == 0.1].n_train.min()), "count", "rows", "descriptive",
+                 runs_path, f"all_runs.csv dataset=={ds} & fraction==0.1, min(n_train) over the 10 splits", "4d")
+        book.add(make_key("n-test-min", ds), int(sub.n_test.min()), "count", "rows", "descriptive", runs_path,
+                 f"all_runs.csv dataset=={ds}, min(n_test)", "4d")
+        book.add(make_key("n-test-max", ds), int(sub.n_test.max()), "count", "rows", "descriptive", runs_path,
+                 f"all_runs.csv dataset=={ds}, max(n_test)", "4d")
+    book.add("n-fractions", int(runs.fraction.nunique()), "count", "fractions", "descriptive", runs_path,
+             "all_runs.csv, nunique(fraction)", "4d")
+    book.add("n-datasets-no-ckd", len(DATASETS_NO_CKD), "count", "datasets", "descriptive", runs_path,
+             "analysis.constants.DATASETS_NO_CKD (ALL5 minus ckd); all_runs.csv listed as the dataset roster source", "4d")
+
+    # Pima zero-to-missing replacement counts and per-column missingness (cached dataset meta).
+    pima_pkl = PROJECT_ROOT / "data" / "pima_diabetes_raw.pkl"
+    _, _, meta = load_dataset("pima_diabetes", verbose=False)
+    for col, n in meta["zeros_replaced_with_nan"].items():
+        book.add(make_key("zeros-replaced", "pima_diabetes", col), int(n), "count", "values", "descriptive", pima_pkl,
+                 f"load_dataset('pima_diabetes').meta['zeros_replaced_with_nan']['{col}']", "4d")
+    for col in ("insu", "skin"):
+        book.add(make_key("missing-col", "pima_diabetes", col), meta["missing_fraction"][col] * 100, "percentage", "%",
+                 "descriptive", pima_pkl, f"load_dataset('pima_diabetes').meta['missing_fraction']['{col}']*100", "4d")
+    ckd_pkl = PROJECT_ROOT / "data" / "ckd_raw.pkl"
+    _, _, ckd_meta = load_dataset("ckd", verbose=False)
+    # Per-(dataset, model) AUROC excess over logreg (model mean - logreg mean over the 10 splits), for the
+    # claim-map C1/C2 exception cells; positive value = the model's per-dataset mean exceeds logreg's.
+    for frac in (1.0, 0.1):
+        means = runs[runs.fraction == frac].groupby(["dataset", "model"]).auroc.mean()
+        for ds in DATASETS_ALL5:
+            for model in MODELS:
+                if model == "logreg":
+                    continue
+                book.add(make_key("auroc-excess-over-logreg", ds, model, f"f{frac}"), float(means[(ds, model)] - means[(ds, "logreg")]),
+                         "diff", "", "descriptive", runs_path,
+                         f"all_runs.csv dataset=={ds} fraction=={frac}: mean(auroc) of {model} minus mean(auroc) of logreg over the 10 splits", "4d")
+    # Outer CV scheme (src.utils.make_splits defaults: 5 folds x 2 repeats, seed 42).
+    from src.utils import make_splits
+    sig = inspect.signature(make_splits).parameters
+    utils_path = PROJECT_ROOT / "src" / "utils.py"
+    book.add("n-cv-folds", sig["n_splits"].default, "count", "folds", "descriptive", utils_path,
+             "inspect.signature(src.utils.make_splits).parameters['n_splits'].default", "4d")
+    book.add("n-cv-repeats", sig["n_repeats"].default, "count", "repeats", "descriptive", utils_path,
+             "inspect.signature(src.utils.make_splits).parameters['n_repeats'].default", "4d")
+
+    # Per-dataset pooled calibration slope with 95% bootstrap CI (Phase 3b), fractions 1.0 and 0.1.
+    cal_path = PROJECT_ROOT / "results" / "phase3b" / "calibration_metrics.csv"
+    ci_path = PROJECT_ROOT / "results" / "phase3b" / "calibration_bootstrap_ci.csv"
+    cal, cal_ci = pd.read_csv(cal_path), pd.read_csv(ci_path)
+    for frac in (1.0, 0.1):
+        for ds in DATASETS_ALL5:
+            for model in MODELS:
+                r = _one_row(cal, (cal.dataset == ds) & (cal.model == model) & (cal.fraction == frac), f"calibration_metrics[{ds},{model},{frac}]")
+                c = _one_row(cal_ci, (cal_ci.dataset == ds) & (cal_ci.model == model) & (cal_ci.fraction == frac), f"calibration_bootstrap_ci[{ds},{model},{frac}]")
+                base = make_key("slope-per-dataset", ds, model, f"f{frac}")
+                sel = f"calibration_metrics.csv / calibration_bootstrap_ci.csv dataset=={ds} model=={model} fraction=={frac}"
+                book.add(f"{base}-point", float(r.slope), "slope", "", "primary", cal_path, sel + ", slope", "4d")
+                book.add(f"{base}-ci-lo", float(c.slope_lo), "slope", "", "primary", ci_path, sel + ", slope_lo", "4d")
+                book.add(f"{base}-ci-hi", float(c.slope_hi), "slope", "", "primary", ci_path, sel + ", slope_hi", "4d")
+    book.add("n-ordinal-as-numeric-ckd", len(ckd_meta["ordinal_as_numeric"]), "count", "columns", "descriptive", ckd_pkl,
+             "len(load_dataset('ckd').meta['ordinal_as_numeric'])", "4d")
+
+
+# ---------------------------------------------------------------------------
 # Output writers: numbers.json / .csv / .tex / .md / numbers_index.md
 # ---------------------------------------------------------------------------
 _LATEX_ESCAPE = {"%": r"\%", "#": r"\#", "&": r"\&", "_": r"\_"}
@@ -1267,6 +1344,7 @@ def main() -> None:
     build_group6_explanations(book)
     build_group7_sensitivity(book)
     build_group8_phase4b_claims(book)
+    build_group9_phase4d(book)
     write_numbers_outputs(book)
     n_undefined = sum(1 for e in book.entries if e["undefined"])
     print(f"numbers.json: {len(book.entries)} entries, {n_undefined} undefined")
