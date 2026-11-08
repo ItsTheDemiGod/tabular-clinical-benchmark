@@ -28,7 +28,6 @@ from scripts import build_drafting_sheet as ds
 from scripts import make_overleaf_bundle as bundle
 from scripts import make_paper_figures as figs
 from scripts import make_paper_tables as tabs
-from tests.test_phase4c import _scannable
 
 PAPER = PROJECT_ROOT / "paper"
 EMAIL_RE = re.compile(rb"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
@@ -72,7 +71,7 @@ def test_results_subsections_present() -> None:
         "Discrimination and Learning Curves", "Calibration", "Robustness to Missing Values and Noise", "Explanation Agreement"]
 
 
-def test_no_at_sign_outside_evidence_and_no_email_anywhere() -> None:
+def test_no_at_sign_outside_evidence_and_no_email_anywhere(scannable) -> None:
     for p in PAPER.rglob("*"):
         if not p.is_file() or p.name == "overleaf_bundle.zip" or "evidence" in p.relative_to(PAPER).parts:
             continue
@@ -81,12 +80,12 @@ def test_no_at_sign_outside_evidence_and_no_email_anywhere() -> None:
         assert "@" not in p.read_text(encoding="utf-8"), p
     for p in PAPER.rglob("*"):
         if p.is_file() and p.name != "overleaf_bundle.zip":
-            assert not EMAIL_RE.search(_scannable(p, p.read_bytes())), p
+            assert not EMAIL_RE.search(scannable(p, p.read_bytes())), p
     z = PAPER / "overleaf_bundle.zip"
     if z.exists():
         with zipfile.ZipFile(z) as zf:
             for n in zf.namelist():
-                assert not EMAIL_RE.search(_scannable(Path(n), zf.read(n)) if n.endswith(".pdf") else zf.read(n)), n
+                assert not EMAIL_RE.search(scannable(Path(n), zf.read(n)) if n.endswith(".pdf") else zf.read(n)), n
 
 
 def test_layout_checker_reports_four_authors() -> None:
@@ -197,11 +196,10 @@ def test_table_i_macros_only_and_deterministic() -> None:
     assert tex.count("\\N{") == 5 * 7  # per row: samples, features + numeric + categorical, positive, missing, min train
 
 
-def test_table_main_is_byte_identical_to_phase4c() -> None:
-    old = subprocess.run(["git", "show", "6a8d0ed:paper/tables/table_main.tex"], cwd=PROJECT_ROOT, capture_output=True)
-    if old.returncode != 0:
-        pytest.skip("git not available")
-    assert (PAPER / "tables" / "table_main.tex").read_bytes().replace(b"\r\n", b"\n") == old.stdout.replace(b"\r\n", b"\n")
+def test_table_main_is_byte_identical_to_phase4c(git_show_fixture) -> None:
+    old = git_show_fixture("6a8d0ed:paper/tables/table_main.tex")
+    cur = (PAPER / "tables" / "table_main.tex").read_bytes()
+    assert cur.replace(bytes([13, 10]), bytes([10])) == old.replace(bytes([13, 10]), bytes([10]))
 
 
 def test_supplementary_tables_exist() -> None:
@@ -211,20 +209,23 @@ def test_supplementary_tables_exist() -> None:
     assert "results/phase3d/top_features.csv" in (PAPER / "tables" / "supp_explanations.tex").read_text(encoding="utf-8")
 
 
-def test_numbers_book_4d_keys_and_idempotent_rebuild() -> None:
+def test_numbers_book_4d_keys_and_idempotent_rebuild(tmp_path: Path, git_show_fixture) -> None:
     path = PAPER / "evidence" / "numbers.json"
     before = path.read_bytes()
     entries = json.loads(before)
     new = [e for e in entries if e["phase"] == "4d"]
     assert len(new) > 0 and all(not e["undefined"] and e["source_sha256"] for e in new)
-    old = subprocess.run(["git", "show", "6a8d0ed:paper/evidence/numbers.json"], cwd=PROJECT_ROOT, capture_output=True)
-    if old.returncode == 0:
-        cur = {e["key"]: e for e in entries}
-        for e in json.loads(old.stdout):
-            assert cur[e["key"]] == e, e["key"]
-    r = subprocess.run([sys.executable, str(PROJECT_ROOT / "scripts" / "build_numbers.py")], capture_output=True, text=True, cwd=PROJECT_ROOT)
+    # Phase 4e: the CLI rebuild goes to a temp dir (--out-dir) and is compared with the committed file.
+    r = subprocess.run([sys.executable, str(PROJECT_ROOT / "scripts" / "build_numbers.py"), "--out-dir", str(tmp_path)],
+                       capture_output=True, text=True, cwd=PROJECT_ROOT)
     assert r.returncode == 0, r.stderr[-500:]
-    assert path.read_bytes() == before  # idempotent
+    assert (tmp_path / "numbers.json").read_bytes() == before  # idempotent
+    assert path.read_bytes() == before  # and the committed file was not touched
+    # Last, because it may skip (explicit reason) when the git history is unavailable: every check above has run.
+    old = git_show_fixture("6a8d0ed:paper/evidence/numbers.json")
+    cur = {e["key"]: e for e in entries}
+    for e in json.loads(old):
+        assert cur[e["key"]] == e, e["key"]
 
 
 # ---------------------------------------------------------------- drafting sheet

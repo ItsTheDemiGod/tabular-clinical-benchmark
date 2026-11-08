@@ -1332,7 +1332,19 @@ def write_inventory(rows: list[dict]) -> None:
     (OUTPUT_DIR / "inventory.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def main() -> None:
+def main(out_dir: Path | None = None) -> None:
+    """Build everything. Default output dir = paper/evidence; `out_dir` redirects ALL outputs (Phase 4e)."""
+    global OUTPUT_DIR
+    saved = OUTPUT_DIR
+    if out_dir is not None:
+        OUTPUT_DIR = Path(out_dir)
+    try:
+        _build_all()
+    finally:
+        OUTPUT_DIR = saved
+
+
+def _build_all() -> None:
     print(f"sys.executable = {sys.executable}")
     book = NumbersBook()
     facts = build_protocol_facts(book)
@@ -1355,4 +1367,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    ap = argparse.ArgumentParser(description="Build the numbers book, protocol facts and inventory.")
+    ap.add_argument("--out-dir", type=Path, default=None, help="write all outputs here instead of paper/evidence")
+    main(ap.parse_args().out_dir)

@@ -1,0 +1,1913 @@
+{
+  "generated_by": "scripts/build_figure_facts.py",
+  "figures": [
+    {
+      "id": "fig_main_learning_calibration",
+      "label": "Fig. 1",
+      "files": "fig_main_learning_calibration.png (300 dpi), fig_main_learning_calibration.pdf",
+      "size_in": [
+        7.16,
+        2.4
+      ],
+      "size_px": [
+        2148,
+        720
+      ],
+      "panels": [
+        {
+          "letter": "a",
+          "panel_id": "Fig. 1(a)",
+          "quantity": {
+            "metric": "AUROC",
+            "dataset_set": "ALL5",
+            "fraction_or_level": "0.1, 0.25, 0.5, 1.0",
+            "kind": "clean test performance",
+            "statistic": "dataset-averaged mean (the 95% CI band is drawn but has no numbers-book key)"
+          },
+          "items": "logreg, rf, xgb, lgbm, mlp, ftt, tabnet",
+          "symbols": "line + marker per model (colour and marker per model; solid for linear/tree models, dashed for deep models); shaded band = 95% CI; log x axis with ticks at the 4 fractions",
+          "ci": {
+            "method": "nested percentile bootstrap of the dataset-averaged mean",
+            "B": 5000,
+            "seed": 42,
+            "interval": "95% percentile [2.5, 97.5]",
+            "resampling": "the 10 splits are resampled with replacement within each dataset, then averaged over datasets"
+          },
+          "n_splits": {
+            "key": "n-outer-splits",
+            "value": "10"
+          },
+          "n_datasets": {
+            "key": "n-datasets",
+            "value": "5"
+          },
+          "exclusions": [
+            "none (all 5 datasets, ALL5)"
+          ],
+          "sources": [
+            {
+              "file": "results/phase3a/ci_dataset_averaged.csv",
+              "sha256": "a548a09ac7f4c9c175a4fbb853ea2c1fc544231a6b71a2fb3a44d94e7a50c4d2",
+              "filter": "metric in {auroc, log_loss}, dataset_set == ALL5, fractions 0.1/0.25/0.5/1.0, bands = ci_lo/ci_hi (panels a, b)"
+            }
+          ],
+          "numbers_book_keys": [
+            "auroc-mean-ftt-all5-f0.1",
+            "auroc-mean-ftt-all5-f0.25",
+            "auroc-mean-ftt-all5-f0.5",
+            "auroc-mean-ftt-all5-f1.0",
+            "auroc-mean-lgbm-all5-f0.1",
+            "auroc-mean-lgbm-all5-f0.25",
+            "auroc-mean-lgbm-all5-f0.5",
+            "auroc-mean-lgbm-all5-f1.0",
+            "auroc-mean-logreg-all5-f0.1",
+            "auroc-mean-logreg-all5-f0.25",
+            "auroc-mean-logreg-all5-f0.5",
+            "auroc-mean-logreg-all5-f1.0",
+            "auroc-mean-mlp-all5-f0.1",
+            "auroc-mean-mlp-all5-f0.25",
+            "auroc-mean-mlp-all5-f0.5",
+            "auroc-mean-mlp-all5-f1.0",
+            "auroc-mean-rf-all5-f0.1",
+            "auroc-mean-rf-all5-f0.25",
+            "auroc-mean-rf-all5-f0.5",
+            "auroc-mean-rf-all5-f1.0",
+            "auroc-mean-tabnet-all5-f0.1",
+            "auroc-mean-tabnet-all5-f0.25",
+            "auroc-mean-tabnet-all5-f0.5",
+            "auroc-mean-tabnet-all5-f1.0",
+            "auroc-mean-xgb-all5-f0.1",
+            "auroc-mean-xgb-all5-f0.25",
+            "auroc-mean-xgb-all5-f0.5",
+            "auroc-mean-xgb-all5-f1.0"
+          ],
+          "caveats": [
+            {
+              "id": "CKD",
+              "text": "The paper's statements about CKD must say it is saturated, and results must be reported both with and without it"
+            },
+            {
+              "id": "UNIT",
+              "text": "the Friedman tests and critical-difference diagrams are **descriptive only**, because the BLOCK unit is anti-conservative (the 10 splits of a dataset come from overlapping-training-set repeated cross-validation) and the DATASET unit has essentially no power (minimum possible two-sided Wilcoxon p = 0.0625 with 5 datasets, 0.125 with 4)"
+            }
+          ]
+        },
+        {
+          "letter": "b",
+          "panel_id": "Fig. 1(b)",
+          "quantity": {
+            "metric": "log loss",
+            "dataset_set": "ALL5",
+            "fraction_or_level": "0.1, 0.25, 0.5, 1.0",
+            "kind": "clean test performance",
+            "statistic": "dataset-averaged mean (the 95% CI band is drawn but has no numbers-book key)"
+          },
+          "items": "logreg, rf, xgb, lgbm, mlp, ftt, tabnet",
+          "symbols": "same conventions as panel (a)",
+          "ci": {
+            "method": "nested percentile bootstrap of the dataset-averaged mean",
+            "B": 5000,
+            "seed": 42,
+            "interval": "95% percentile [2.5, 97.5]",
+            "resampling": "the 10 splits are resampled with replacement within each dataset, then averaged over datasets"
+          },
+          "n_splits": {
+            "key": "n-outer-splits",
+            "value": "10"
+          },
+          "n_datasets": {
+            "key": "n-datasets",
+            "value": "5"
+          },
+          "exclusions": [
+            "none (all 5 datasets, ALL5)"
+          ],
+          "sources": [
+            {
+              "file": "results/phase3a/ci_dataset_averaged.csv",
+              "sha256": "a548a09ac7f4c9c175a4fbb853ea2c1fc544231a6b71a2fb3a44d94e7a50c4d2",
+              "filter": "metric in {auroc, log_loss}, dataset_set == ALL5, fractions 0.1/0.25/0.5/1.0, bands = ci_lo/ci_hi (panels a, b)"
+            }
+          ],
+          "numbers_book_keys": [
+            "logloss-mean-ftt-all5-f0.1",
+            "logloss-mean-ftt-all5-f0.25",
+            "logloss-mean-ftt-all5-f0.5",
+            "logloss-mean-ftt-all5-f1.0",
+            "logloss-mean-lgbm-all5-f0.1",
+            "logloss-mean-lgbm-all5-f0.25",
+            "logloss-mean-lgbm-all5-f0.5",
+            "logloss-mean-lgbm-all5-f1.0",
+            "logloss-mean-logreg-all5-f0.1",
+            "logloss-mean-logreg-all5-f0.25",
+            "logloss-mean-logreg-all5-f0.5",
+            "logloss-mean-logreg-all5-f1.0",
+            "logloss-mean-mlp-all5-f0.1",
+            "logloss-mean-mlp-all5-f0.25",
+            "logloss-mean-mlp-all5-f0.5",
+            "logloss-mean-mlp-all5-f1.0",
+            "logloss-mean-rf-all5-f0.1",
+            "logloss-mean-rf-all5-f0.25",
+            "logloss-mean-rf-all5-f0.5",
+            "logloss-mean-rf-all5-f1.0",
+            "logloss-mean-tabnet-all5-f0.1",
+            "logloss-mean-tabnet-all5-f0.25",
+            "logloss-mean-tabnet-all5-f0.5",
+            "logloss-mean-tabnet-all5-f1.0",
+            "logloss-mean-xgb-all5-f0.1",
+            "logloss-mean-xgb-all5-f0.25",
+            "logloss-mean-xgb-all5-f0.5",
+            "logloss-mean-xgb-all5-f1.0"
+          ],
+          "caveats": [
+            {
+              "id": "CKD",
+              "text": "The paper's statements about CKD must say it is saturated, and results must be reported both with and without it"
+            },
+            {
+              "id": "UNIT",
+              "text": "the Friedman tests and critical-difference diagrams are **descriptive only**, because the BLOCK unit is anti-conservative (the 10 splits of a dataset come from overlapping-training-set repeated cross-validation) and the DATASET unit has essentially no power (minimum possible two-sided Wilcoxon p = 0.0625 with 5 datasets, 0.125 with 4)"
+            }
+          ]
+        },
+        {
+          "letter": "c",
+          "panel_id": "Fig. 1(c)",
+          "quantity": {
+            "metric": "calibration slope (Platt, pooled)",
+            "dataset_set": "per NO_CKD dataset (dots + bootstrap whiskers) and NO_CKD mean (bar)",
+            "fraction_or_level": "0.1",
+            "kind": "clean test predictions",
+            "statistic": "pooled slope"
+          },
+          "items": "logreg, rf, xgb, lgbm, mlp, ftt, tabnet; 4 datasets: pima_diabetes, heart_cleveland, ilpd, breast_wisconsin",
+          "symbols": "colour = model; marker SHAPE = dataset (o pima_diabetes, s heart_cleveland, ^ ilpd, D breast_wisconsin); whiskers = bootstrap CI of the pooled slope; black horizontal bar = NO_CKD mean of the 4 pooled slopes; dotted horizontal line at slope 1 (perfect calibration slope); log y axis",
+          "ci": {
+            "method": "percentile bootstrap of the pooled slope (per dataset)",
+            "B": 2000,
+            "seed": 42,
+            "interval": "95% percentile [2.5, 97.5]",
+            "resampling": "the 10 splits are resampled with replacement; replicates with separable classes are dropped (column n_dropped_replicates); NO CI exists for the NO_CKD-average bar, none is drawn"
+          },
+          "n_splits": {
+            "key": "n-outer-splits",
+            "value": "10"
+          },
+          "n_datasets": {
+            "key": "n-datasets-no-ckd",
+            "value": "4"
+          },
+          "exclusions": [
+            "ckd is excluded from the slope panel and its NO_CKD average: saturated dataset with extreme pooled slopes (CLAUDE.md sections 6-7)"
+          ],
+          "sources": [
+            {
+              "file": "results/phase3b/calibration_metrics.csv",
+              "sha256": "2a0206c0b59336924c7f7fd94021f0c344959d19c2c4a2eb3302cb7b53150ef9",
+              "filter": "fraction == 0.1, dataset in NO_CKD (pima_diabetes, heart_cleveland, ilpd, breast_wisconsin); column slope = one dot per dataset (panel c)"
+            },
+            {
+              "file": "results/phase3b/calibration_bootstrap_ci.csv",
+              "sha256": "1b2f1e8dc6b75c7d60a431beb5be8fcf5bc4ccc86c161c90fddd4121a426e7de",
+              "filter": "fraction == 0.1, same datasets; whiskers = slope_lo/slope_hi (per-dataset bootstrap CI)"
+            },
+            {
+              "file": "results/phase3b/calibration_averaged.csv",
+              "sha256": "6d199d7bc7da0240ecbd51f7f713dace0fb9fffe93c27f17e24a8db252b6975c",
+              "filter": "fraction == 0.1, dataset_set == NO_CKD; column slope_mean = black bar. No CI exists for the NO_CKD average, so none is drawn."
+            }
+          ],
+          "numbers_book_keys": [
+            "slope-ftt-nockd-f0.1",
+            "slope-lgbm-nockd-f0.1",
+            "slope-logreg-nockd-f0.1",
+            "slope-mlp-nockd-f0.1",
+            "slope-per-dataset-breast-wisconsin-ftt-f0.1-ci-hi",
+            "slope-per-dataset-breast-wisconsin-ftt-f0.1-ci-lo",
+            "slope-per-dataset-breast-wisconsin-ftt-f0.1-point",
+            "slope-per-dataset-breast-wisconsin-lgbm-f0.1-ci-hi",
+            "slope-per-dataset-breast-wisconsin-lgbm-f0.1-ci-lo",
+            "slope-per-dataset-breast-wisconsin-lgbm-f0.1-point",
+            "slope-per-dataset-breast-wisconsin-logreg-f0.1-ci-hi",
+            "slope-per-dataset-breast-wisconsin-logreg-f0.1-ci-lo",
+            "slope-per-dataset-breast-wisconsin-logreg-f0.1-point",
+            "slope-per-dataset-breast-wisconsin-mlp-f0.1-ci-hi",
+            "slope-per-dataset-breast-wisconsin-mlp-f0.1-ci-lo",
+            "slope-per-dataset-breast-wisconsin-mlp-f0.1-point",
+            "slope-per-dataset-breast-wisconsin-rf-f0.1-ci-hi",
+            "slope-per-dataset-breast-wisconsin-rf-f0.1-ci-lo",
+            "slope-per-dataset-breast-wisconsin-rf-f0.1-point",
+            "slope-per-dataset-breast-wisconsin-tabnet-f0.1-ci-hi",
+            "slope-per-dataset-breast-wisconsin-tabnet-f0.1-ci-lo",
+            "slope-per-dataset-breast-wisconsin-tabnet-f0.1-point",
+            "slope-per-dataset-breast-wisconsin-xgb-f0.1-ci-hi",
+            "slope-per-dataset-breast-wisconsin-xgb-f0.1-ci-lo",
+            "slope-per-dataset-breast-wisconsin-xgb-f0.1-point",
+            "slope-per-dataset-heart-cleveland-ftt-f0.1-ci-hi",
+            "slope-per-dataset-heart-cleveland-ftt-f0.1-ci-lo",
+            "slope-per-dataset-heart-cleveland-ftt-f0.1-point",
+            "slope-per-dataset-heart-cleveland-lgbm-f0.1-ci-hi",
+            "slope-per-dataset-heart-cleveland-lgbm-f0.1-ci-lo",
+            "slope-per-dataset-heart-cleveland-lgbm-f0.1-point",
+            "slope-per-dataset-heart-cleveland-logreg-f0.1-ci-hi",
+            "slope-per-dataset-heart-cleveland-logreg-f0.1-ci-lo",
+            "slope-per-dataset-heart-cleveland-logreg-f0.1-point",
+            "slope-per-dataset-heart-cleveland-mlp-f0.1-ci-hi",
+            "slope-per-dataset-heart-cleveland-mlp-f0.1-ci-lo",
+            "slope-per-dataset-heart-cleveland-mlp-f0.1-point",
+            "slope-per-dataset-heart-cleveland-rf-f0.1-ci-hi",
+            "slope-per-dataset-heart-cleveland-rf-f0.1-ci-lo",
+            "slope-per-dataset-heart-cleveland-rf-f0.1-point",
+            "slope-per-dataset-heart-cleveland-tabnet-f0.1-ci-hi",
+            "slope-per-dataset-heart-cleveland-tabnet-f0.1-ci-lo",
+            "slope-per-dataset-heart-cleveland-tabnet-f0.1-point",
+            "slope-per-dataset-heart-cleveland-xgb-f0.1-ci-hi",
+            "slope-per-dataset-heart-cleveland-xgb-f0.1-ci-lo",
+            "slope-per-dataset-heart-cleveland-xgb-f0.1-point",
+            "slope-per-dataset-ilpd-ftt-f0.1-ci-hi",
+            "slope-per-dataset-ilpd-ftt-f0.1-ci-lo",
+            "slope-per-dataset-ilpd-ftt-f0.1-point",
+            "slope-per-dataset-ilpd-lgbm-f0.1-ci-hi",
+            "slope-per-dataset-ilpd-lgbm-f0.1-ci-lo",
+            "slope-per-dataset-ilpd-lgbm-f0.1-point",
+            "slope-per-dataset-ilpd-logreg-f0.1-ci-hi",
+            "slope-per-dataset-ilpd-logreg-f0.1-ci-lo",
+            "slope-per-dataset-ilpd-logreg-f0.1-point",
+            "slope-per-dataset-ilpd-mlp-f0.1-ci-hi",
+            "slope-per-dataset-ilpd-mlp-f0.1-ci-lo",
+            "slope-per-dataset-ilpd-mlp-f0.1-point",
+            "slope-per-dataset-ilpd-rf-f0.1-ci-hi",
+            "slope-per-dataset-ilpd-rf-f0.1-ci-lo",
+            "slope-per-dataset-ilpd-rf-f0.1-point",
+            "slope-per-dataset-ilpd-tabnet-f0.1-ci-hi",
+            "slope-per-dataset-ilpd-tabnet-f0.1-ci-lo",
+            "slope-per-dataset-ilpd-tabnet-f0.1-point",
+            "slope-per-dataset-ilpd-xgb-f0.1-ci-hi",
+            "slope-per-dataset-ilpd-xgb-f0.1-ci-lo",
+            "slope-per-dataset-ilpd-xgb-f0.1-point",
+            "slope-per-dataset-pima-diabetes-ftt-f0.1-ci-hi",
+            "slope-per-dataset-pima-diabetes-ftt-f0.1-ci-lo",
+            "slope-per-dataset-pima-diabetes-ftt-f0.1-point",
+            "slope-per-dataset-pima-diabetes-lgbm-f0.1-ci-hi",
+            "slope-per-dataset-pima-diabetes-lgbm-f0.1-ci-lo",
+            "slope-per-dataset-pima-diabetes-lgbm-f0.1-point",
+            "slope-per-dataset-pima-diabetes-logreg-f0.1-ci-hi",
+            "slope-per-dataset-pima-diabetes-logreg-f0.1-ci-lo",
+            "slope-per-dataset-pima-diabetes-logreg-f0.1-point",
+            "slope-per-dataset-pima-diabetes-mlp-f0.1-ci-hi",
+            "slope-per-dataset-pima-diabetes-mlp-f0.1-ci-lo",
+            "slope-per-dataset-pima-diabetes-mlp-f0.1-point",
+            "slope-per-dataset-pima-diabetes-rf-f0.1-ci-hi",
+            "slope-per-dataset-pima-diabetes-rf-f0.1-ci-lo",
+            "slope-per-dataset-pima-diabetes-rf-f0.1-point",
+            "slope-per-dataset-pima-diabetes-tabnet-f0.1-ci-hi",
+            "slope-per-dataset-pima-diabetes-tabnet-f0.1-ci-lo",
+            "slope-per-dataset-pima-diabetes-tabnet-f0.1-point",
+            "slope-per-dataset-pima-diabetes-xgb-f0.1-ci-hi",
+            "slope-per-dataset-pima-diabetes-xgb-f0.1-ci-lo",
+            "slope-per-dataset-pima-diabetes-xgb-f0.1-point",
+            "slope-rf-nockd-f0.1",
+            "slope-tabnet-nockd-f0.1",
+            "slope-xgb-nockd-f0.1"
+          ],
+          "caveats": [
+            {
+              "id": "CAL1",
+              "text": "every pooled calibration analysis uses 2 x n_rows predictions per (dataset, model, fraction), since each test row appears in 2 of the 10 splits (one per CV repeat). ECE on small samples is biased and noisy"
+            },
+            {
+              "id": "CAL2",
+              "text": "use Brier and log loss as primary calibration measures, with bootstrap confidence intervals."
+            },
+            {
+              "id": "CKD",
+              "text": "The paper's statements about CKD must say it is saturated, and results must be reported both with and without it"
+            }
+          ]
+        }
+      ],
+      "sources_all": [
+        {
+          "file": "results/phase3a/ci_dataset_averaged.csv",
+          "sha256": "a548a09ac7f4c9c175a4fbb853ea2c1fc544231a6b71a2fb3a44d94e7a50c4d2",
+          "filter": "metric in {auroc, log_loss}, dataset_set == ALL5, fractions 0.1/0.25/0.5/1.0, bands = ci_lo/ci_hi (panels a, b)"
+        },
+        {
+          "file": "results/phase3b/calibration_metrics.csv",
+          "sha256": "2a0206c0b59336924c7f7fd94021f0c344959d19c2c4a2eb3302cb7b53150ef9",
+          "filter": "fraction == 0.1, dataset in NO_CKD (pima_diabetes, heart_cleveland, ilpd, breast_wisconsin); column slope = one dot per dataset (panel c)"
+        },
+        {
+          "file": "results/phase3b/calibration_bootstrap_ci.csv",
+          "sha256": "1b2f1e8dc6b75c7d60a431beb5be8fcf5bc4ccc86c161c90fddd4121a426e7de",
+          "filter": "fraction == 0.1, same datasets; whiskers = slope_lo/slope_hi (per-dataset bootstrap CI)"
+        },
+        {
+          "file": "results/phase3b/calibration_averaged.csv",
+          "sha256": "6d199d7bc7da0240ecbd51f7f713dace0fb9fffe93c27f17e24a8db252b6975c",
+          "filter": "fraction == 0.1, dataset_set == NO_CKD; column slope_mean = black bar. No CI exists for the NO_CKD average, so none is drawn."
+        }
+      ]
+    },
+    {
+      "id": "fig_main_robustness",
+      "label": "Fig. 2",
+      "files": "fig_main_robustness.png (300 dpi), fig_main_robustness.pdf",
+      "size_in": [
+        7.16,
+        2.2
+      ],
+      "size_px": [
+        2148,
+        660
+      ],
+      "panels": [
+        {
+          "letter": "a",
+          "panel_id": "Fig. 2(a)",
+          "quantity": {
+            "metric": "AUROC",
+            "dataset_set": "ALL5",
+            "fraction_or_level": "30% missing; noise 0.5",
+            "kind": "missing (MCAR) and original Gaussian noise",
+            "statistic": "change versus the model's own clean AUROC (degradation), dataset-averaged"
+          },
+          "items": "logreg, rf, xgb, lgbm, mlp, ftt, tabnet",
+          "symbols": "two groups on the x axis (30% missing, noise 0.5); one marker per model with vertical CI whisker (colour and marker per model); filled markers",
+          "ci": {
+            "method": "percentile bootstrap of the dataset-averaged mean change",
+            "B": 5000,
+            "seed": 42,
+            "interval": "95% percentile [2.5, 97.5]",
+            "resampling": "the 10 splits are resampled with replacement within each dataset (between-dataset variability is ignored)"
+          },
+          "n_splits": {
+            "key": "n-outer-splits",
+            "value": "10"
+          },
+          "n_datasets": {
+            "key": "n-datasets",
+            "value": "5"
+          },
+          "exclusions": [
+            "none (ALL5)"
+          ],
+          "sources": [
+            {
+              "file": "results/phase3c/robustness_averaged.csv",
+              "sha256": "31f96f892770ad5feb7d79cd9160655e4217d211aa763dd003cfa8192f741196",
+              "filter": "dataset_set == ALL5; panel a: kind==missing level==0.3 and kind==noise level==0.5, metric==auroc, degradation_mean with degradation_ci_lo/hi; panel b: kind==noise level==0.5, metric==log_loss (filled markers)"
+            }
+          ],
+          "numbers_book_keys": [
+            "auroc-miss30-degradation-ftt-all5",
+            "auroc-miss30-degradation-lgbm-all5",
+            "auroc-miss30-degradation-logreg-all5",
+            "auroc-miss30-degradation-mlp-all5",
+            "auroc-miss30-degradation-rf-all5",
+            "auroc-miss30-degradation-tabnet-all5",
+            "auroc-miss30-degradation-xgb-all5",
+            "auroc-noise50-orig-degradation-ftt-all5",
+            "auroc-noise50-orig-degradation-lgbm-all5",
+            "auroc-noise50-orig-degradation-logreg-all5",
+            "auroc-noise50-orig-degradation-mlp-all5",
+            "auroc-noise50-orig-degradation-rf-all5",
+            "auroc-noise50-orig-degradation-tabnet-all5",
+            "auroc-noise50-orig-degradation-xgb-all5"
+          ],
+          "caveats": [
+            {
+              "id": "ROB1",
+              "text": "every result describes MODEL + the saved pipeline's IMPUTER together (median/most-frequent imputation fitted on the training fold is part of the pipeline), not the model in isolation; tree models use no native NaN handling. Missingness tested is MCAR only"
+            },
+            {
+              "id": "ROB2",
+              "text": "Degradation is always relative to each model's OWN clean performance on that split, so a model with lower clean performance can show smaller absolute degradation."
+            },
+            {
+              "id": "NOISE",
+              "text": "Noise is relative to each column's TRAINING standard deviation and applied to ordinal numeric columns (CKD `sg`/`al`/`su`, Cleveland `ca`) as if continuous."
+            }
+          ]
+        },
+        {
+          "letter": "b",
+          "panel_id": "Fig. 2(b)",
+          "quantity": {
+            "metric": "log loss",
+            "dataset_set": "ALL5",
+            "fraction_or_level": "noise 0.5",
+            "kind": "original and continuous-only Gaussian noise",
+            "statistic": "change versus the model's own clean log loss (degradation), dataset-averaged"
+          },
+          "items": "logreg, rf, xgb, lgbm, mlp, ftt, tabnet",
+          "symbols": "FILLED markers = original noise; OPEN (white-filled) markers = continuous-only noise variant; one marker per model with CI whisker",
+          "ci": {
+            "method": "percentile bootstrap of the dataset-averaged mean change",
+            "B": 5000,
+            "seed": 42,
+            "interval": "95% percentile [2.5, 97.5]",
+            "resampling": "the 10 splits are resampled with replacement within each dataset (between-dataset variability is ignored)",
+            "note": "original noise: B above; continuous-only variant: B = 5000"
+          },
+          "n_splits": {
+            "key": "n-outer-splits",
+            "value": "10"
+          },
+          "n_datasets": {
+            "key": "n-datasets",
+            "value": "5"
+          },
+          "exclusions": [
+            "continuous-only variant excludes ordinal columns (CKD sg/al/su, Cleveland ca) from the noise"
+          ],
+          "sources": [
+            {
+              "file": "results/phase3c/robustness_averaged.csv",
+              "sha256": "31f96f892770ad5feb7d79cd9160655e4217d211aa763dd003cfa8192f741196",
+              "filter": "dataset_set == ALL5; panel a: kind==missing level==0.3 and kind==noise level==0.5, metric==auroc, degradation_mean with degradation_ci_lo/hi; panel b: kind==noise level==0.5, metric==log_loss (filled markers)"
+            },
+            {
+              "file": "results/phase3d/noise_continuous/noise_cont_averaged.csv",
+              "sha256": "335402187d0e5bc5404c5631a1886e6b7889bf9efec19986120ead12c0889b94",
+              "filter": "dataset_set == ALL5, kind==noise_cont level==0.5, metric==log_loss (open markers, panel b)"
+            }
+          ],
+          "numbers_book_keys": [
+            "logloss-noise50-cont-degradation-ftt-all5",
+            "logloss-noise50-cont-degradation-lgbm-all5",
+            "logloss-noise50-cont-degradation-logreg-all5",
+            "logloss-noise50-cont-degradation-mlp-all5",
+            "logloss-noise50-cont-degradation-rf-all5",
+            "logloss-noise50-cont-degradation-tabnet-all5",
+            "logloss-noise50-cont-degradation-xgb-all5",
+            "logloss-noise50-orig-degradation-ftt-all5",
+            "logloss-noise50-orig-degradation-lgbm-all5",
+            "logloss-noise50-orig-degradation-logreg-all5",
+            "logloss-noise50-orig-degradation-mlp-all5",
+            "logloss-noise50-orig-degradation-rf-all5",
+            "logloss-noise50-orig-degradation-tabnet-all5",
+            "logloss-noise50-orig-degradation-xgb-all5"
+          ],
+          "caveats": [
+            {
+              "id": "ROB1",
+              "text": "every result describes MODEL + the saved pipeline's IMPUTER together (median/most-frequent imputation fitted on the training fold is part of the pipeline), not the model in isolation; tree models use no native NaN handling. Missingness tested is MCAR only"
+            },
+            {
+              "id": "ROB2",
+              "text": "Degradation is always relative to each model's OWN clean performance on that split, so a model with lower clean performance can show smaller absolute degradation."
+            },
+            {
+              "id": "NOISE",
+              "text": "Noise is relative to each column's TRAINING standard deviation and applied to ordinal numeric columns (CKD `sg`/`al`/`su`, Cleveland `ca`) as if continuous."
+            }
+          ],
+          "numbers_book_keys_note": "original-noise keys and continuous-only keys are listed together in numbers_book_keys"
+        }
+      ],
+      "sources_all": [
+        {
+          "file": "results/phase3c/robustness_averaged.csv",
+          "sha256": "31f96f892770ad5feb7d79cd9160655e4217d211aa763dd003cfa8192f741196",
+          "filter": "dataset_set == ALL5; panel a: kind==missing level==0.3 and kind==noise level==0.5, metric==auroc, degradation_mean with degradation_ci_lo/hi; panel b: kind==noise level==0.5, metric==log_loss (filled markers)"
+        },
+        {
+          "file": "results/phase3d/noise_continuous/noise_cont_averaged.csv",
+          "sha256": "335402187d0e5bc5404c5631a1886e6b7889bf9efec19986120ead12c0889b94",
+          "filter": "dataset_set == ALL5, kind==noise_cont level==0.5, metric==log_loss (open markers, panel b)"
+        }
+      ]
+    },
+    {
+      "id": "fig_main_explanations",
+      "label": "Fig. 3",
+      "files": "fig_main_explanations.png (300 dpi), fig_main_explanations.pdf",
+      "size_in": [
+        7.16,
+        2.4
+      ],
+      "size_px": [
+        2148,
+        720
+      ],
+      "panels": [
+        {
+          "letter": "a",
+          "panel_id": "Fig. 3(a)",
+          "quantity": {
+            "metric": "top-5 Jaccard of SHAP importances",
+            "dataset_set": "per dataset (all 5)",
+            "fraction_or_level": "fraction 1.0 pipelines",
+            "kind": "pairs logreg-rf, logreg-mlp, rf-mlp; within-model stability (mean over models); chance level",
+            "statistic": "mean over the 10 splits"
+          },
+          "items": "pairs logreg-rf, logreg-mlp, rf-mlp; within-model stability; chance level; 5 datasets on the x axis",
+          "symbols": "pair markers: o logreg-rf, ^ logreg-mlp, D rf-mlp (neutral greys); open black square = within-model stability (mean over models); black cross = chance level; no CI drawn",
+          "ci": {
+            "method": "none drawn in panel (a)",
+            "note": "the CI columns jaccard_ci_lo/hi of agreement_per_dataset.csv are not plotted"
+          },
+          "n_splits": {
+            "key": "n-outer-splits",
+            "value": "10"
+          },
+          "n_datasets": {
+            "key": "n-datasets",
+            "value": "5"
+          },
+          "exclusions": [
+            "none"
+          ],
+          "sources": [
+            {
+              "file": "results/phase3d/agreement_per_dataset.csv",
+              "sha256": "ac38fe19e46a617e890c4615519308fd94d023c663baaa3ae3ba6635b0328a6a",
+              "filter": "all 5 datasets; model pairs logreg-rf, logreg-mlp, rf-mlp; column jaccard_mean = dots (panel a)"
+            },
+            {
+              "file": "results/phase3d/baselines.csv",
+              "sha256": "204b0fdc09ac6010e013f0cf1859f250cd404a97b89ce381c652054be7a938a1",
+              "filter": "type == within_model_mean_over_models (squares, jaccard_mean) and type == chance (crosses, jaccard_mean) (panel a)"
+            }
+          ],
+          "numbers_book_keys": [
+            "chance-jaccard-breast-wisconsin",
+            "chance-jaccard-ckd",
+            "chance-jaccard-heart-cleveland",
+            "chance-jaccard-ilpd",
+            "chance-jaccard-pima-diabetes",
+            "jaccard-logreg-mlp-breast-wisconsin",
+            "jaccard-logreg-mlp-ckd",
+            "jaccard-logreg-mlp-heart-cleveland",
+            "jaccard-logreg-mlp-ilpd",
+            "jaccard-logreg-mlp-pima-diabetes",
+            "jaccard-logreg-rf-breast-wisconsin",
+            "jaccard-logreg-rf-ckd",
+            "jaccard-logreg-rf-heart-cleveland",
+            "jaccard-logreg-rf-ilpd",
+            "jaccard-logreg-rf-pima-diabetes",
+            "jaccard-rf-mlp-breast-wisconsin",
+            "jaccard-rf-mlp-ckd",
+            "jaccard-rf-mlp-heart-cleveland",
+            "jaccard-rf-mlp-ilpd",
+            "jaccard-rf-mlp-pima-diabetes",
+            "stability-jaccard-breast-wisconsin",
+            "stability-jaccard-ckd",
+            "stability-jaccard-heart-cleveland",
+            "stability-jaccard-ilpd",
+            "stability-jaccard-pima-diabetes"
+          ],
+          "caveats": [
+            {
+              "id": "EXPL",
+              "text": "so only RANKINGS (top-5 sets, Spearman correlation) are ever compared across models, never raw SHAP magnitudes."
+            },
+            {
+              "id": "CORR",
+              "text": "Correlated features — especially Breast Wisconsin's mean/standard-error/worst triplets — can substitute for one another in a top-5 set"
+            },
+            {
+              "id": "C9",
+              "text": "Pairs with cross-model Jaccard BELOW within-model stability: 13 of 15."
+            }
+          ]
+        },
+        {
+          "letter": "b",
+          "panel_id": "Fig. 3(b)",
+          "quantity": {
+            "metric": "plausibility precision of the top-5 against the pre-registered list",
+            "dataset_set": "per dataset (all 5)",
+            "fraction_or_level": "fraction 1.0 pipelines",
+            "kind": "logreg, rf, mlp",
+            "statistic": "mean precision with 95% CI, and chance precision"
+          },
+          "items": "logreg, rf, mlp; 5 datasets on the x axis",
+          "symbols": "colour and marker per model with CI whisker; black cross = chance precision; DAGGER (†) on a dataset tick label = chance precision >= 0.60 (plausibility non-informative, claim map C10)",
+          "ci": {
+            "method": "percentile bootstrap of the mean precision over the 10 splits",
+            "B": 5000,
+            "seed": 42,
+            "interval": "95% percentile [2.5, 97.5]",
+            "resampling": "the 10 splits are resampled with replacement"
+          },
+          "n_splits": {
+            "key": "n-outer-splits",
+            "value": "10"
+          },
+          "n_datasets": {
+            "key": "n-datasets",
+            "value": "5"
+          },
+          "exclusions": [
+            "none"
+          ],
+          "sources": [
+            {
+              "file": "results/phase3d/plausibility.csv",
+              "sha256": "f047be2981c6c475e996ba763f716be87c024f5ac3d604e381f4c4901a306a45",
+              "filter": "models logreg, rf, mlp; precision_mean with precision_ci_lo/hi (dots, 95% CI) and chance_precision (crosses) (panel b). DAGGER (†) on a dataset tick label of panel b = chance precision >= 0.60, i.e. plausibility non-informative (claim map C10); define it in the caption"
+            }
+          ],
+          "numbers_book_keys": [
+            "plausibility-logreg-breast-wisconsin-chance",
+            "plausibility-logreg-breast-wisconsin-ci-hi",
+            "plausibility-logreg-breast-wisconsin-ci-lo",
+            "plausibility-logreg-breast-wisconsin-precision",
+            "plausibility-logreg-ckd-chance",
+            "plausibility-logreg-ckd-ci-hi",
+            "plausibility-logreg-ckd-ci-lo",
+            "plausibility-logreg-ckd-precision",
+            "plausibility-logreg-heart-cleveland-chance",
+            "plausibility-logreg-heart-cleveland-ci-hi",
+            "plausibility-logreg-heart-cleveland-ci-lo",
+            "plausibility-logreg-heart-cleveland-precision",
+            "plausibility-logreg-ilpd-chance",
+            "plausibility-logreg-ilpd-ci-hi",
+            "plausibility-logreg-ilpd-ci-lo",
+            "plausibility-logreg-ilpd-precision",
+            "plausibility-logreg-pima-diabetes-chance",
+            "plausibility-logreg-pima-diabetes-ci-hi",
+            "plausibility-logreg-pima-diabetes-ci-lo",
+            "plausibility-logreg-pima-diabetes-precision",
+            "plausibility-mlp-breast-wisconsin-chance",
+            "plausibility-mlp-breast-wisconsin-ci-hi",
+            "plausibility-mlp-breast-wisconsin-ci-lo",
+            "plausibility-mlp-breast-wisconsin-precision",
+            "plausibility-mlp-ckd-chance",
+            "plausibility-mlp-ckd-ci-hi",
+            "plausibility-mlp-ckd-ci-lo",
+            "plausibility-mlp-ckd-precision",
+            "plausibility-mlp-heart-cleveland-chance",
+            "plausibility-mlp-heart-cleveland-ci-hi",
+            "plausibility-mlp-heart-cleveland-ci-lo",
+            "plausibility-mlp-heart-cleveland-precision",
+            "plausibility-mlp-ilpd-chance",
+            "plausibility-mlp-ilpd-ci-hi",
+            "plausibility-mlp-ilpd-ci-lo",
+            "plausibility-mlp-ilpd-precision",
+            "plausibility-mlp-pima-diabetes-chance",
+            "plausibility-mlp-pima-diabetes-ci-hi",
+            "plausibility-mlp-pima-diabetes-ci-lo",
+            "plausibility-mlp-pima-diabetes-precision",
+            "plausibility-rf-breast-wisconsin-chance",
+            "plausibility-rf-breast-wisconsin-ci-hi",
+            "plausibility-rf-breast-wisconsin-ci-lo",
+            "plausibility-rf-breast-wisconsin-precision",
+            "plausibility-rf-ckd-chance",
+            "plausibility-rf-ckd-ci-hi",
+            "plausibility-rf-ckd-ci-lo",
+            "plausibility-rf-ckd-precision",
+            "plausibility-rf-heart-cleveland-chance",
+            "plausibility-rf-heart-cleveland-ci-hi",
+            "plausibility-rf-heart-cleveland-ci-lo",
+            "plausibility-rf-heart-cleveland-precision",
+            "plausibility-rf-ilpd-chance",
+            "plausibility-rf-ilpd-ci-hi",
+            "plausibility-rf-ilpd-ci-lo",
+            "plausibility-rf-ilpd-precision",
+            "plausibility-rf-pima-diabetes-chance",
+            "plausibility-rf-pima-diabetes-ci-hi",
+            "plausibility-rf-pima-diabetes-ci-lo",
+            "plausibility-rf-pima-diabetes-precision"
+          ],
+          "caveats": [
+            {
+              "id": "DIR",
+              "text": "No direction-of-effect (positive/negative SHAP) check was performed."
+            },
+            {
+              "id": "C10",
+              "text": "Datasets flagged non-informative (chance >= 0.60): "
+            }
+          ]
+        }
+      ],
+      "sources_all": [
+        {
+          "file": "results/phase3d/agreement_per_dataset.csv",
+          "sha256": "ac38fe19e46a617e890c4615519308fd94d023c663baaa3ae3ba6635b0328a6a",
+          "filter": "all 5 datasets; model pairs logreg-rf, logreg-mlp, rf-mlp; column jaccard_mean = dots (panel a)"
+        },
+        {
+          "file": "results/phase3d/baselines.csv",
+          "sha256": "204b0fdc09ac6010e013f0cf1859f250cd404a97b89ce381c652054be7a938a1",
+          "filter": "type == within_model_mean_over_models (squares, jaccard_mean) and type == chance (crosses, jaccard_mean) (panel a)"
+        },
+        {
+          "file": "results/phase3d/plausibility.csv",
+          "sha256": "f047be2981c6c475e996ba763f716be87c024f5ac3d604e381f4c4901a306a45",
+          "filter": "models logreg, rf, mlp; precision_mean with precision_ci_lo/hi (dots, 95% CI) and chance_precision (crosses) (panel b). DAGGER (†) on a dataset tick label of panel b = chance precision >= 0.60, i.e. plausibility non-informative (claim map C10); define it in the caption"
+        }
+      ]
+    },
+    {
+      "id": "fig_main_reliability",
+      "label": "Fig. 4",
+      "files": "fig_main_reliability.png (300 dpi), fig_main_reliability.pdf",
+      "size_in": [
+        3.45,
+        2.7
+      ],
+      "size_px": [
+        1035,
+        810
+      ],
+      "panels": [
+        {
+          "letter": "-",
+          "panel_id": "Fig. 4",
+          "quantity": {
+            "metric": "reliability (observed vs predicted frequency, equal-mass 10 bins, Wilson 95% intervals)",
+            "dataset_set": "NO_CKD pooled",
+            "fraction_or_level": "0.1",
+            "kind": "logreg, rf, mlp",
+            "statistic": "binned frequencies (no numbers-book key)"
+          },
+          "items": "logreg, rf, mlp",
+          "symbols": "one line + marker per model; vertical bars = Wilson 95% intervals; dashed grey diagonal = perfect calibration; equal-mass bins (10)",
+          "ci": {
+            "method": "Wilson score interval for a binomial proportion",
+            "interval": "95% (z = 1.96)",
+            "B": null,
+            "seed": null,
+            "resampling": "none"
+          },
+          "n_splits": {
+            "key": "n-outer-splits",
+            "value": "10"
+          },
+          "n_datasets": {
+            "key": "n-datasets-no-ckd",
+            "value": "4"
+          },
+          "exclusions": [
+            "ckd excluded (saturated); the 4 NO_CKD datasets are pooled per model, n = 2 x rows per dataset summed"
+          ],
+          "sources": [
+            {
+              "file": "results/phase3b/calibration_metrics.csv",
+              "sha256": "2a0206c0b59336924c7f7fd94021f0c344959d19c2c4a2eb3302cb7b53150ef9",
+              "filter": "fraction == 0.1, 4 NO_CKD datasets x logreg/rf/mlp, column ece_em: reference for the reproduction check only (not plotted)"
+            },
+            {
+              "file": "results/predictions/{pima_diabetes,heart_cleveland,ilpd,breast_wisconsin}__{logreg,rf,mlp}__split{0..9}.npz",
+              "sha256": null,
+              "filter": "keys y_true and prob_0.1; the 4 datasets pooled per model (n = 2 x rows per dataset, summed); equal-mass 10 bins (scripts.phase3b_calibration._reliability_bins), Wilson 95% intervals (analysis.calibration.wilson_interval)",
+              "manifest_lines": [
+                {
+                  "file": "results/predictions/breast_wisconsin__logreg__split0.npz",
+                  "sha256": "565fae674d2cfbbe849482cdbcb73d4f132506c7c93d12ac314b9ae070634c43"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__logreg__split1.npz",
+                  "sha256": "0db9d591f94af88e06f32820d9f61f0b3743136b838785205a0a1e26a6848626"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__logreg__split2.npz",
+                  "sha256": "2fc1ec8cb79d6e3967c3e40472c9eba293b5f7309492fad566ad1b25dac2d3df"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__logreg__split3.npz",
+                  "sha256": "fbfebf1d35d53f9e361ec0e7c31c937a0fc2e25a9d8a2195fa26eab3d0f8c783"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__logreg__split4.npz",
+                  "sha256": "8606cbb1f00dd50273aad33da7a377633532f2bcd611a031294c33ed5e797304"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__logreg__split5.npz",
+                  "sha256": "d471cbbb2153ffe5ab7d5ff6d69290393d8114831b55b8d6a490564b91ec2a42"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__logreg__split6.npz",
+                  "sha256": "663923e9b95496d574cd4c347ebb6b819aec64178375762cd0997c657994dd4b"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__logreg__split7.npz",
+                  "sha256": "27327edbe82bea70ec7aa20721f8809f1afd891e1d4d488933c458b0fd607208"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__logreg__split8.npz",
+                  "sha256": "3e6e71dc0db3405bb2d1c41f970b77ab1d72fb0f31ac6a73e458cd60b393e4f3"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__logreg__split9.npz",
+                  "sha256": "5137786cd2bf2fd6593aef71b4e54d0d296c654c20488a95070e1767fdae3b42"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__mlp__split0.npz",
+                  "sha256": "9c411e0c6b35496883ac9b7af46721afff15303474045dda466866627ad0568a"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__mlp__split1.npz",
+                  "sha256": "b4b3320a1fedf425da89ad5fb8ebdb5972a21d409f2d1f4bc3b1b6d3f2d2f412"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__mlp__split2.npz",
+                  "sha256": "98cb26a563a3fd96efc8d322978b18545b87300faeff326323cf911687070aa4"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__mlp__split3.npz",
+                  "sha256": "9fdb7b85b6d9e56e849a26023092b4636a5cc91bf131c18c35e8082f05125a2b"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__mlp__split4.npz",
+                  "sha256": "73c60c4deea17abb86f921a22b1ad66a5294409006d177286ea0f38e661509aa"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__mlp__split5.npz",
+                  "sha256": "a239fd5832e37eaed77134fdb86b2973e24c579c057df4681eb0b78695866254"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__mlp__split6.npz",
+                  "sha256": "25b3d97748f84691da8486a3b554e5149972f63bb190bdbaa0483f597e28e800"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__mlp__split7.npz",
+                  "sha256": "6506bef1c545b2a30c9b135b2761386083fd108aed0ce2671e624fe35efd8a3b"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__mlp__split8.npz",
+                  "sha256": "023ae405604ab1de00bf68bdfec4f60392a00c73d98db770c805063ba41f5818"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__mlp__split9.npz",
+                  "sha256": "5dc5242de7d20648476004d394f8d0e49698df38ce0570bfee60e874d70922fb"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__rf__split0.npz",
+                  "sha256": "94372915b55757f0ec61c17d786b591a21f08a0d2328c47f175113df43c9186c"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__rf__split1.npz",
+                  "sha256": "6b52d6f2dc9b149e16a53659810e4aa632cb15e355a6d5bbc3594bf7e20555c4"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__rf__split2.npz",
+                  "sha256": "5fe579361f74b7ad61f5221271c0e36710a496934972f11668076f2cc40f4939"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__rf__split3.npz",
+                  "sha256": "be37a29efd5475f1a3b4d7b70139d9efc9550ccb24715df24d4a818136b5209c"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__rf__split4.npz",
+                  "sha256": "c2cd57a988addf5c6ef62d6f45755da5f791493765f24614e7f47a9b13aad363"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__rf__split5.npz",
+                  "sha256": "3c441b57418cb67d5024a0e193079b4851fffa24933acc9f9f86ff1c474f6d69"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__rf__split6.npz",
+                  "sha256": "c651dd190483c8b59fb43bbce8acbe9ca7b9e4f42d7166cae6b4d315594f0bdb"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__rf__split7.npz",
+                  "sha256": "90ee3d8d09f4562b985afcc2702c7b1c70a614e116578c14abab8a5a703e6a23"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__rf__split8.npz",
+                  "sha256": "0bf294289a15891b72b738d9ecc4eb31eaed13b596e21ef23061d3fc5276f224"
+                },
+                {
+                  "file": "results/predictions/breast_wisconsin__rf__split9.npz",
+                  "sha256": "df83c6e3e148dd37f3bc409780cdaf4d5991101bade446e15d9e371384be1e88"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__logreg__split0.npz",
+                  "sha256": "914d05ddce2b9d2927fb72d96314affbb86bd97e28cd45ec89857ed0395a0351"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__logreg__split1.npz",
+                  "sha256": "d5df91d36ac6641016b0eeb59ec71eed74a48e8844c278dbaf3db8937e7a2f01"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__logreg__split2.npz",
+                  "sha256": "284847883db6566fcbc76036193de872aaa821c0bd956c4ed9dc63222a701de4"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__logreg__split3.npz",
+                  "sha256": "73a822485091aa0510e77441f51e00ecd9878b07d917b0c52de3c714364ad377"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__logreg__split4.npz",
+                  "sha256": "473687ad68eade960d1d826aa966225cf274e9b71dadcb37486adbc1d4af653c"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__logreg__split5.npz",
+                  "sha256": "619200d6ae95ac87bff24fdbf2b561fc9952360ddddd57c74a3f23d34ab4dee1"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__logreg__split6.npz",
+                  "sha256": "15f6462c7cc6478f1bc966d2b90e15c1f06cc001faef011cdaa1e4305881266e"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__logreg__split7.npz",
+                  "sha256": "59a4bc56068857be66fbf29cfc658ab4d61bafa63c4388026e3c599794b586e7"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__logreg__split8.npz",
+                  "sha256": "70adba94b5feb30a1cf3789d5042cb94f029a9a9b105f6c7e4f7da023030a890"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__logreg__split9.npz",
+                  "sha256": "372f7aa34b541984d3cca3463198126c8dcfce642f7862881541d1f645fc7a8d"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__mlp__split0.npz",
+                  "sha256": "c5b722ff65b82891b444af4751dce559d0bb8b21e52262b466b365d2bcf3bc8f"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__mlp__split1.npz",
+                  "sha256": "9c439f8cb6fefa276004c215ccab84e96873cae8078ea67371316a5359d6149b"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__mlp__split2.npz",
+                  "sha256": "2505a4c2ee71c6ac3287c5189a7e946c1b3442559767215e3b0a03ec62b6d025"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__mlp__split3.npz",
+                  "sha256": "cf56f942c6ac7f7de93df5f9c3152c7c7c297a3c070da89331c1bf55f5d635cf"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__mlp__split4.npz",
+                  "sha256": "22afad762d87067b5e460d8b5b3fa70499d272f34d6ce7563d944202038db73f"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__mlp__split5.npz",
+                  "sha256": "254e6945291d8cddc938d6ce1bc7e940ec188fbbb620a1ddcb46e86e65231534"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__mlp__split6.npz",
+                  "sha256": "15886c287511fae1cb8be618ec98bb508b9ae05c83debc7e0c1b6926c74581ad"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__mlp__split7.npz",
+                  "sha256": "584b325eae6f3927c1612a3381d1d352a74ab6ab7c48fac9ae10d3388e7e4016"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__mlp__split8.npz",
+                  "sha256": "efa7c5fe2c076253f073af9ad42456c81ce5d95331d8fbd242305fe9fe54a2b7"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__mlp__split9.npz",
+                  "sha256": "4bb6cd8cca0dcaa237f68267803c86023847a6a26d28cc297eb499cbeca3b9c1"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__rf__split0.npz",
+                  "sha256": "e159ab2b032cd1cf263946058db5a8bc8db454ef52864e1822417f816b266c57"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__rf__split1.npz",
+                  "sha256": "553970d08dd8ccc5e341730a4d2316f02fe56f9950c9e4bb3ca0ba26f4a32923"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__rf__split2.npz",
+                  "sha256": "a2234156ffeba78b7ad665b3f61c0594b02776e201e803f2d51d7f331dcd6ef4"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__rf__split3.npz",
+                  "sha256": "ef62b084d55108ca9c4c53b345a7e0ba7558dbe3e79ee90e2c1f6cb4aa3760e8"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__rf__split4.npz",
+                  "sha256": "e971980800bd42975daba1f695bd31771200b6e97389a7edb5ae7c64d4270615"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__rf__split5.npz",
+                  "sha256": "1c029d487f15ccc6ea1bd264f07bf9c2c34053b2aeb56285c0c193b43a8d8505"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__rf__split6.npz",
+                  "sha256": "445cf215db784b7a6b9911b75b5a533b1a7c91cd81cd0b42353855a6d022a7e7"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__rf__split7.npz",
+                  "sha256": "87843351bbdfd9680566637d737d1eea487fe5f27824b1e7c08eace461056c82"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__rf__split8.npz",
+                  "sha256": "1b92257cabffd89498a8df55c5374601935e81cd9e49de451290a137d384b876"
+                },
+                {
+                  "file": "results/predictions/heart_cleveland__rf__split9.npz",
+                  "sha256": "567ff0a04b72b4d0f6451d86d69d1640c40f167fd87a9ee9deb2dd9b90b8cff5"
+                },
+                {
+                  "file": "results/predictions/ilpd__logreg__split0.npz",
+                  "sha256": "6fa39c29631d7dcfe3eab5a2182299b7c20e57338e676455c5e274a4594a8549"
+                },
+                {
+                  "file": "results/predictions/ilpd__logreg__split1.npz",
+                  "sha256": "9bff538a91ddbccdd5509f5e53ce5954974301207620ddd2972f59900552c4f7"
+                },
+                {
+                  "file": "results/predictions/ilpd__logreg__split2.npz",
+                  "sha256": "d5e9b4a235817837e827f7ba549dc35503c16d835901d1ec2178c204e7118b10"
+                },
+                {
+                  "file": "results/predictions/ilpd__logreg__split3.npz",
+                  "sha256": "b7605d32259214b75fb1995059244e38b1b7435dd3c438acd674cea602329d73"
+                },
+                {
+                  "file": "results/predictions/ilpd__logreg__split4.npz",
+                  "sha256": "a64052ad055543dd0bf7961a4378d0340a11ab1f4d04c029bd8d91e721b6d536"
+                },
+                {
+                  "file": "results/predictions/ilpd__logreg__split5.npz",
+                  "sha256": "0b8ee5cd2801d73548bd545b0669e25f8d4b446e7261833acfdee254e877610d"
+                },
+                {
+                  "file": "results/predictions/ilpd__logreg__split6.npz",
+                  "sha256": "81388ee2af01500fd3c40169c5f84b54d3ad166c1b1d1bda2c4c3b97e3a4f1b9"
+                },
+                {
+                  "file": "results/predictions/ilpd__logreg__split7.npz",
+                  "sha256": "7ec979862494a459444fad63cd9a62e82efd299d851536ceebdcf984e2926d3c"
+                },
+                {
+                  "file": "results/predictions/ilpd__logreg__split8.npz",
+                  "sha256": "ca9fc69c857430713829b751634c1c65ae09a5ae45d055cd238f39fc20e96a08"
+                },
+                {
+                  "file": "results/predictions/ilpd__logreg__split9.npz",
+                  "sha256": "b9174233b0b9b57be4ac47c989ece1619c766a03c673dd55391cdc5f09ae7183"
+                },
+                {
+                  "file": "results/predictions/ilpd__mlp__split0.npz",
+                  "sha256": "69cfa4172de40b674a5c874d87ceae8e4111751ea78cfa05c8796f9689f3c42b"
+                },
+                {
+                  "file": "results/predictions/ilpd__mlp__split1.npz",
+                  "sha256": "1725201666f1ac7e796ea281a576d620743a09e393c459e49057ddbe960e0616"
+                },
+                {
+                  "file": "results/predictions/ilpd__mlp__split2.npz",
+                  "sha256": "5c70dc7e3314ba626fc72c4629d836b7f30b32a5bef32b8a8333ef2e091f86fd"
+                },
+                {
+                  "file": "results/predictions/ilpd__mlp__split3.npz",
+                  "sha256": "284ea511589968e9ade978a99559f68e1fce0e58749e0ff6ff728ef125418d58"
+                },
+                {
+                  "file": "results/predictions/ilpd__mlp__split4.npz",
+                  "sha256": "c2ba2770b4e061fdc558e8c711dcbfcb7617540ffd2bee1a2752816353064703"
+                },
+                {
+                  "file": "results/predictions/ilpd__mlp__split5.npz",
+                  "sha256": "c870939620aa12440b8da6b477d742f2c54cee3347bd2b2ad5c44ece370f5ef0"
+                },
+                {
+                  "file": "results/predictions/ilpd__mlp__split6.npz",
+                  "sha256": "104ae5f4d1233dc7f0b678e1a9302d8daaf1f37d3ea042a84206ef40b2d1b441"
+                },
+                {
+                  "file": "results/predictions/ilpd__mlp__split7.npz",
+                  "sha256": "fbfcb986e456b8b1f41a1371447613651349d96203e1253ba7dfb9e98da3cfc9"
+                },
+                {
+                  "file": "results/predictions/ilpd__mlp__split8.npz",
+                  "sha256": "5c42763c294725f09d99a2a3445ce91fdc09a6b7fc051f627db037f0d5ec15d9"
+                },
+                {
+                  "file": "results/predictions/ilpd__mlp__split9.npz",
+                  "sha256": "80867b98fef21ef26367e456984b352749be0f5b58a28a8cc09ebb11feac569f"
+                },
+                {
+                  "file": "results/predictions/ilpd__rf__split0.npz",
+                  "sha256": "a11f5b2c02d91a94c235beceee7f217e1f9477efa1a2a98ccf66f8349dee51aa"
+                },
+                {
+                  "file": "results/predictions/ilpd__rf__split1.npz",
+                  "sha256": "7b824411037dacbcd5f5b1b4455d6c9dbb332ce460afc9c83660673debbe1314"
+                },
+                {
+                  "file": "results/predictions/ilpd__rf__split2.npz",
+                  "sha256": "20e6e499ae1fb7b4efc7c58bc098595a9825ef82a5c7ad7e8501cbb25461f77b"
+                },
+                {
+                  "file": "results/predictions/ilpd__rf__split3.npz",
+                  "sha256": "665e5abfae5816ebfb7759138f3ee373f1c85afd4f3fd5f3fd881b87d59ee8e6"
+                },
+                {
+                  "file": "results/predictions/ilpd__rf__split4.npz",
+                  "sha256": "d1ae040dd0c483fea0b76f05bfecb49766369fef50851d986d8cfcaf8c307275"
+                },
+                {
+                  "file": "results/predictions/ilpd__rf__split5.npz",
+                  "sha256": "a63cb7249f68d60d34cc871b268ead2a54cab0bf9d260e7b31aba871edb873cf"
+                },
+                {
+                  "file": "results/predictions/ilpd__rf__split6.npz",
+                  "sha256": "6bd68fb74975d64677218ad0c32c0ecd6306aa5f03c7b6ddffa76403238df3c5"
+                },
+                {
+                  "file": "results/predictions/ilpd__rf__split7.npz",
+                  "sha256": "6fbcc3bc627a518c3a3cb50bf07effe78231c301a10456980c7ae1faed496824"
+                },
+                {
+                  "file": "results/predictions/ilpd__rf__split8.npz",
+                  "sha256": "62af476f37648af4d31db7cb91a8f9f9a83cdbf4a6ecea051834b0496ff0e63e"
+                },
+                {
+                  "file": "results/predictions/ilpd__rf__split9.npz",
+                  "sha256": "710e96056bfa58c4376bc2b319d85422558e4e77280bf54e61e6dad4978795cf"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__logreg__split0.npz",
+                  "sha256": "d3a94ac9dbdf301d3928a01518d18c2b703e2d9a4b78afce6207b165e2bc5508"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__logreg__split1.npz",
+                  "sha256": "ec97abb014f3cd84d09297fb0354f28513425c4fd1cd18092d5243de34c98074"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__logreg__split2.npz",
+                  "sha256": "7baa9cbce939809f4df4aead9e4ecf7781bd527da2a9db58bdbfef849152544c"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__logreg__split3.npz",
+                  "sha256": "9cc9cef59576e8a0ded7e29e75b8a9d877f45c71077a64f5764c8304ff787b7c"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__logreg__split4.npz",
+                  "sha256": "24d17f7ded3e18bd87cb63e7d89b9528a8fdfd1aa1b9be2cd45f0d7284eca914"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__logreg__split5.npz",
+                  "sha256": "290dea75450ea65ed130b1b39efa799b056a455d852ac9dd0dfebe25af179850"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__logreg__split6.npz",
+                  "sha256": "904610116f02dc372084ac004fc5f773afc4386d44ccddafeac01ae245d95a5e"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__logreg__split7.npz",
+                  "sha256": "d468734c024e5063c568b6f878629f0ef3b0d672f67de6f7287f539de457596e"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__logreg__split8.npz",
+                  "sha256": "1e6b9bc60bd035d98ec83c223df1b4a27fcd3c1aa4fac76f5958aedc082976f2"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__logreg__split9.npz",
+                  "sha256": "ab57b5edb0d0761c580df328b3fa200ce36690c9fa60fb993168ba95e0bed87a"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__mlp__split0.npz",
+                  "sha256": "47b8cde6c87e41bddb3062a1dbccb57050e90b93003ad65833bdaf07c81415fe"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__mlp__split1.npz",
+                  "sha256": "fabae433f92aa1a560b353fa2f0aa0496f22474a505d4f3fe5b9990443cb6e7e"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__mlp__split2.npz",
+                  "sha256": "cb73ae134346df1713db881af3c9825f0f0740708c2f33c534c65ecc4a37c621"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__mlp__split3.npz",
+                  "sha256": "4a4670bae71970724aaa5ad536e64eab6f86cad4974ecafef5a00487b0ea3154"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__mlp__split4.npz",
+                  "sha256": "67eaed34e8e04410761c6f968f88cb864f9521a09f0344353e95bf019b8edc31"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__mlp__split5.npz",
+                  "sha256": "80f6e249d62dc0b43e5b63cdc270b98dde7c969736abf883b11981dc15111da8"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__mlp__split6.npz",
+                  "sha256": "a888dba1bda645b1cb5ea84d47f1789f5408699ae417f9562b5e35c0cb0f70c8"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__mlp__split7.npz",
+                  "sha256": "4e4a1e32e4542e1496fb20da7bfb279c4a0e57f420387e0bd1932c5e4cd6427f"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__mlp__split8.npz",
+                  "sha256": "647add223602d7ed24dd6c1970ea99af9be52b9ed568511d482ce43a232985ae"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__mlp__split9.npz",
+                  "sha256": "b327d2aea1b26ed0b25770c52faab6e96e5dd1c5a352242c19fb527493a9976b"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__rf__split0.npz",
+                  "sha256": "53b1be6948621195fd7f71b1526413e0196ab0360713a676b74dbee7d3a5e424"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__rf__split1.npz",
+                  "sha256": "08300d637847f6d8772759abbcbe3c295becaa4d494e49dd5fc37c001024933d"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__rf__split2.npz",
+                  "sha256": "3aa4fe9b18f14e9db62019135c8bf8a83d49dc6315fc74f0e43e2219cd36d46e"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__rf__split3.npz",
+                  "sha256": "c2ef2377ae4e93f80232b5618b7ca7b9d41a87cb2c6fc3444251b2348b9f099e"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__rf__split4.npz",
+                  "sha256": "d7a7f6e059436dea48f29e0d154f16380f7d6c4982fb6a0674f711ed874e82d0"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__rf__split5.npz",
+                  "sha256": "337ad52e6003c7891e60bcf582fae3d242f6e4f1ae8af9d7b5db8a1fe42d5e13"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__rf__split6.npz",
+                  "sha256": "2f246cd84fc8d8f66124e018492ba68ce8ad92175a69edc44a6a55f042d6d8cb"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__rf__split7.npz",
+                  "sha256": "545f84b0afd6ee340385332614353765ef6aea58d45cc9bed4f309905d11a435"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__rf__split8.npz",
+                  "sha256": "0fbf13c535a202b65d1959f9eee101334f5dfccb4ac730a373d8779c988675ae"
+                },
+                {
+                  "file": "results/predictions/pima_diabetes__rf__split9.npz",
+                  "sha256": "e8b6cb6aeb2a5c2792477ccec753ceed4dae0f9f08a819a8cf02ef4e5d84e8b6"
+                }
+              ]
+            }
+          ],
+          "numbers_book_keys": [],
+          "caveats": [
+            {
+              "id": "CAL1",
+              "text": "every pooled calibration analysis uses 2 x n_rows predictions per (dataset, model, fraction), since each test row appears in 2 of the 10 splits (one per CV repeat). ECE on small samples is biased and noisy"
+            },
+            {
+              "id": "CAL2",
+              "text": "use Brier and log loss as primary calibration measures, with bootstrap confidence intervals."
+            }
+          ]
+        }
+      ],
+      "sources_all": [
+        {
+          "file": "results/phase3b/calibration_metrics.csv",
+          "sha256": "2a0206c0b59336924c7f7fd94021f0c344959d19c2c4a2eb3302cb7b53150ef9",
+          "filter": "fraction == 0.1, 4 NO_CKD datasets x logreg/rf/mlp, column ece_em: reference for the reproduction check only (not plotted)"
+        },
+        {
+          "file": "results/predictions/{pima_diabetes,heart_cleveland,ilpd,breast_wisconsin}__{logreg,rf,mlp}__split{0..9}.npz",
+          "sha256": null,
+          "filter": "keys y_true and prob_0.1; the 4 datasets pooled per model (n = 2 x rows per dataset, summed); equal-mass 10 bins (scripts.phase3b_calibration._reliability_bins), Wilson 95% intervals (analysis.calibration.wilson_interval)",
+          "manifest_lines": [
+            {
+              "file": "results/predictions/breast_wisconsin__logreg__split0.npz",
+              "sha256": "565fae674d2cfbbe849482cdbcb73d4f132506c7c93d12ac314b9ae070634c43"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__logreg__split1.npz",
+              "sha256": "0db9d591f94af88e06f32820d9f61f0b3743136b838785205a0a1e26a6848626"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__logreg__split2.npz",
+              "sha256": "2fc1ec8cb79d6e3967c3e40472c9eba293b5f7309492fad566ad1b25dac2d3df"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__logreg__split3.npz",
+              "sha256": "fbfebf1d35d53f9e361ec0e7c31c937a0fc2e25a9d8a2195fa26eab3d0f8c783"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__logreg__split4.npz",
+              "sha256": "8606cbb1f00dd50273aad33da7a377633532f2bcd611a031294c33ed5e797304"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__logreg__split5.npz",
+              "sha256": "d471cbbb2153ffe5ab7d5ff6d69290393d8114831b55b8d6a490564b91ec2a42"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__logreg__split6.npz",
+              "sha256": "663923e9b95496d574cd4c347ebb6b819aec64178375762cd0997c657994dd4b"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__logreg__split7.npz",
+              "sha256": "27327edbe82bea70ec7aa20721f8809f1afd891e1d4d488933c458b0fd607208"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__logreg__split8.npz",
+              "sha256": "3e6e71dc0db3405bb2d1c41f970b77ab1d72fb0f31ac6a73e458cd60b393e4f3"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__logreg__split9.npz",
+              "sha256": "5137786cd2bf2fd6593aef71b4e54d0d296c654c20488a95070e1767fdae3b42"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__mlp__split0.npz",
+              "sha256": "9c411e0c6b35496883ac9b7af46721afff15303474045dda466866627ad0568a"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__mlp__split1.npz",
+              "sha256": "b4b3320a1fedf425da89ad5fb8ebdb5972a21d409f2d1f4bc3b1b6d3f2d2f412"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__mlp__split2.npz",
+              "sha256": "98cb26a563a3fd96efc8d322978b18545b87300faeff326323cf911687070aa4"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__mlp__split3.npz",
+              "sha256": "9fdb7b85b6d9e56e849a26023092b4636a5cc91bf131c18c35e8082f05125a2b"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__mlp__split4.npz",
+              "sha256": "73c60c4deea17abb86f921a22b1ad66a5294409006d177286ea0f38e661509aa"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__mlp__split5.npz",
+              "sha256": "a239fd5832e37eaed77134fdb86b2973e24c579c057df4681eb0b78695866254"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__mlp__split6.npz",
+              "sha256": "25b3d97748f84691da8486a3b554e5149972f63bb190bdbaa0483f597e28e800"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__mlp__split7.npz",
+              "sha256": "6506bef1c545b2a30c9b135b2761386083fd108aed0ce2671e624fe35efd8a3b"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__mlp__split8.npz",
+              "sha256": "023ae405604ab1de00bf68bdfec4f60392a00c73d98db770c805063ba41f5818"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__mlp__split9.npz",
+              "sha256": "5dc5242de7d20648476004d394f8d0e49698df38ce0570bfee60e874d70922fb"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__rf__split0.npz",
+              "sha256": "94372915b55757f0ec61c17d786b591a21f08a0d2328c47f175113df43c9186c"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__rf__split1.npz",
+              "sha256": "6b52d6f2dc9b149e16a53659810e4aa632cb15e355a6d5bbc3594bf7e20555c4"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__rf__split2.npz",
+              "sha256": "5fe579361f74b7ad61f5221271c0e36710a496934972f11668076f2cc40f4939"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__rf__split3.npz",
+              "sha256": "be37a29efd5475f1a3b4d7b70139d9efc9550ccb24715df24d4a818136b5209c"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__rf__split4.npz",
+              "sha256": "c2cd57a988addf5c6ef62d6f45755da5f791493765f24614e7f47a9b13aad363"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__rf__split5.npz",
+              "sha256": "3c441b57418cb67d5024a0e193079b4851fffa24933acc9f9f86ff1c474f6d69"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__rf__split6.npz",
+              "sha256": "c651dd190483c8b59fb43bbce8acbe9ca7b9e4f42d7166cae6b4d315594f0bdb"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__rf__split7.npz",
+              "sha256": "90ee3d8d09f4562b985afcc2702c7b1c70a614e116578c14abab8a5a703e6a23"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__rf__split8.npz",
+              "sha256": "0bf294289a15891b72b738d9ecc4eb31eaed13b596e21ef23061d3fc5276f224"
+            },
+            {
+              "file": "results/predictions/breast_wisconsin__rf__split9.npz",
+              "sha256": "df83c6e3e148dd37f3bc409780cdaf4d5991101bade446e15d9e371384be1e88"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__logreg__split0.npz",
+              "sha256": "914d05ddce2b9d2927fb72d96314affbb86bd97e28cd45ec89857ed0395a0351"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__logreg__split1.npz",
+              "sha256": "d5df91d36ac6641016b0eeb59ec71eed74a48e8844c278dbaf3db8937e7a2f01"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__logreg__split2.npz",
+              "sha256": "284847883db6566fcbc76036193de872aaa821c0bd956c4ed9dc63222a701de4"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__logreg__split3.npz",
+              "sha256": "73a822485091aa0510e77441f51e00ecd9878b07d917b0c52de3c714364ad377"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__logreg__split4.npz",
+              "sha256": "473687ad68eade960d1d826aa966225cf274e9b71dadcb37486adbc1d4af653c"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__logreg__split5.npz",
+              "sha256": "619200d6ae95ac87bff24fdbf2b561fc9952360ddddd57c74a3f23d34ab4dee1"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__logreg__split6.npz",
+              "sha256": "15f6462c7cc6478f1bc966d2b90e15c1f06cc001faef011cdaa1e4305881266e"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__logreg__split7.npz",
+              "sha256": "59a4bc56068857be66fbf29cfc658ab4d61bafa63c4388026e3c599794b586e7"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__logreg__split8.npz",
+              "sha256": "70adba94b5feb30a1cf3789d5042cb94f029a9a9b105f6c7e4f7da023030a890"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__logreg__split9.npz",
+              "sha256": "372f7aa34b541984d3cca3463198126c8dcfce642f7862881541d1f645fc7a8d"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__mlp__split0.npz",
+              "sha256": "c5b722ff65b82891b444af4751dce559d0bb8b21e52262b466b365d2bcf3bc8f"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__mlp__split1.npz",
+              "sha256": "9c439f8cb6fefa276004c215ccab84e96873cae8078ea67371316a5359d6149b"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__mlp__split2.npz",
+              "sha256": "2505a4c2ee71c6ac3287c5189a7e946c1b3442559767215e3b0a03ec62b6d025"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__mlp__split3.npz",
+              "sha256": "cf56f942c6ac7f7de93df5f9c3152c7c7c297a3c070da89331c1bf55f5d635cf"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__mlp__split4.npz",
+              "sha256": "22afad762d87067b5e460d8b5b3fa70499d272f34d6ce7563d944202038db73f"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__mlp__split5.npz",
+              "sha256": "254e6945291d8cddc938d6ce1bc7e940ec188fbbb620a1ddcb46e86e65231534"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__mlp__split6.npz",
+              "sha256": "15886c287511fae1cb8be618ec98bb508b9ae05c83debc7e0c1b6926c74581ad"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__mlp__split7.npz",
+              "sha256": "584b325eae6f3927c1612a3381d1d352a74ab6ab7c48fac9ae10d3388e7e4016"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__mlp__split8.npz",
+              "sha256": "efa7c5fe2c076253f073af9ad42456c81ce5d95331d8fbd242305fe9fe54a2b7"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__mlp__split9.npz",
+              "sha256": "4bb6cd8cca0dcaa237f68267803c86023847a6a26d28cc297eb499cbeca3b9c1"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__rf__split0.npz",
+              "sha256": "e159ab2b032cd1cf263946058db5a8bc8db454ef52864e1822417f816b266c57"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__rf__split1.npz",
+              "sha256": "553970d08dd8ccc5e341730a4d2316f02fe56f9950c9e4bb3ca0ba26f4a32923"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__rf__split2.npz",
+              "sha256": "a2234156ffeba78b7ad665b3f61c0594b02776e201e803f2d51d7f331dcd6ef4"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__rf__split3.npz",
+              "sha256": "ef62b084d55108ca9c4c53b345a7e0ba7558dbe3e79ee90e2c1f6cb4aa3760e8"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__rf__split4.npz",
+              "sha256": "e971980800bd42975daba1f695bd31771200b6e97389a7edb5ae7c64d4270615"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__rf__split5.npz",
+              "sha256": "1c029d487f15ccc6ea1bd264f07bf9c2c34053b2aeb56285c0c193b43a8d8505"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__rf__split6.npz",
+              "sha256": "445cf215db784b7a6b9911b75b5a533b1a7c91cd81cd0b42353855a6d022a7e7"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__rf__split7.npz",
+              "sha256": "87843351bbdfd9680566637d737d1eea487fe5f27824b1e7c08eace461056c82"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__rf__split8.npz",
+              "sha256": "1b92257cabffd89498a8df55c5374601935e81cd9e49de451290a137d384b876"
+            },
+            {
+              "file": "results/predictions/heart_cleveland__rf__split9.npz",
+              "sha256": "567ff0a04b72b4d0f6451d86d69d1640c40f167fd87a9ee9deb2dd9b90b8cff5"
+            },
+            {
+              "file": "results/predictions/ilpd__logreg__split0.npz",
+              "sha256": "6fa39c29631d7dcfe3eab5a2182299b7c20e57338e676455c5e274a4594a8549"
+            },
+            {
+              "file": "results/predictions/ilpd__logreg__split1.npz",
+              "sha256": "9bff538a91ddbccdd5509f5e53ce5954974301207620ddd2972f59900552c4f7"
+            },
+            {
+              "file": "results/predictions/ilpd__logreg__split2.npz",
+              "sha256": "d5e9b4a235817837e827f7ba549dc35503c16d835901d1ec2178c204e7118b10"
+            },
+            {
+              "file": "results/predictions/ilpd__logreg__split3.npz",
+              "sha256": "b7605d32259214b75fb1995059244e38b1b7435dd3c438acd674cea602329d73"
+            },
+            {
+              "file": "results/predictions/ilpd__logreg__split4.npz",
+              "sha256": "a64052ad055543dd0bf7961a4378d0340a11ab1f4d04c029bd8d91e721b6d536"
+            },
+            {
+              "file": "results/predictions/ilpd__logreg__split5.npz",
+              "sha256": "0b8ee5cd2801d73548bd545b0669e25f8d4b446e7261833acfdee254e877610d"
+            },
+            {
+              "file": "results/predictions/ilpd__logreg__split6.npz",
+              "sha256": "81388ee2af01500fd3c40169c5f84b54d3ad166c1b1d1bda2c4c3b97e3a4f1b9"
+            },
+            {
+              "file": "results/predictions/ilpd__logreg__split7.npz",
+              "sha256": "7ec979862494a459444fad63cd9a62e82efd299d851536ceebdcf984e2926d3c"
+            },
+            {
+              "file": "results/predictions/ilpd__logreg__split8.npz",
+              "sha256": "ca9fc69c857430713829b751634c1c65ae09a5ae45d055cd238f39fc20e96a08"
+            },
+            {
+              "file": "results/predictions/ilpd__logreg__split9.npz",
+              "sha256": "b9174233b0b9b57be4ac47c989ece1619c766a03c673dd55391cdc5f09ae7183"
+            },
+            {
+              "file": "results/predictions/ilpd__mlp__split0.npz",
+              "sha256": "69cfa4172de40b674a5c874d87ceae8e4111751ea78cfa05c8796f9689f3c42b"
+            },
+            {
+              "file": "results/predictions/ilpd__mlp__split1.npz",
+              "sha256": "1725201666f1ac7e796ea281a576d620743a09e393c459e49057ddbe960e0616"
+            },
+            {
+              "file": "results/predictions/ilpd__mlp__split2.npz",
+              "sha256": "5c70dc7e3314ba626fc72c4629d836b7f30b32a5bef32b8a8333ef2e091f86fd"
+            },
+            {
+              "file": "results/predictions/ilpd__mlp__split3.npz",
+              "sha256": "284ea511589968e9ade978a99559f68e1fce0e58749e0ff6ff728ef125418d58"
+            },
+            {
+              "file": "results/predictions/ilpd__mlp__split4.npz",
+              "sha256": "c2ba2770b4e061fdc558e8c711dcbfcb7617540ffd2bee1a2752816353064703"
+            },
+            {
+              "file": "results/predictions/ilpd__mlp__split5.npz",
+              "sha256": "c870939620aa12440b8da6b477d742f2c54cee3347bd2b2ad5c44ece370f5ef0"
+            },
+            {
+              "file": "results/predictions/ilpd__mlp__split6.npz",
+              "sha256": "104ae5f4d1233dc7f0b678e1a9302d8daaf1f37d3ea042a84206ef40b2d1b441"
+            },
+            {
+              "file": "results/predictions/ilpd__mlp__split7.npz",
+              "sha256": "fbfcb986e456b8b1f41a1371447613651349d96203e1253ba7dfb9e98da3cfc9"
+            },
+            {
+              "file": "results/predictions/ilpd__mlp__split8.npz",
+              "sha256": "5c42763c294725f09d99a2a3445ce91fdc09a6b7fc051f627db037f0d5ec15d9"
+            },
+            {
+              "file": "results/predictions/ilpd__mlp__split9.npz",
+              "sha256": "80867b98fef21ef26367e456984b352749be0f5b58a28a8cc09ebb11feac569f"
+            },
+            {
+              "file": "results/predictions/ilpd__rf__split0.npz",
+              "sha256": "a11f5b2c02d91a94c235beceee7f217e1f9477efa1a2a98ccf66f8349dee51aa"
+            },
+            {
+              "file": "results/predictions/ilpd__rf__split1.npz",
+              "sha256": "7b824411037dacbcd5f5b1b4455d6c9dbb332ce460afc9c83660673debbe1314"
+            },
+            {
+              "file": "results/predictions/ilpd__rf__split2.npz",
+              "sha256": "20e6e499ae1fb7b4efc7c58bc098595a9825ef82a5c7ad7e8501cbb25461f77b"
+            },
+            {
+              "file": "results/predictions/ilpd__rf__split3.npz",
+              "sha256": "665e5abfae5816ebfb7759138f3ee373f1c85afd4f3fd5f3fd881b87d59ee8e6"
+            },
+            {
+              "file": "results/predictions/ilpd__rf__split4.npz",
+              "sha256": "d1ae040dd0c483fea0b76f05bfecb49766369fef50851d986d8cfcaf8c307275"
+            },
+            {
+              "file": "results/predictions/ilpd__rf__split5.npz",
+              "sha256": "a63cb7249f68d60d34cc871b268ead2a54cab0bf9d260e7b31aba871edb873cf"
+            },
+            {
+              "file": "results/predictions/ilpd__rf__split6.npz",
+              "sha256": "6bd68fb74975d64677218ad0c32c0ecd6306aa5f03c7b6ddffa76403238df3c5"
+            },
+            {
+              "file": "results/predictions/ilpd__rf__split7.npz",
+              "sha256": "6fbcc3bc627a518c3a3cb50bf07effe78231c301a10456980c7ae1faed496824"
+            },
+            {
+              "file": "results/predictions/ilpd__rf__split8.npz",
+              "sha256": "62af476f37648af4d31db7cb91a8f9f9a83cdbf4a6ecea051834b0496ff0e63e"
+            },
+            {
+              "file": "results/predictions/ilpd__rf__split9.npz",
+              "sha256": "710e96056bfa58c4376bc2b319d85422558e4e77280bf54e61e6dad4978795cf"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__logreg__split0.npz",
+              "sha256": "d3a94ac9dbdf301d3928a01518d18c2b703e2d9a4b78afce6207b165e2bc5508"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__logreg__split1.npz",
+              "sha256": "ec97abb014f3cd84d09297fb0354f28513425c4fd1cd18092d5243de34c98074"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__logreg__split2.npz",
+              "sha256": "7baa9cbce939809f4df4aead9e4ecf7781bd527da2a9db58bdbfef849152544c"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__logreg__split3.npz",
+              "sha256": "9cc9cef59576e8a0ded7e29e75b8a9d877f45c71077a64f5764c8304ff787b7c"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__logreg__split4.npz",
+              "sha256": "24d17f7ded3e18bd87cb63e7d89b9528a8fdfd1aa1b9be2cd45f0d7284eca914"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__logreg__split5.npz",
+              "sha256": "290dea75450ea65ed130b1b39efa799b056a455d852ac9dd0dfebe25af179850"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__logreg__split6.npz",
+              "sha256": "904610116f02dc372084ac004fc5f773afc4386d44ccddafeac01ae245d95a5e"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__logreg__split7.npz",
+              "sha256": "d468734c024e5063c568b6f878629f0ef3b0d672f67de6f7287f539de457596e"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__logreg__split8.npz",
+              "sha256": "1e6b9bc60bd035d98ec83c223df1b4a27fcd3c1aa4fac76f5958aedc082976f2"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__logreg__split9.npz",
+              "sha256": "ab57b5edb0d0761c580df328b3fa200ce36690c9fa60fb993168ba95e0bed87a"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__mlp__split0.npz",
+              "sha256": "47b8cde6c87e41bddb3062a1dbccb57050e90b93003ad65833bdaf07c81415fe"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__mlp__split1.npz",
+              "sha256": "fabae433f92aa1a560b353fa2f0aa0496f22474a505d4f3fe5b9990443cb6e7e"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__mlp__split2.npz",
+              "sha256": "cb73ae134346df1713db881af3c9825f0f0740708c2f33c534c65ecc4a37c621"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__mlp__split3.npz",
+              "sha256": "4a4670bae71970724aaa5ad536e64eab6f86cad4974ecafef5a00487b0ea3154"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__mlp__split4.npz",
+              "sha256": "67eaed34e8e04410761c6f968f88cb864f9521a09f0344353e95bf019b8edc31"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__mlp__split5.npz",
+              "sha256": "80f6e249d62dc0b43e5b63cdc270b98dde7c969736abf883b11981dc15111da8"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__mlp__split6.npz",
+              "sha256": "a888dba1bda645b1cb5ea84d47f1789f5408699ae417f9562b5e35c0cb0f70c8"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__mlp__split7.npz",
+              "sha256": "4e4a1e32e4542e1496fb20da7bfb279c4a0e57f420387e0bd1932c5e4cd6427f"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__mlp__split8.npz",
+              "sha256": "647add223602d7ed24dd6c1970ea99af9be52b9ed568511d482ce43a232985ae"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__mlp__split9.npz",
+              "sha256": "b327d2aea1b26ed0b25770c52faab6e96e5dd1c5a352242c19fb527493a9976b"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__rf__split0.npz",
+              "sha256": "53b1be6948621195fd7f71b1526413e0196ab0360713a676b74dbee7d3a5e424"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__rf__split1.npz",
+              "sha256": "08300d637847f6d8772759abbcbe3c295becaa4d494e49dd5fc37c001024933d"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__rf__split2.npz",
+              "sha256": "3aa4fe9b18f14e9db62019135c8bf8a83d49dc6315fc74f0e43e2219cd36d46e"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__rf__split3.npz",
+              "sha256": "c2ef2377ae4e93f80232b5618b7ca7b9d41a87cb2c6fc3444251b2348b9f099e"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__rf__split4.npz",
+              "sha256": "d7a7f6e059436dea48f29e0d154f16380f7d6c4982fb6a0674f711ed874e82d0"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__rf__split5.npz",
+              "sha256": "337ad52e6003c7891e60bcf582fae3d242f6e4f1ae8af9d7b5db8a1fe42d5e13"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__rf__split6.npz",
+              "sha256": "2f246cd84fc8d8f66124e018492ba68ce8ad92175a69edc44a6a55f042d6d8cb"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__rf__split7.npz",
+              "sha256": "545f84b0afd6ee340385332614353765ef6aea58d45cc9bed4f309905d11a435"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__rf__split8.npz",
+              "sha256": "0fbf13c535a202b65d1959f9eee101334f5dfccb4ac730a373d8779c988675ae"
+            },
+            {
+              "file": "results/predictions/pima_diabetes__rf__split9.npz",
+              "sha256": "e8b6cb6aeb2a5c2792477ccec753ceed4dae0f9f08a819a8cf02ef4e5d84e8b6"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "id": "Table I",
+      "file": "paper/tables/table_datasets.tex",
+      "content": "per-dataset facts (rows, raw features, numeric/categorical counts, positive fraction, missing share, minimum training size at fraction 0.1)",
+      "env": "table*",
+      "n_numbers_book_keys": 35,
+      "numbers_book_keys": [
+        "min-train-f0.1-breast-wisconsin",
+        "min-train-f0.1-ckd",
+        "min-train-f0.1-heart-cleveland",
+        "min-train-f0.1-ilpd",
+        "min-train-f0.1-pima-diabetes",
+        "missing-fraction-breast-wisconsin",
+        "missing-fraction-ckd",
+        "missing-fraction-heart-cleveland",
+        "missing-fraction-ilpd",
+        "missing-fraction-pima-diabetes",
+        "n-categorical-breast-wisconsin",
+        "n-categorical-ckd",
+        "n-categorical-heart-cleveland",
+        "n-categorical-ilpd",
+        "n-categorical-pima-diabetes",
+        "n-numeric-breast-wisconsin",
+        "n-numeric-ckd",
+        "n-numeric-heart-cleveland",
+        "n-numeric-ilpd",
+        "n-numeric-pima-diabetes",
+        "positive-fraction-breast-wisconsin",
+        "positive-fraction-ckd",
+        "positive-fraction-heart-cleveland",
+        "positive-fraction-ilpd",
+        "positive-fraction-pima-diabetes",
+        "raw-features-breast-wisconsin",
+        "raw-features-ckd",
+        "raw-features-heart-cleveland",
+        "raw-features-ilpd",
+        "raw-features-pima-diabetes",
+        "rows-used-breast-wisconsin",
+        "rows-used-ckd",
+        "rows-used-heart-cleveland",
+        "rows-used-ilpd",
+        "rows-used-pima-diabetes"
+      ],
+      "rule": "no bold; one row per dataset",
+      "caveats": [
+        {
+          "id": "CKD",
+          "text": "The paper's statements about CKD must say it is saturated, and results must be reported both with and without it"
+        }
+      ]
+    },
+    {
+      "id": "Table II",
+      "file": "paper/tables/table_main.tex",
+      "content": "per model: AUROC f1.0 ALL5/NO_CKD, f0.1 ALL5/NO_CKD, log loss f1.0 and f0.1 ALL5 (dataset-averaged means), NO_CKD pooled slope at f0.1",
+      "env": "table*",
+      "n_numbers_book_keys": 49,
+      "numbers_book_keys": [
+        "auroc-mean-ftt-all5-f0.1",
+        "auroc-mean-ftt-all5-f1.0",
+        "auroc-mean-ftt-nockd-f0.1",
+        "auroc-mean-ftt-nockd-f1.0",
+        "auroc-mean-lgbm-all5-f0.1",
+        "auroc-mean-lgbm-all5-f1.0",
+        "auroc-mean-lgbm-nockd-f0.1",
+        "auroc-mean-lgbm-nockd-f1.0",
+        "auroc-mean-logreg-all5-f0.1",
+        "auroc-mean-logreg-all5-f1.0",
+        "auroc-mean-logreg-nockd-f0.1",
+        "auroc-mean-logreg-nockd-f1.0",
+        "auroc-mean-mlp-all5-f0.1",
+        "auroc-mean-mlp-all5-f1.0",
+        "auroc-mean-mlp-nockd-f0.1",
+        "auroc-mean-mlp-nockd-f1.0",
+        "auroc-mean-rf-all5-f0.1",
+        "auroc-mean-rf-all5-f1.0",
+        "auroc-mean-rf-nockd-f0.1",
+        "auroc-mean-rf-nockd-f1.0",
+        "auroc-mean-tabnet-all5-f0.1",
+        "auroc-mean-tabnet-all5-f1.0",
+        "auroc-mean-tabnet-nockd-f0.1",
+        "auroc-mean-tabnet-nockd-f1.0",
+        "auroc-mean-xgb-all5-f0.1",
+        "auroc-mean-xgb-all5-f1.0",
+        "auroc-mean-xgb-nockd-f0.1",
+        "auroc-mean-xgb-nockd-f1.0",
+        "logloss-mean-ftt-all5-f0.1",
+        "logloss-mean-ftt-all5-f1.0",
+        "logloss-mean-lgbm-all5-f0.1",
+        "logloss-mean-lgbm-all5-f1.0",
+        "logloss-mean-logreg-all5-f0.1",
+        "logloss-mean-logreg-all5-f1.0",
+        "logloss-mean-mlp-all5-f0.1",
+        "logloss-mean-mlp-all5-f1.0",
+        "logloss-mean-rf-all5-f0.1",
+        "logloss-mean-rf-all5-f1.0",
+        "logloss-mean-tabnet-all5-f0.1",
+        "logloss-mean-tabnet-all5-f1.0",
+        "logloss-mean-xgb-all5-f0.1",
+        "logloss-mean-xgb-all5-f1.0",
+        "slope-ftt-nockd-f0.1",
+        "slope-lgbm-nockd-f0.1",
+        "slope-logreg-nockd-f0.1",
+        "slope-mlp-nockd-f0.1",
+        "slope-rf-nockd-f0.1",
+        "slope-tabnet-nockd-f0.1",
+        "slope-xgb-nockd-f0.1"
+      ],
+      "rule": "best per column in bold by the UNROUNDED value (highest AUROC, lowest log loss, slope closest to 1); cells that print identically after rounding can both look best",
+      "caveats": [
+        {
+          "id": "CAL1",
+          "text": "every pooled calibration analysis uses 2 x n_rows predictions per (dataset, model, fraction), since each test row appears in 2 of the 10 splits (one per CV repeat). ECE on small samples is biased and noisy"
+        },
+        {
+          "id": "CKD",
+          "text": "The paper's statements about CKD must say it is saturated, and results must be reported both with and without it"
+        }
+      ]
+    }
+  ]
+}

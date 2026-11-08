@@ -1,22 +1,13 @@
-% Paper skeleton (Phase 4b, restructured in Phase 4d for a 6-page generic IEEE
-% conference paper). NO PROSE is written yet -- every file under sections/
-% holds only a heading and a TODO comment.
+% Compile on Overleaf. If IEEEtran reports an error, copy it into the planning chat.
 %
-% TODO: No LaTeX distribution was found on this machine at Phase 4b time
-% (2026-11-08): pdflatex/xelatex/latexmk/bibtex/biber/pandoc and kpsewhich
-% were all absent (see paper/evidence/claim_map.md Part 3 / CLAUDE.md section
-% 8 for the full tool-availability table). IEEEtran.cls could therefore not
-% be located, so the \documentclass line below is commented out. Before this
-% can compile: install a LaTeX distribution (e.g. MiKTeX or TeX Live) with
-% the IEEEtran class (available from CTAN / the IEEE author kit), then
-% uncomment the line below and remove this TODO.
-% \documentclass[conference]{IEEEtran}
-\documentclass[11pt]{article} % TEMPORARY placeholder class until IEEEtran is available -- replace with the line above.
+% Paper skeleton (Phase 4b, restructured in Phase 4d for a 6-page generic IEEE conference paper;
+% the IEEEtran class is used since Phase 4e). NO PROSE is written yet -- every file under sections/
+% holds only a heading and a TODO comment. Nothing can be compiled on the machine that holds this
+% repository (no LaTeX distribution); scripts/check_paper_static.py is a text check, not a compiler.
+\documentclass[conference]{IEEEtran}
 
-\usepackage{graphicx}
-\usepackage{amsmath}
-\usepackage{booktabs}
-\usepackage{hyperref}
+\usepackage{graphicx} % \includegraphics (figures/*.pdf)
+\usepackage{booktabs} % \toprule, \midrule, \cmidrule in tables/*.tex
 
 % Every result number in this paper must be written as \N{key} -- never
 % hand-typed -- so that scripts/check_paper_numbers.py can verify it against
@@ -60,12 +51,6 @@ A Multi-Dataset Study of Accuracy, Calibration, Robustness and Explanation Agree
   Coimbatore, India\\
   [EMAIL]}
 }
-% Fallback for the placeholder article class (IEEEauthorblockN/A are
-% IEEEtran-specific commands and will not compile under article; remove this
-% fallback once \documentclass[conference]{IEEEtran} above is enabled).
-\providecommand{\IEEEauthorblockN}[1]{#1}
-\providecommand{\IEEEauthorblockA}[1]{#1}
-
 \maketitle
 
 \input{sections/abstract}

@@ -32,7 +32,7 @@ CLAIM_CSV = EVID / "claim_map.csv"
 OUT_MD = EVID / "drafting_sheet.md"
 OUT_CSV = EVID / "drafting_sheet.csv"
 COLUMNS = ["item_id", "section", "fact_label", "keys", "values", "raw_values", "claim_status",
-           "caveat_ids", "caveat_text", "source_file", "shown_in"]
+           "caveat_ids", "caveat_text", "source_file", "shown_in", "display_hint"]
 NON_LOGREG = [m for m in MODELS if m != "logreg"]
 DS_KEY = lambda ds: ds.replace("_", "-")  # noqa: E731  (numbers-book key style)
 SETS = (("all5", "ALL5"), ("nockd", "NO_CKD"))
@@ -93,6 +93,94 @@ CAVEATS: dict[str, tuple[str, str]] = {
     "DESC": (CLAUDE, "Evidence framing for the paper (2026-11-07):"),
 }
 
+
+# ---------------------------------------------------------------------------------------------
+# What each figure panel / table actually displays (Phase 4e). A row may be labelled with a
+# figure panel only if EVERY key of the row fullmatches that panel's `key_re`; with a table only
+# if every key is literally one of the \N{} keys used in that table's .tex file. Everything else
+# is "text only". Derived from paper/figures/SOURCES.txt and scripts/make_paper_figures.py.
+# ---------------------------------------------------------------------------------------------
+_M = "(?:" + "|".join(MODELS) + ")"
+_D5 = "(?:" + "|".join(DS_KEY(d) for d in DATASETS_ALL5) + ")"
+_D4 = "(?:" + "|".join(DS_KEY(d) for d in DATASETS_NO_CKD) + ")"
+_F = r"(?:0\.1|0\.25|0\.5|1\.0)"
+FIGURE_CONTENT: dict[str, dict[str, str]] = {
+    "Fig. 1(a)": {"metric": "AUROC", "dataset_set": "ALL5", "fraction_or_level": "0.1, 0.25, 0.5, 1.0",
+                  "kind": "clean test performance",
+                  "statistic": "dataset-averaged mean (the 95% CI band is drawn but has no numbers-book key)",
+                  "key_re": rf"auroc-mean-{_M}-all5-f{_F}"},
+    "Fig. 1(b)": {"metric": "log loss", "dataset_set": "ALL5", "fraction_or_level": "0.1, 0.25, 0.5, 1.0",
+                  "kind": "clean test performance",
+                  "statistic": "dataset-averaged mean (the 95% CI band is drawn but has no numbers-book key)",
+                  "key_re": rf"logloss-mean-{_M}-all5-f{_F}"},
+    "Fig. 1(c)": {"metric": "calibration slope (Platt, pooled)",
+                  "dataset_set": "per NO_CKD dataset (dots + bootstrap whiskers) and NO_CKD mean (bar)",
+                  "fraction_or_level": "0.1", "kind": "clean test predictions", "statistic": "pooled slope",
+                  "key_re": rf"slope-per-dataset-{_D4}-{_M}-f0\.1-(?:point|ci-lo|ci-hi)|slope-{_M}-nockd-f0\.1"},
+    "Fig. 2(a)": {"metric": "AUROC", "dataset_set": "ALL5", "fraction_or_level": "30% missing; noise 0.5",
+                  "kind": "missing (MCAR) and original Gaussian noise",
+                  "statistic": "change versus the model's own clean AUROC (degradation), dataset-averaged",
+                  "key_re": rf"auroc-(?:miss30|noise50-orig)-degradation-{_M}-all5"},
+    "Fig. 2(b)": {"metric": "log loss", "dataset_set": "ALL5", "fraction_or_level": "noise 0.5",
+                  "kind": "original and continuous-only Gaussian noise",
+                  "statistic": "change versus the model's own clean log loss (degradation), dataset-averaged",
+                  "key_re": rf"logloss-noise50-(?:orig|cont)-degradation-{_M}-all5"},
+    "Fig. 3(a)": {"metric": "top-5 Jaccard of SHAP importances", "dataset_set": "per dataset (all 5)",
+                  "fraction_or_level": "fraction 1.0 pipelines",
+                  "kind": "pairs logreg-rf, logreg-mlp, rf-mlp; within-model stability (mean over models); chance level",
+                  "statistic": "mean over the 10 splits",
+                  "key_re": rf"jaccard-(?:logreg-rf|logreg-mlp|rf-mlp)-{_D5}|stability-jaccard-{_D5}|chance-jaccard-{_D5}"},
+    "Fig. 3(b)": {"metric": "plausibility precision of the top-5 against the pre-registered list",
+                  "dataset_set": "per dataset (all 5)", "fraction_or_level": "fraction 1.0 pipelines",
+                  "kind": "logreg, rf, mlp", "statistic": "mean precision with 95% CI, and chance precision",
+                  "key_re": rf"plausibility-(?:logreg|rf|mlp)-{_D5}-(?:precision|ci-lo|ci-hi|chance)"},
+    "Fig. 4": {"metric": "reliability (observed vs predicted frequency, equal-mass 10 bins, Wilson 95% intervals)",
+               "dataset_set": "NO_CKD pooled", "fraction_or_level": "0.1", "kind": "logreg, rf, mlp",
+               "statistic": "binned frequencies (no numbers-book key)", "key_re": r"(?!)"},
+}
+TABLE_FILES = {"Table I": "table_datasets.tex", "Table II": "table_main.tex"}
+TABLE_CONTENT = {
+    "Table I": "per-dataset facts (rows, raw features, numeric/categorical counts, positive fraction, missing share, minimum training size at fraction 0.1)",
+    "Table II": "per model: AUROC f1.0 ALL5/NO_CKD, f0.1 ALL5/NO_CKD, log loss f1.0 and f0.1 ALL5 (dataset-averaged means), NO_CKD pooled slope at f0.1",
+}
+
+
+def _table_keys(tex_name: str) -> set[str]:
+    txt = (PROJECT_ROOT / "paper" / "tables" / tex_name).read_text(encoding="utf-8")
+    return set(re.findall(r"\\N\{([^}]+)\}", txt))
+
+
+TABLE_KEYS = {t: _table_keys(f) for t, f in TABLE_FILES.items()}
+
+
+def shown_label(refs: list[str]) -> str:
+    """Union of the figure panels / tables that display the row's quantities, but only if EVERY key of the
+    row is displayed by at least one of them (a key shown nowhere makes the whole row 'text only')."""
+    if not refs or any(r not in NUM for r in refs):
+        return "text only"
+    items = [(f, lambda r, c=c: re.fullmatch(c["key_re"], r) is not None) for f, c in FIGURE_CONTENT.items()]
+    items += [(t, lambda r, ks=ks: r in ks) for t, ks in TABLE_KEYS.items()]
+    if any(not any(m(r) for _, m in items) for r in refs):
+        return "text only"
+    return "; ".join(f for f, m in items if any(m(r) for r in refs))
+
+
+_COUNT_SUFFIX = ("-npos", "-nsign-agree", "-ntotal")
+_DIFF_WORDS = ("-diff-", "excess", "-dod-", "meandiff", "change", "degradation")
+
+
+def display_hint(refs: list[str]) -> str:
+    """TIE_AT_3_DECIMALS / CI_INCLUDES_ZERO (joined by '|') / NONE. See LEGEND."""
+    hints = []
+    if any(r in NUM and any(w in r for w in _DIFF_WORDS) and not r.endswith(_COUNT_SUFFIX)
+           and abs(NUM[r]["value"]) < 0.0005 for r in refs):
+        hints.append("TIE_AT_3_DECIMALS")
+    if any(r.endswith("-ci-lo") and r[:-6] + "-ci-hi" in refs and r in NUM and r[:-6] + "-ci-hi" in NUM
+           and NUM[r]["value"] <= 0 <= NUM[r[:-6] + "-ci-hi"]["value"] for r in refs):
+        hints.append("CI_INCLUDES_ZERO")
+    return "|".join(hints) or "NONE"
+
+
 ROWS: list[dict] = []
 _COUNTER: dict[str, int] = {}
 
@@ -151,7 +239,9 @@ def add(sec: str, label: str, refs: list[str] | None = None, claim: str | None =
         "item_id": f"{sec}-{_COUNTER[sec]:03d}", "section": SECTIONS[sec], "fact_label": label,
         "keys": "|".join(refs), "values": "|".join(vals), "raw_values": "|".join(raws),
         "claim_status": claim_status(claim, items), "caveat_ids": "|".join(caveats),
-        "caveat_text": " || ".join(texts), "source_file": source or "; ".join(srcs) or "n/a", "shown_in": shown,
+        "caveat_text": " || ".join(texts), "source_file": source or "; ".join(srcs) or "n/a",
+        # `shown` (hand-written labels of Phase 4d) is IGNORED since Phase 4e: derived from FIGURE_CONTENT / table keys.
+        "shown_in": shown_label(refs), "display_hint": display_hint(refs),
     })
 
 
@@ -376,12 +466,12 @@ def build() -> None:
         _COUNTER["LIM"] = _COUNTER.get("LIM", 0) + 1
         ROWS.append({"item_id": f"LIM-{i:03d}", "section": SECTIONS["LIM"], "fact_label": f"Limitations item L{i} (CLAUDE.md section 7, verbatim)",
                      "keys": "", "values": it, "raw_values": "", "claim_status": "n/a", "caveat_ids": "", "caveat_text": "",
-                     "source_file": "CLAUDE.md", "shown_in": "text only"})
+                     "source_file": "CLAUDE.md", "shown_in": "text only", "display_hint": "NONE"})
     mn = CLAIM_TXT.split("## STATEMENTS THAT MUST NOT BE MADE", 1)[1].strip("\n")
     for j, it in enumerate(re.split(r"\n(?=- \*\*)", mn.strip("\n")), 1):
         ROWS.append({"item_id": f"LIM-M{j:02d}", "section": SECTIONS["LIM"], "fact_label": f"Statement that must not be made M{j} (claim_map.md, verbatim)",
                      "keys": "", "values": it.strip("\n"), "raw_values": "", "claim_status": "n/a", "caveat_ids": "", "caveat_text": "",
-                     "source_file": "paper/evidence/claim_map.md", "shown_in": "text only"})
+                     "source_file": "paper/evidence/claim_map.md", "shown_in": "text only", "display_hint": "NONE"})
 
     # ---------------------------------------------------------------- VII Conclusion
     for claim, lbl in (("C1", "C1 status per model (fraction 1.0, AUROC below logreg)"), ("C2", "C2 status per model (fraction 0.1)"),
@@ -411,6 +501,13 @@ Status words (mechanical rule of the claim map, fixed before any value was compu
 - NOT SUPPORTED: the rule fails.
 - DESCRIPTIVE: a quantity that is reported, not tested.
 
+`shown in` lists the figure panels / tables that display the row's quantities (metric, dataset set, fraction or level, kind, statistic must match
+exactly); every key of the row must be displayed by one of them, otherwise it says "text only" (rule and contents: FIGURE_CONTENT in scripts/build_drafting_sheet.py, paper/evidence/figure_facts.md).
+`display_hint` (fixed vocabulary; two hints are joined by `|`):
+- TIE_AT_3_DECIMALS: a key of the row is a difference, excess or change whose absolute value is below 0.0005, so it formats to 0.000 (do not write "better" or "worse").
+- CI_INCLUDES_ZERO: the row carries a confidence interval (a ci-lo/ci-hi pair) that includes 0.
+- NONE: neither.
+
 Rules: a claim with status NOT SUPPORTED or PARTLY may only be stated with its caveat attached. DESCRIPTIVE items may be stated as numbers only.
 Digits in a cell must come from a key's formatted value or a verbatim copy; the `fact_label` column carries only fixed design labels (see tests/test_phase4d.py).
 """
@@ -430,14 +527,14 @@ def write() -> None:
             for r in rows:
                 lines += [f"**{r['item_id']}** {r['fact_label']}\n", "```text", r["values"], "```\n"]
             continue
-        lines += ["| id | fact | keys | values | claim:status | caveats | source | shown in |", "|---|---|---|---|---|---|---|---|"]
+        lines += ["| id | fact | keys | values | claim:status | caveats | source | shown in | hint |", "|---|---|---|---|---|---|---|---|---|"]
         for r in rows:
             for c in r["caveat_ids"].split("|"):
                 if c:
                     cav_used[c] = CAVEATS[c][1]
             esc = lambda s: str(s).replace("|", "/").replace("\n", " ")  # noqa: E731
             lines.append(f"| {r['item_id']} | {esc(r['fact_label'])} | {esc(r['keys']).replace('/', ', ')} | {esc(r['values']).replace('/', ', ')} | "
-                         f"{esc(r['claim_status'])} | {esc(r['caveat_ids']).replace('/', ', ')} | {esc(r['source_file'])} | {esc(r['shown_in'])} |")
+                         f"{esc(r['claim_status'])} | {esc(r['caveat_ids']).replace('/', ', ')} | {esc(r['source_file'])} | {esc(r['shown_in'])} | {esc(r['display_hint'])} |")
     lines += ["\n## Caveat texts (verbatim; ids used in the tables above)\n"]
     for c in sorted(cav_used):
         lines.append(f"- **{c}**: {cav_used[c]}")

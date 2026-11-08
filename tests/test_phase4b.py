@@ -33,23 +33,26 @@ def pre_existing_entries() -> dict[str, dict]:
 
 
 @pytest.fixture(scope="module")
-def built_entries(pre_existing_entries) -> dict[str, dict]:
-    """Rebuilds the real numbers book (includes group 8) once, then the claim
-    map, and returns the resulting numbers.json entries keyed by key."""
-    bn.main()
-    entries = json.loads(NUMBERS_JSON.read_text(encoding="utf-8"))
-    bcm.main()
+def built_entries(pre_existing_entries, rebuilt_numbers_dir, tmp_path_factory) -> dict[str, dict]:
+    """The numbers book (includes group 8) rebuilt into a temp dir, then the claim map built into another
+    temp dir (Phase 4e: nothing under paper/evidence is overwritten); returns the entries keyed by key."""
+    entries = json.loads((rebuilt_numbers_dir / "numbers.json").read_text(encoding="utf-8"))
+    out = tmp_path_factory.mktemp("claim_map")
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(bcm, "OUTPUT_DIR", out)  # NUMBERS_JSON_PATH stays the committed numbers.json
+        bcm.main()
+    for name in ("claim_map.csv", "claim_map.md", "claim_map_detail.json"):
+        assert (out / name).read_bytes() == (PROJECT_ROOT / "paper" / "evidence" / name).read_bytes(), name
     return {e["key"]: e for e in entries}
 
 
 # ---------------------------------------------------------------------------
 # Numbers-book rebuild: idempotence + pre-existing-key preservation
 # ---------------------------------------------------------------------------
-def test_rebuild_is_idempotent(built_entries):
-    before = NUMBERS_JSON.read_bytes()
-    bn.main()
-    after = NUMBERS_JSON.read_bytes()
-    assert before == after
+def test_rebuild_is_idempotent(built_entries, tmp_path):
+    before = NUMBERS_JSON.read_bytes()  # committed
+    bn.main(out_dir=tmp_path)
+    assert (tmp_path / "numbers.json").read_bytes() == before
 
 
 def test_rebuild_preserves_all_pre_existing_keys_and_values(pre_existing_entries, built_entries):

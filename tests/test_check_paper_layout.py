@@ -117,23 +117,33 @@ def test_no_pdf_given_reports_string_not_crash(tmp_path):
     assert code == 0
 
 
-def test_check_page5_headings_flags_disallowed_heading():
+def test_check_last_page_headings_flags_disallowed_heading():
     text = "some text\n\\section{Conclusion}\nmore text"
-    problems = cpl.check_page5_headings(text)
+    problems = cpl.check_last_page_headings(text)
     assert len(problems) == 1
     assert "Conclusion" in problems[0]
 
 
-def test_check_page5_headings_allows_references_and_acknowledgments():
+def test_check_last_page_headings_allows_references_and_acknowledgments():
     text = "\\section*{Acknowledgments}\nthanks\n\\section*{References}\n[1] ..."
-    problems = cpl.check_page5_headings(text)
+    problems = cpl.check_last_page_headings(text)
     assert problems == []
 
 
-@pytest.mark.skipif(cpl.find_pdf_tool() is None, reason="no PDF tool (pypdf/pdfinfo/pdftotext) available on this machine")
-def test_find_pdf_tool_returns_a_known_value():
-    tool = cpl.find_pdf_tool()
-    assert tool in ("pypdf", "pdfinfo", "pdftotext")
+# Phase 4e: the former version was skipped whenever no PDF tool was on PATH (pdftotext is on PATH under Git Bash
+# but not under PowerShell, so the suite's skipped count depended on the shell). The tool lookup is now
+# tested deterministically by faking PATH and the pypdf import.
+@pytest.mark.parametrize("have,expected", [
+    (("pdfinfo", "pdftotext"), "pdfinfo"), (("pdftotext",), "pdftotext"), ((), None)])
+def test_find_pdf_tool_lookup_order(monkeypatch, have, expected):
+    monkeypatch.setitem(sys.modules, "pypdf", None)  # makes `import pypdf` raise ImportError
+    monkeypatch.setattr(cpl.shutil, "which", lambda name: f"/fake/{name}" if name in have else None)
+    assert cpl.find_pdf_tool() == expected
+
+
+def test_find_pdf_tool_prefers_pypdf(monkeypatch):
+    monkeypatch.setitem(sys.modules, "pypdf", object())
+    assert cpl.find_pdf_tool() == "pypdf"
 
 
 # ---- Phase 4d: venue config ------------------------------------------------
@@ -186,7 +196,7 @@ def test_last_page_rule_toggles(tmp_path, monkeypatch):
     monkeypatch.setattr(cpl, "page_count_and_last_page_text", lambda p, t: (6, "\section{Conclusion}"))
     off, _ = cpl.run_check(main, pdf, {**cpl.DEFAULT_LIMITS, "last_page_references_only": False})
     on, rep = cpl.run_check(main, pdf, {**cpl.DEFAULT_LIMITS, "last_page_references_only": True})
-    assert off == 0 and on == 1 and rep["pdf_check"]["page5_heading_problems"]
+    assert off == 0 and on == 1 and rep["pdf_check"]["last_page_heading_problems"]
 
 
 def test_page_limit_uses_max_pages(tmp_path, monkeypatch):
@@ -202,3 +212,57 @@ def test_page_limit_uses_max_pages(tmp_path, monkeypatch):
 def test_missing_config_falls_back_with_warning(tmp_path):
     lim, _, warns = cpl.load_limits(tmp_path / "nope.json")
     assert lim == cpl.DEFAULT_LIMITS and len(warns) == 1
+
+
+# ---- Phase 4e: venue config validation ----------------------------------------
+def test_unknown_key_warns_and_is_named(tmp_path):
+    p = _cfg(tmp_path, max_page=9)  # typo of max_pages
+    _, _, warns = cpl.load_limits(p)
+    assert any("max_page" in w and "ignored" in w for w in warns)
+
+
+def test_documented_info_keys_do_not_warn(tmp_path):
+    p = _cfg(tmp_path, venue="X", template="Y", notes="Z")
+    assert cpl.load_limits(p)[2] == []
+
+
+@pytest.mark.parametrize("key,bad", [
+    ("max_pages", 0), ("max_pages", "6"), ("max_pages", 6.5), ("max_pages", True),
+    ("max_references", "20"), ("max_references", 1.5), ("reference_soft_limit", 0),
+    ("max_authors", -1), ("last_page_references_only", "yes"), ("last_page_references_only", 1)])
+def test_wrong_type_is_a_config_error(tmp_path, key, bad):
+    with pytest.raises(cpl.ConfigError, match=key):
+        cpl.load_limits(_cfg(tmp_path, **{key: bad}))
+
+
+def test_wrong_type_exits_nonzero_from_cli(tmp_path):
+    main = _write(tmp_path, "main.tex", "x")
+    r = subprocess.run([sys.executable, str(_SCRIPT), str(main), "--config", str(_cfg(tmp_path, max_pages="six"))],
+                       capture_output=True, text=True)
+    assert r.returncode == 1 and "ERROR" in r.stdout and "max_pages" in r.stdout
+
+
+def test_valid_types_and_null_max_references_accepted(tmp_path):
+    lim, _, warns = cpl.load_limits(_cfg(tmp_path, max_references=None, max_pages=8))
+    assert lim["max_references"] is None and warns == []
+
+
+def test_report_lists_limits_and_their_sources(tmp_path):
+    main = _write(tmp_path, "main.tex", "x")
+    r = subprocess.run([sys.executable, str(_SCRIPT), str(main), "--config", str(_cfg(tmp_path, max_pages=8)),
+                        "--max-refs", "9"], capture_output=True, text=True)
+    assert "max_pages=8 (config venue.json)" in r.stdout and "max_references=9 (CLI --max-refs)" in r.stdout
+    assert "max_authors=35 (default)" not in r.stdout  # max_authors is in the config here -> source is config
+    assert "max_authors=35 (config venue.json)" in r.stdout
+
+
+def test_printed_report_says_last_page(tmp_path, monkeypatch, capsys):
+    main = _write(tmp_path, "main.tex", "x")
+    pdf = tmp_path / "a.pdf"
+    pdf.write_bytes(b"%PDF")
+    monkeypatch.setattr(cpl, "find_pdf_tool", lambda: "pdftotext")
+    monkeypatch.setattr(cpl, "page_count_and_last_page_text", lambda p, t: (6, ""))
+    _, rep = cpl.run_check(main, pdf)
+    cpl.print_report(rep)
+    out = capsys.readouterr().out
+    assert "last page" in out and "page 5" not in out.lower()

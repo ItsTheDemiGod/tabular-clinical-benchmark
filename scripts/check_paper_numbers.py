@@ -1,8 +1,10 @@
 """Phase 4a: checks a paper draft for numbers that do not come from the numbers
 book (paper/evidence/numbers.json).
 
-Usage: python scripts/check_paper_numbers.py path\\to\\draft.tex [--warn-only]
-Also accepts .md and .txt drafts.
+Usage: python scripts/check_paper_numbers.py [path\\to\\draft.tex ...] [--warn-only] [--exclude GLOB]
+Also accepts .md and .txt drafts. With no path it checks paper/main.tex, paper/sections/*.tex and
+paper/tables/*.tex. Files matching `excluded_globs` of paper/evidence/checker_config.json (the
+supplementary tables) or --exclude are listed as skipped, never counted as failures.
 
 THIS CHECKER IS HEURISTIC, not a full LaTeX/Markdown parser. It extracts numbers
 with a line-by-line regex scan and classifies each as "exact", "rounded" or
@@ -42,6 +44,7 @@ numbers.json or review them by eye.
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import hashlib
 import json
 import re
@@ -50,6 +53,9 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 NUMBERS_JSON_PATH = PROJECT_ROOT / "paper" / "evidence" / "numbers.json"
+
+CONFIG_PATH = PROJECT_ROOT / "paper" / "evidence" / "checker_config.json"
+SKIP_MESSAGE = "skipped (supplementary; numbers come directly from CSV files)"
 
 UNIT_WORDS = {
     "trials", "folds", "splits", "tasks", "rows", "models", "datasets", "epochs",
@@ -220,14 +226,53 @@ def print_report(report: dict) -> None:
     print(f"Summary: {report['n_unmatched']} UNMATCHED number(s), {len(report['unknown_n_keys'])} unknown \\N{{}} key(s).")
 
 
+def load_excluded_globs(config_path: Path = CONFIG_PATH) -> list[str]:
+    """`excluded_globs` of paper/evidence/checker_config.json ([] if the file is missing)."""
+    if not Path(config_path).exists():
+        return []
+    return list(json.loads(Path(config_path).read_text(encoding="utf-8")).get("excluded_globs", []))
+
+
+def is_excluded(path: Path, globs: list[str]) -> bool:
+    """fnmatch of the path (relative to the project root when inside it, else absolute; '/' separators)."""
+    p = Path(path).resolve()
+    name = p.relative_to(PROJECT_ROOT).as_posix() if p.is_relative_to(PROJECT_ROOT) else p.as_posix()
+    return any(fnmatch.fnmatch(name, g) for g in globs)
+
+
+def expand_targets(paths: list[Path]) -> list[Path]:
+    """Files stay; directories become their *.tex files (recursive, sorted). No paths -> the default set:
+    paper/main.tex, paper/sections/*.tex and paper/tables/*.tex (supplementary ones are then excluded by config)."""
+    paper = PROJECT_ROOT / "paper"
+    if not paths:
+        paths = [paper / "main.tex", paper / "sections", paper / "tables"]
+    out: list[Path] = []
+    for p in paths:
+        out.extend(sorted(Path(p).rglob("*.tex")) if Path(p).is_dir() else [Path(p)])
+    return out
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Check a paper draft's numbers against the numbers book.")
-    parser.add_argument("draft", type=Path)
+    parser = argparse.ArgumentParser(description="Check paper drafts' numbers against the numbers book.")
+    parser.add_argument("drafts", nargs="*", type=Path, help="files or directories (default: main.tex, sections/, tables/)")
     parser.add_argument("--warn-only", action="store_true", help="always exit 0, report only")
+    parser.add_argument("--exclude", action="append", default=[], metavar="GLOB",
+                        help="glob of files to skip, added to checker_config.json's excluded_globs (repeatable)")
     args = parser.parse_args()
 
-    exit_code, report = run_check(args.draft)
-    print_report(report)
+    globs = load_excluded_globs() + args.exclude
+    targets = expand_targets(args.drafts)
+    exit_code = 0
+    for t in targets:
+        if len(targets) > 1:
+            print(f"=== {t} ===")
+        if is_excluded(t, globs):
+            print(f"{t}: {SKIP_MESSAGE}")
+            print()
+            continue
+        code, report = run_check(t)
+        print_report(report)
+        exit_code = max(exit_code, code)
     sys.exit(0 if args.warn_only else exit_code)
 
 

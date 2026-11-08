@@ -127,14 +127,10 @@ def test_missing_key_is_reported() -> None:
         tabs.build_main_table(numbers)
 
 
-def test_numbers_book_untouched_by_phase4c() -> None:
+def test_numbers_book_untouched_by_phase4c(git_show_fixture) -> None:
     """Phase 4d follows a changed requirement: group "4d" legitimately ADDS keys, so the check is now
     'every key of the Phase 4c commit (6a8d0ed) is still present with an identical entry'."""
-    try:
-        head = subprocess.run(["git", "show", "6a8d0ed:paper/evidence/numbers.json"], cwd=PROJECT_ROOT,
-                              capture_output=True, check=True).stdout
-    except Exception:
-        pytest.skip("git not available")
+    head = git_show_fixture("6a8d0ed:paper/evidence/numbers.json")
     cur = {e["key"]: e for e in json.loads((PAPER / "evidence" / "numbers.json").read_bytes())}
     for e in json.loads(head):
         assert cur[e["key"]] == e, e["key"]
@@ -151,23 +147,12 @@ def test_author_block_order_and_layout_checker() -> None:
     assert "Authors: 4" in r.stdout
 
 
-def _scannable(p: Path, data: bytes) -> bytes:
-    """Bytes worth scanning for an email: compressed PNG/PDF payloads can match the regex by chance, so
-    scan only PNG text metadata and PDF bytes outside stream...endstream (Phase 4d fix of a false positive)."""
-    if p.suffix.lower() == ".png":
-        with Image.open(p) as im:
-            return " ".join(str(v) for v in im.info.values()).encode("utf-8", "replace")
-    if p.suffix.lower() == ".pdf":
-        return re.sub(rb"stream.*?endstream", b"", data, flags=re.S)
-    return data
-
-
-def test_no_at_sign_or_email_under_paper() -> None:
+def test_no_at_sign_or_email_under_paper(scannable) -> None:
     for p in PAPER.rglob("*"):
         if not p.is_file() or p.name == "overleaf_bundle.zip":
             continue
         data = p.read_bytes()
-        scan = _scannable(p, data)
+        scan = scannable(p, data)
         assert not EMAIL_RE.search(scan), f"email-like pattern in {p}"
         # Frozen Phase 4a/4b evidence files use '@' as "at fraction" in selector text; everything
         # else under paper/ (text files) must not contain '@' at all.

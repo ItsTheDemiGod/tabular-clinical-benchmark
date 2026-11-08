@@ -26,23 +26,22 @@ NUMBERS_TEX = PROJECT_ROOT / "paper" / "evidence" / "numbers.tex"
 
 
 @pytest.fixture(scope="module")
-def built_entries() -> list[dict]:
-    """Builds the real numbers book once (idempotent, deterministic) and returns
-    the resulting entries, reused by every test below (fast after the first run).
-    """
-    bn.main()
-    return json.loads(NUMBERS_JSON.read_text(encoding="utf-8"))
+def built_entries(rebuilt_numbers_dir) -> list[dict]:
+    """The numbers book rebuilt ONCE (session fixture, into a temp dir -- Phase 4e: no test may
+    overwrite paper/evidence) and returned as entries, reused by every test below."""
+    return json.loads((rebuilt_numbers_dir / "numbers.json").read_text(encoding="utf-8"))
 
 
 # ---------------------------------------------------------------------------
 # Idempotency
 # ---------------------------------------------------------------------------
-def test_build_is_idempotent(built_entries, tmp_path):
-    before_json = NUMBERS_JSON.read_bytes()
-    before_tex = NUMBERS_TEX.read_bytes()
-    bn.main()
-    assert NUMBERS_JSON.read_bytes() == before_json
-    assert NUMBERS_TEX.read_bytes() == before_tex
+def test_build_is_idempotent(built_entries, rebuilt_numbers_dir, tmp_path):
+    """A fresh build (into a temp dir) is byte-identical to the committed files, and so is a second build."""
+    for sub_dir in (rebuilt_numbers_dir, tmp_path):
+        if sub_dir is tmp_path:
+            bn.main(out_dir=tmp_path)
+        assert (sub_dir / "numbers.json").read_bytes() == NUMBERS_JSON.read_bytes()
+        assert (sub_dir / "numbers.tex").read_bytes() == NUMBERS_TEX.read_bytes()
 
 
 # ---------------------------------------------------------------------------

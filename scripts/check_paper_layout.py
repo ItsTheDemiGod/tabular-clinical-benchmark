@@ -36,6 +36,38 @@ DEFAULT_LIMITS: dict = {"max_pages": 6, "max_references": None, "reference_soft_
                         "max_authors": 35, "last_page_references_only": False}
 
 
+# Documented keys of paper/venue.json: the limits plus three free-text descriptive keys.
+INFO_KEYS = ("venue", "template", "notes")
+
+
+class ConfigError(ValueError):
+    """A known venue.json key has the wrong type (Phase 4e): the check must fail, not guess."""
+
+
+def _is_int(v: object) -> bool:
+    return isinstance(v, int) and not isinstance(v, bool)
+
+
+# key -> (validator, human description of the expected type)
+_VALIDATORS = {
+    "max_pages": (lambda v: _is_int(v) and v > 0, "a positive integer"),
+    "max_references": (lambda v: v is None or (_is_int(v) and v >= 0), "an integer or null"),
+    "reference_soft_limit": (lambda v: _is_int(v) and v > 0, "a positive integer"),
+    "max_authors": (lambda v: _is_int(v) and v > 0, "a positive integer"),
+    "last_page_references_only": (lambda v: isinstance(v, bool), "a boolean"),
+}
+
+
+def validate_config(cfg: dict) -> tuple[list[str], list[str]]:
+    """(warnings, errors): unknown keys warn, known keys of the wrong type are errors."""
+    warns = [f"unknown key {k!r} in venue config is ignored (documented keys: "
+             f"{', '.join(list(DEFAULT_LIMITS) + list(INFO_KEYS))})"
+             for k in cfg if k not in DEFAULT_LIMITS and k not in INFO_KEYS]
+    errs = [f"venue config key {k!r} must be {desc}, got {cfg[k]!r}"
+            for k, (ok, desc) in _VALIDATORS.items() if k in cfg and not ok(cfg[k])]
+    return warns, errs
+
+
 def load_limits(config: Path | None = DEFAULT_CONFIG, max_pages: int | None = None,
                 max_refs: int | None = None) -> tuple[dict, dict, list[str]]:
     """Returns (limits, sources, warnings). Precedence: CLI > config > defaults."""
@@ -44,6 +76,10 @@ def load_limits(config: Path | None = DEFAULT_CONFIG, max_pages: int | None = No
     warnings: list[str] = []
     if config is not None and Path(config).exists():
         cfg = json.loads(Path(config).read_text(encoding="utf-8"))
+        cfg_warns, cfg_errs = validate_config(cfg)
+        if cfg_errs:
+            raise ConfigError("; ".join(cfg_errs))
+        warnings.extend(cfg_warns)
         for k in limits:
             if k in cfg:
                 limits[k], sources[k] = cfg[k], f"config {Path(config).name}"
@@ -154,11 +190,11 @@ def page_count_and_last_page_text(pdf_path: Path, tool: str) -> tuple[int, str]:
     raise RuntimeError(f"unknown tool {tool!r}")
 
 
-def check_page5_headings(page5_text: str) -> list[str]:
+def check_last_page_headings(last_page_text: str) -> list[str]:
     """Returns a list of problem descriptions: any \\section heading found in
-    the raw page-5 text other than 'References' or 'Acknowledgments'."""
+    the raw last-page text other than 'References' or 'Acknowledgments'."""
     problems = []
-    for m in _SECTION_HEADING_RE.finditer(page5_text):
+    for m in _SECTION_HEADING_RE.finditer(last_page_text):
         heading = m.group(1).strip()
         if heading.lower() not in ("references", "acknowledgments", "acknowledgements"):
             problems.append(f"last page contains a disallowed heading: {heading!r}")
@@ -192,11 +228,11 @@ def run_check(main_tex: Path, pdf_path: Path | None, limits: dict | None = None,
             report["pdf_check"] = "no PDF tool available (pypdf, pdfinfo, pdftotext all missing) -- page count not checked"
         else:
             n_pages, last_page_text = page_count_and_last_page_text(pdf_path, tool)
-            problems = (check_page5_headings(last_page_text)
+            problems = (check_last_page_headings(last_page_text)
                         if limits["last_page_references_only"] and n_pages >= 1 else [])
             report["pdf_check"] = {
                 "tool": tool, "n_pages": n_pages, "pages_ok": n_pages <= limits["max_pages"],
-                "page5_heading_problems": problems,
+                "last_page_heading_problems": problems,
             }
     else:
         report["pdf_check"] = "no PDF given/found -- page count not checked"
@@ -209,7 +245,7 @@ def run_check(main_tex: Path, pdf_path: Path | None, limits: dict | None = None,
     if isinstance(report["pdf_check"], dict):
         if not report["pdf_check"]["pages_ok"]:
             violations.append(f"{report['pdf_check']['n_pages']} pages > {limits['max_pages']}")
-        violations.extend(report["pdf_check"]["page5_heading_problems"])
+        violations.extend(report["pdf_check"]["last_page_heading_problems"])
     report["violations"] = violations
     return (1 if violations else 0), report
 
@@ -229,7 +265,8 @@ def print_report(report: dict) -> None:
         print(f"PDF check: {pc}")
     else:
         print(f"PDF check (tool={pc['tool']}): {pc['n_pages']} pages (<={lim['max_pages']}: {pc['pages_ok']})")
-        for p in pc["page5_heading_problems"]:
+        print(f"  last page: {len(pc['last_page_heading_problems'])} heading problem(s)")
+        for p in pc["last_page_heading_problems"]:
             print(f"  {p}")
     print()
     if report["violations"]:
@@ -249,7 +286,11 @@ def main() -> None:
     parser.add_argument("--max-refs", type=int, default=None)
     args = parser.parse_args()
 
-    limits, sources, warns = load_limits(args.config, args.max_pages, args.max_refs)
+    try:
+        limits, sources, warns = load_limits(args.config, args.max_pages, args.max_refs)
+    except ConfigError as exc:
+        print(f"ERROR: {exc}")
+        sys.exit(1)
     exit_code, report = run_check(args.main_tex, args.pdf, limits, sources, warns)
     print_report(report)
     sys.exit(exit_code)

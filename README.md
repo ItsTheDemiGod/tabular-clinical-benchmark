@@ -791,3 +791,32 @@ for the page check.
 .venv-deep\Scripts\python.exe scripts\check_paper_layout.py paper\main.tex [--pdf paper\build\main.pdf]
 .venv-deep\Scripts\python.exe scripts\check_paper_numbers.py paper\main.tex
 ```
+
+## Phase 4e: review fixes, static LaTeX check, figure facts, IEEEtran main.tex
+
+No result file, nothing in `src/` or `analysis/`, no model was touched; no paper prose was written.
+
+- **Drafting sheet**: `shown in` labels are now derived from one table, `FIGURE_CONTENT` in `scripts/build_drafting_sheet.py`
+  (what each figure panel and table displays); difference-to-logreg rows (C1, C2, C3, C8) are "text only". New column
+  `display_hint` (`TIE_AT_3_DECIMALS`, `CI_INCLUDES_ZERO`, `NONE`).
+- **Errata** `paper/evidence/claim_map_errata.md` (`scripts/build_claim_map_errata.py`): claim map C7 had "smallest/largest drop" swapped.
+- **Figure facts** `paper/evidence/figure_facts.md` / `.json` (`scripts/build_figure_facts.py`): facts for the captions, no prose.
+- **Static LaTeX check** `scripts/check_paper_static.py` (NOT a compiler): braces, environments, labels/refs, figure/input
+  targets, `\cite` keys, `\N{}` keys, captions without labels.
+- **Numbers checker**: `scripts/check_paper_numbers.py` takes several files/directories, `--exclude GLOB`, and reads
+  `paper/evidence/checker_config.json` (supplementary tables are listed as skipped, never failed).
+- **Layout checker**: `paper/venue.json` is validated (unknown keys warn, wrong types fail); `check_page5_headings` is now `check_last_page_headings`.
+- **Tests no longer overwrite `paper/evidence`**: `scripts/build_numbers.py --out-dir DIR`; `tests/conftest.py` holds the shared helpers and an
+  end-of-session guard that fails if any file under `paper/evidence` changed.
+- `paper/main.tex` uses `\documentclass[conference]{IEEEtran}` (compile on Overleaf). `paper/sections/abstract.tex` had a backspace and an
+  escape byte instead of `\begin` / `\end` and was repaired.
+
+```
+.venv-deep\Scripts\python.exe scripts\build_drafting_sheet.py
+.venv-deep\Scripts\python.exe scripts\build_claim_map_errata.py
+.venv-deep\Scripts\python.exe scripts\build_figure_facts.py
+.venv-deep\Scripts\python.exe scripts\make_overleaf_bundle.py
+.venv-deep\Scripts\python.exe scripts\check_paper_static.py paper\main.tex
+.venv-deep\Scripts\python.exe scripts\check_paper_numbers.py
+.venv-deep\Scripts\python.exe scripts\check_paper_layout.py paper\main.tex [--pdf paper\build\main.pdf]
+```
